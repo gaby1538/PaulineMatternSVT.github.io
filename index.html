@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cours de SVT — Pauline Mattern</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & VARIABLES ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-deep:   #1a3a2a;
+      --green-mid:    #2d6a4f;
+      --green-light:  #52b788;
+      --cream:        #f5f0e8;
+      --cream-dark:   #e8e0d0;
+      --amber:        #c9881c;
+      --amber-light:  #e8b84b;
+      --text-dark:    #1c1c1c;
+      --text-mid:     #4a4a4a;
+      --white:        #ffffff;
+      --serif:        'Cormorant Garamond', Georgia, serif;
+      --sans:         'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background-color: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(245, 240, 232, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(45, 106, 79, 0.15);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(26,58,42,0.1); }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--amber); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--green-mid); }
+
+    .nav-cta {
+      background: var(--green-deep);
+      color: var(--cream) !important;
+      padding: 0.6rem 1.4rem;
+      border-radius: 2px;
+      transition: background 0.25s !important;
+    }
+    .nav-cta:hover { background: var(--green-mid) !important; color: var(--white) !important; }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--green-deep);
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10rem 4rem 6rem 6rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--green-deep);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--green-mid);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-mid);
+      max-width: 440px;
+      margin-bottom: 2.8rem;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.6s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.8s forwards;
+    }
+
+    .btn-primary {
+      background: var(--green-deep);
+      color: var(--cream);
+      padding: 1rem 2rem;
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 2px solid var(--green-deep);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--green-deep);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--green-deep);
+      padding: 1rem 2rem;
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 2px solid var(--green-deep);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: var(--green-deep);
+      color: var(--cream);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--cream-dark);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      letter-spacing: 0.05em;
+    }
+
+    /* hero right — botanical illustration panel */
+    .hero-right {
+      background: var(--green-deep);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-right::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(82,183,136,0.3) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(201,136,28,0.2) 0%, transparent 50%);
+    }
+
+    /* SVG botanical decoration */
+    .botanical-svg {
+      width: 85%;
+      max-width: 500px;
+      opacity: 0;
+      animation: fadeIn 1.5s ease 1s forwards;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* floating badge */
+    .hero-badge {
+      position: absolute;
+      bottom: 3rem;
+      left: -3rem;
+      background: var(--amber);
+      color: var(--white);
+      padding: 1.2rem 1.8rem;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-style: italic;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+      z-index: 5;
+      opacity: 0;
+      animation: slideRight 0.8s ease 1.2s forwards;
+    }
+
+    /* ── SECTION MATIÈRES ── */
+    .section-matieres {
+      padding: 7rem 6rem;
+      background: var(--white);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .section-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+      color: var(--green-deep);
+      line-height: 1.15;
+    }
+    .section-title em { font-style: italic; color: var(--green-mid); }
+
+    .matieres-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .matiere-card {
+      background: var(--cream);
+      padding: 2.5rem;
+      border: 1px solid var(--cream-dark);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: default;
+    }
+    .matiere-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 3px;
+      background: var(--green-light);
+      transition: width 0.4s ease;
+    }
+    .matiere-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(26,58,42,0.12); }
+    .matiere-card:hover::after { width: 100%; }
+
+    .matiere-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+    .matiere-title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+    .matiere-niveau {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .matiere-desc {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text-mid);
+      font-weight: 300;
+    }
+
+    /* ── SECTION OFFRES ── */
+    .section-offres {
+      padding: 7rem 6rem;
+      background: var(--green-deep);
+      color: var(--cream);
+    }
+
+    .section-offres .section-title { color: var(--cream); }
+    .section-offres .section-eyebrow { color: var(--amber-light); }
+
+    .offres-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .offre-card {
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 2.5rem;
+      position: relative;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .offre-card:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--green-light);
+    }
+    .offre-card.featured {
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+    .offre-badge {
+      position: absolute;
+      top: -12px; left: 2rem;
+      background: var(--green-light);
+      color: var(--white);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      font-weight: 500;
+    }
+    .offre-type {
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.8rem;
+    }
+    .offre-card.featured .offre-type { color: rgba(255,255,255,0.8); }
+    .offre-title {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+    .offre-price {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: var(--amber-light);
+      line-height: 1;
+    }
+    .offre-card.featured .offre-price { color: var(--white); }
+    .offre-price small { font-size: 1rem; font-weight: 300; }
+    .offre-features {
+      list-style: none;
+      margin: 1.5rem 0 2rem;
+    }
+    .offre-features li {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.75);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .offre-features li::before { content: '→'; color: var(--green-light); font-size: 0.8rem; }
+    .offre-card.featured .offre-features li { color: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.2); }
+    .offre-card.featured .offre-features li::before { color: var(--white); }
+
+    .btn-offre {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      padding: 0.9rem;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--cream);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-offre:hover { background: var(--cream); color: var(--green-deep); border-color: var(--cream); }
+    .offre-card.featured .btn-offre { background: var(--white); color: var(--amber); border-color: var(--white); }
+    .offre-card.featured .btn-offre:hover { background: var(--green-deep); color: var(--white); border-color: var(--green-deep); }
+
+    /* ── SECTION APPROCHE ── */
+    .section-approche {
+      padding: 7rem 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .approche-image-area {
+      position: relative;
+    }
+    .approche-main-block {
+      background: var(--green-mid);
+      width: 100%;
+      aspect-ratio: 4/5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .approche-main-block::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 40% 60%, rgba(82,183,136,0.4) 0%, transparent 70%);
+    }
+    .approche-main-block svg {
+      width: 70%;
+      opacity: 0.9;
+      position: relative;
+      z-index: 2;
+    }
+    .approche-tag {
+      position: absolute;
+      top: -1.5rem;
+      right: -2rem;
+      background: var(--cream);
+      border: 1px solid var(--cream-dark);
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    .approche-tag strong {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      color: var(--green-deep);
+      display: block;
+    }
+    .approche-tag span { font-size: 0.78rem; color: var(--text-mid); }
+
+    .approche-content { padding-left: 2rem; }
+    .approche-list {
+      list-style: none;
+      margin-top: 2.5rem;
+    }
+    .approche-list li {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+      align-items: flex-start;
+    }
+    .approche-num {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      color: var(--amber);
+      flex-shrink: 0;
+      width: 2rem;
+      line-height: 1;
+    }
+    .approche-list-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--green-deep);
+      margin-bottom: 0.3rem;
+    }
+    .approche-list-desc {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ── SECTION RESSOURCES ── */
+    .section-ressources {
+      padding: 6rem 6rem;
+      background: var(--cream-dark);
+    }
+
+    .ressources-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .ressource-card {
+      background: var(--white);
+      padding: 2rem;
+      border-bottom: 3px solid transparent;
+      transition: border-color 0.3s, transform 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .ressource-card:hover { border-color: var(--green-light); transform: translateY(-4px); }
+    .ressource-icon { font-size: 1.8rem; margin-bottom: 1rem; display: block; }
+    .ressource-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+    .ressource-desc {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* ── SECTION CTA RESERVATION ── */
+    .section-reservation {
+      padding: 7rem 6rem;
+      text-align: center;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    .section-reservation::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(82,183,136,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .reservation-title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 4vw, 4.5rem);
+      color: var(--green-deep);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .reservation-title em { font-style: italic; color: var(--amber); }
+    .reservation-sub {
+      font-size: 1rem;
+      color: var(--text-mid);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .reservation-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep);
+      color: rgba(255,255,255,0.7);
+      padding: 3.5rem 6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      color: var(--cream);
+    }
+    .footer-logo span { color: var(--amber); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; flex-wrap: wrap; }
+    .footer-links a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes slideRight {
+      from { opacity: 0; transform: translateX(-20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; flex-direction: column; gap: 1.2rem; position: absolute; top: 100%; left: 0; right: 0; background: var(--cream); padding: 2rem; border-top: 1px solid var(--cream-dark); }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 8rem 1.5rem 4rem; }
+      .hero-right { display: none; }
+      .hero-stats { gap: 1.5rem; }
+
+      .section-matieres, .section-approche, .section-offres, .section-ressources, .section-reservation { padding: 4rem 1.5rem; }
+      .matieres-grid, .offres-grid { grid-template-columns: 1fr; }
+      .ressources-grid { grid-template-columns: 1fr 1fr; }
+      .section-approche { grid-template-columns: 1fr; }
+      .approche-content { padding-left: 0; }
+      .approche-tag { right: 0; top: -1rem; }
+      footer { padding: 2.5rem 1.5rem; flex-direction: column; text-align: center; }
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">SVT<span>.</span> Cours</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#matieres">Matières</a></li>
+      <li><a href="#offres">Offres</a></li>
+      <li><a href="#approche">Approche</a></li>
+      <li><a href="#ressources">Ressources</a></li>
+      <li><a href="#reservation" class="nav-cta">Réserver</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Sciences de la Vie et de la Terre</p>
+      <h1 class="hero-title">
+        Comprendre<br/><em>le vivant,</em><br/>réussir vos examens
+      </h1>
+      <p class="hero-desc">
+        Des cours particuliers de SVT adaptés à votre niveau, du collège au lycée.
+        Une pédagogie claire, des méthodes efficaces, et un suivi personnalisé.
+      </p>
+      <div class="hero-actions">
+        <a href="#reservation" class="btn-primary">Réserver un cours</a>
+        <a href="#offres" class="btn-secondary">Voir les offres</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <span class="stat-number">98%</span>
+          <span class="stat-label">de réussite au bac</span>
+        </div>
+        <div>
+          <span class="stat-number">+5 ans</span>
+          <span class="stat-label">d'expérience</span>
+        </div>
+        <div>
+          <span class="stat-number">50+</span>
+          <span class="stat-label">élèves accompagnés</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- panel décoratif droit -->
+    <div class="hero-right">
+      <!-- Illustration botanique SVG -->
+      <svg class="botanical-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <!-- cellule centrale -->
+        <ellipse cx="200" cy="260" rx="80" ry="60" stroke="rgba(82,183,136,0.6)" stroke-width="1.5" fill="rgba(82,183,136,0.08)"/>
+        <circle cx="200" cy="260" r="22" stroke="rgba(201,136,28,0.7)" stroke-width="1.5" fill="rgba(201,136,28,0.1)"/>
+        <!-- mitochondries -->
+        <ellipse cx="230" cy="285" rx="14" ry="8" stroke="rgba(82,183,136,0.5)" stroke-width="1" fill="none" transform="rotate(30 230 285)"/>
+        <ellipse cx="170" cy="245" rx="12" ry="7" stroke="rgba(82,183,136,0.5)" stroke-width="1" fill="none" transform="rotate(-20 170 245)"/>
+        <!-- feuilles -->
+        <path d="M200 180 C220 130 280 110 290 80 C260 70 210 100 200 180Z" stroke="rgba(82,183,136,0.7)" stroke-width="1.5" fill="rgba(82,183,136,0.12)"/>
+        <path d="M200 180 C180 130 120 110 110 80 C140 70 190 100 200 180Z" stroke="rgba(82,183,136,0.7)" stroke-width="1.5" fill="rgba(82,183,136,0.12)"/>
+        <!-- tige -->
+        <line x1="200" y1="320" x2="200" y2="440" stroke="rgba(82,183,136,0.5)" stroke-width="1.5"/>
+        <!-- branches -->
+        <line x1="200" y1="360" x2="150" y2="400" stroke="rgba(82,183,136,0.4)" stroke-width="1"/>
+        <line x1="200" y1="380" x2="250" y2="415" stroke="rgba(82,183,136,0.4)" stroke-width="1"/>
+        <!-- ADN double hélice -->
+        <path d="M130 80 C145 90 145 110 130 120 C145 130 145 150 130 160" stroke="rgba(201,136,28,0.6)" stroke-width="1.5" fill="none"/>
+        <path d="M155 80 C140 90 140 110 155 120 C140 130 140 150 155 160" stroke="rgba(201,136,28,0.6)" stroke-width="1.5" fill="none"/>
+        <!-- liaisons ADN -->
+        <line x1="130" y1="92" x2="155" y2="88" stroke="rgba(201,136,28,0.4)" stroke-width="1"/>
+        <line x1="128" y1="108" x2="157" y2="112" stroke="rgba(201,136,28,0.4)" stroke-width="1"/>
+        <line x1="130" y1="132" x2="155" y2="128" stroke="rgba(201,136,28,0.4)" stroke-width="1"/>
+        <line x1="128" y1="148" x2="157" y2="152" stroke="rgba(201,136,28,0.4)" stroke-width="1"/>
+        <!-- petits cercles décoratifs -->
+        <circle cx="300" cy="380" r="3" fill="rgba(82,183,136,0.4)"/>
+        <circle cx="310" cy="360" r="2" fill="rgba(201,136,28,0.4)"/>
+        <circle cx="290" cy="350" r="2.5" fill="rgba(82,183,136,0.3)"/>
+        <circle cx="100" cy="300" r="3.5" fill="rgba(201,136,28,0.3)"/>
+        <circle cx="90" cy="320" r="2" fill="rgba(82,183,136,0.4)"/>
+        <!-- Texte décoratif -->
+        <text x="60" y="200" fill="rgba(255,255,255,0.08)" font-size="80" font-family="serif" font-style="italic">svt</text>
+      </svg>
+
+      <div class="hero-badge">
+        Cours personnalisés<br/>en ligne & présentiel
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ MATIÈRES ═══ -->
+  <section class="section-matieres" id="matieres">
+    <div class="section-header reveal">
+      <p class="section-eyebrow">Ce que j'enseigne</p>
+      <h2 class="section-title">Des cours pour <em>chaque niveau</em></h2>
+    </div>
+    <div class="matieres-grid">
+      <div class="matiere-card reveal">
+        <span class="matiere-icon">🔬</span>
+        <h3 class="matiere-title">Biologie Cellulaire</h3>
+        <p class="matiere-niveau">Lycée · Terminale</p>
+        <p class="matiere-desc">La cellule, la mitose, la méiose, la génétique moléculaire. Comprendre la base du vivant avec des schémas clairs et des exercices ciblés.</p>
+      </div>
+      <div class="matiere-card reveal" style="transition-delay: 0.15s">
+        <span class="matiere-icon">🧬</span>
+        <h3 class="matiere-title">Génétique & Évolution</h3>
+        <p class="matiere-niveau">Lycée · 1ère & Terminale</p>
+        <p class="matiere-desc">Hérédité, mutations, sélection naturelle, phylogénèse. Des concepts clés traités pas à pas pour maîtriser les grands thèmes du bac.</p>
+      </div>
+      <div class="matiere-card reveal" style="transition-delay: 0.3s">
+        <span class="matiere-icon">🌍</span>
+        <h3 class="matiere-title">Sciences de la Terre</h3>
+        <p class="matiere-niveau">Lycée · Collège</p>
+        <p class="matiere-desc">Tectonique des plaques, géologie, paléontologie, changement climatique. La Terre racontée avec rigueur et passion.</p>
+      </div>
+      <div class="matiere-card reveal" style="transition-delay: 0.1s">
+        <span class="matiere-icon">🌿</span>
+        <h3 class="matiere-title">Écosystèmes & Environnement</h3>
+        <p class="matiere-niveau">Collège · 5ème, 4ème, 3ème</p>
+        <p class="matiere-desc">Biodiversité, chaînes alimentaires, impact humain, développement durable. Rendre la nature accessible à tous les niveaux.</p>
+      </div>
+      <div class="matiere-card reveal" style="transition-delay: 0.25s">
+        <span class="matiere-icon">💊</span>
+        <h3 class="matiere-title">Corps Humain & Santé</h3>
+        <p class="matiere-niveau">Lycée · 2nde & 1ère</p>
+        <p class="matiere-desc">Système immunitaire, neurologie, digestion, reproduction. Des thèmes concrets pour mieux comprendre son propre corps.</p>
+      </div>
+      <div class="matiere-card reveal" style="transition-delay: 0.4s">
+        <span class="matiere-icon">📝</span>
+        <h3 class="matiere-title">Méthodologie Bac</h3>
+        <p class="matiere-niveau">Terminale · Épreuves</p>
+        <p class="matiere-desc">Maîtriser la synthèse de documents, l'argumentation scientifique et les schémas attendus. Préparer le grand oral et l'épreuve écrite.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ OFFRES ═══ -->
+  <section class="section-offres" id="offres">
+    <div class="section-header reveal">
+      <p class="section-eyebrow">Tarifs & formules</p>
+      <h2 class="section-title">Choisissez <em>votre formule</em></h2>
+    </div>
+    <div class="offres-grid">
+      <div class="offre-card reveal">
+        <p class="offre-type">Ponctuel</p>
+        <h3 class="offre-title">Cours à la carte</h3>
+        <div class="offre-price">35€ <small>/ heure</small></div>
+        <ul class="offre-features">
+          <li>Cours individuel en ligne</li>
+          <li>Sans engagement</li>
+          <li>Replay de la session</li>
+          <li>Support de cours PDF</li>
+        </ul>
+        <a href="#reservation" class="btn-offre">Réserver</a>
+      </div>
+      <div class="offre-card featured reveal" style="transition-delay: 0.15s">
+        <div class="offre-badge">Populaire</div>
+        <p class="offre-type">Suivi régulier</p>
+        <h3 class="offre-title">Pack mensuel</h3>
+        <div class="offre-price">120€ <small>/ mois</small></div>
+        <ul class="offre-features">
+          <li>4 cours par mois (1h/séance)</li>
+          <li>Fiches méthodes incluses</li>
+          <li>Corrections d'exercices</li>
+          <li>Bilan mensuel des progrès</li>
+          <li>WhatsApp entre les cours</li>
+        </ul>
+        <a href="#reservation" class="btn-offre">Choisir ce pack</a>
+      </div>
+      <div class="offre-card reveal" style="transition-delay: 0.3s">
+        <p class="offre-type">Intensif</p>
+        <h3 class="offre-title">Prépa Bac</h3>
+        <div class="offre-price">220€ <small>/ stage</small></div>
+        <ul class="offre-features">
+          <li>6 cours intensifs en 2 semaines</li>
+          <li>Annales corrigées</li>
+          <li>Fiches de révision complètes</li>
+          <li>Simulation d'épreuve</li>
+          <li>Coaching grand oral SVT</li>
+        </ul>
+        <a href="#reservation" class="btn-offre">S'inscrire</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ APPROCHE ═══ -->
+  <section class="section-approche" id="approche">
+    <div class="approche-image-area reveal">
+      <div class="approche-main-block">
+        <!-- Illustration décorative -->
+        <svg viewBox="0 0 300 360" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <circle cx="150" cy="180" r="100" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <circle cx="150" cy="180" r="70" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <circle cx="150" cy="180" r="40" stroke="rgba(201,136,28,0.5)" stroke-width="1.5" fill="rgba(201,136,28,0.08)"/>
+          <circle cx="150" cy="180" r="15" fill="rgba(201,136,28,0.3)" stroke="rgba(201,136,28,0.6)" stroke-width="1"/>
+          <!-- organelles -->
+          <ellipse cx="190" cy="155" rx="18" ry="10" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="rgba(255,255,255,0.05)" transform="rotate(-25 190 155)"/>
+          <ellipse cx="115" cy="210" rx="15" ry="9" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="rgba(255,255,255,0.05)" transform="rotate(15 115 210)"/>
+          <ellipse cx="180" cy="205" rx="13" ry="8" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none" transform="rotate(-10 180 205)"/>
+          <!-- particules -->
+          <circle cx="90" cy="120" r="4" fill="rgba(255,255,255,0.3)"/>
+          <circle cx="220" cy="130" r="3" fill="rgba(201,136,28,0.5)"/>
+          <circle cx="240" cy="220" r="5" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="80" cy="250" r="3.5" fill="rgba(201,136,28,0.4)"/>
+          <circle cx="200" cy="280" r="4" fill="rgba(255,255,255,0.25)"/>
+          <!-- texte -->
+          <text x="150" y="330" text-anchor="middle" fill="rgba(255,255,255,0.15)" font-size="14" font-family="serif" letter-spacing="4">BIOLOGIE</text>
+        </svg>
+        <div class="approche-tag">
+          <strong>10+</strong>
+          <span>thèmes maîtrisés</span>
+        </div>
+      </div>
+    </div>
+    <div class="approche-content reveal">
+      <p class="section-eyebrow">Ma pédagogie</p>
+      <h2 class="section-title">Une approche <em>sur mesure</em></h2>
+      <ul class="approche-list">
+        <li>
+          <span class="approche-num">01</span>
+          <div>
+            <p class="approche-list-title">Diagnostic initial</p>
+            <p class="approche-list-desc">Chaque élève commence par un bilan pour identifier ses lacunes, ses points forts et adapter le programme.</p>
+          </div>
+        </li>
+        <li>
+          <span class="approche-num">02</span>
+          <div>
+            <p class="approche-list-title">Cours structurés & visuels</p>
+            <p class="approche-list-desc">Des schémas, des tableaux, des animations. La SVT s'apprend en voyant, pas seulement en lisant.</p>
+          </div>
+        </li>
+        <li>
+          <span class="approche-num">03</span>
+          <div>
+            <p class="approche-list-title">Pratique & exercices ciblés</p>
+            <p class="approche-list-desc">On s'entraîne avec des vraies annales et des exercices du niveau exact de l'élève.</p>
+          </div>
+        </li>
+        <li>
+          <span class="approche-num">04</span>
+          <div>
+            <p class="approche-list-title">Suivi entre les séances</p>
+            <p class="approche-list-desc">Questions rapides par message, fiches de révision partagées, retours sur les devoirs.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ RESSOURCES ═══ -->
+  <section class="section-ressources" id="ressources">
+    <div class="section-header reveal">
+      <p class="section-eyebrow">Accès libre</p>
+      <h2 class="section-title">Ressources <em>pédagogiques</em></h2>
+    </div>
+    <div class="ressources-grid">
+      <a href="#" class="ressource-card reveal">
+        <span class="ressource-icon">📄</span>
+        <h4 class="ressource-title">Fiches méthode</h4>
+        <p class="ressource-desc">Comment rédiger une synthèse, un schéma bilan, une argumentation scientifique.</p>
+      </a>
+      <a href="#" class="ressource-card reveal" style="transition-delay: 0.1s">
+        <span class="ressource-icon">🎬</span>
+        <h4 class="ressource-title">Cours en ligne</h4>
+        <p class="ressource-desc">Vidéos explicatives sur les grands thèmes du programme de lycée et collège.</p>
+      </a>
+      <a href="#" class="ressource-card reveal" style="transition-delay: 0.2s">
+        <span class="ressource-icon">📚</span>
+        <h4 class="ressource-title">Annales corrigées</h4>
+        <p class="ressource-desc">Des sujets de bac et brevet avec corrections détaillées et conseils de rédaction.</p>
+      </a>
+      <a href="#" class="ressource-card reveal" style="transition-delay: 0.3s">
+        <span class="ressource-icon">🔗</span>
+        <h4 class="ressource-title">Liens utiles</h4>
+        <p class="ressource-desc">Sélection de sites de référence, simulateurs et outils pour aller plus loin.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══ CTA RÉSERVATION ═══ -->
+  <section class="section-reservation" id="reservation">
+    <div class="reveal">
+      <p class="section-eyebrow">Commençons</p>
+      <h2 class="reservation-title">Prêt à <em>progresser</em><br/>en SVT ?</h2>
+      <p class="reservation-sub">
+        Réservez un premier cours découverte — sans engagement.
+        On fait connaissance, on évalue votre niveau, et on définit ensemble un plan de travail.
+      </p>
+      <div class="reservation-actions">
+        <!-- Remplacez ce lien par votre lien Calendly ou Koalendar -->
+        <a href="https://calendly.com" target="_blank" class="btn-primary">📅 Réserver un créneau</a>
+        <a href="mailto:contact@coursvst.fr" class="btn-secondary">✉️ Me contacter</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-logo">SVT<span>.</span>Cours</div>
+    <ul class="footer-links">
+      <li><a href="#matieres">Matières</a></li>
+      <li><a href="#offres">Offres</a></li>
+      <li><a href="#approche">Approche</a></li>
+      <li><a href="#ressources">Ressources</a></li>
+      <li><a href="#reservation">Réservation</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 — Cours de SVT. Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    // ── Navbar scroll ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ── Menu hamburger ──
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // ── Scroll reveal ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
