@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Réservation — Cours de SVT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    /* ── VARIABLES & RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-deep:  #1a3a2a;
+      --green-mid:   #2d6a4f;
+      --green-light: #52b788;
+      --cream:       #f5f0e8;
+      --cream-dark:  #e8e0d0;
+      --amber:       #c9881c;
+      --amber-light: #e8b84b;
+      --text-dark:   #1c1c1c;
+      --text-mid:    #4a4a4a;
+      --white:       #ffffff;
+      --red:         #c0392b;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans:  'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(245,240,232,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(45,106,79,0.15);
+    }
+    .nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--green-deep); text-decoration: none; }
+    .nav-logo span { color: var(--amber); }
+    .nav-back { font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.2s; }
+    .nav-back:hover { color: var(--green-mid); }
+
+    /* ── PAGE LAYOUT ── */
+    .page-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8rem 2rem 5rem;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .page-eyebrow {
+      font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--amber); font-weight: 500; margin-bottom: 1rem;
+    }
+    .page-title {
+      font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--green-deep); line-height: 1.1;
+    }
+    .page-title em { font-style: italic; color: var(--green-mid); }
+    .page-subtitle {
+      margin-top: 1rem; font-size: 1rem; color: var(--text-mid);
+      font-weight: 300; line-height: 1.7; max-width: 500px; margin-inline: auto;
+    }
+
+    /* ── STEPPER ── */
+    .stepper {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; margin-bottom: 3.5rem; position: relative;
+    }
+    .step {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      position: relative; z-index: 2;
+    }
+    .step-circle {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 2px solid var(--cream-dark);
+      background: var(--cream); color: var(--text-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 1.1rem;
+      transition: all 0.4s;
+    }
+    .step.active .step-circle {
+      border-color: var(--green-mid); background: var(--green-mid); color: var(--white);
+    }
+    .step.done .step-circle {
+      border-color: var(--green-light); background: var(--green-light); color: var(--white);
+    }
+    .step-label {
+      font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-mid); white-space: nowrap; transition: color 0.3s;
+    }
+    .step.active .step-label { color: var(--green-deep); font-weight: 500; }
+    .step.done .step-label { color: var(--green-light); }
+    .step-line {
+      width: 80px; height: 1px; background: var(--cream-dark);
+      margin-bottom: 1.5rem; flex-shrink: 0; transition: background 0.4s;
+    }
+    .step-line.done { background: var(--green-light); }
+
+    /* ── PANELS ── */
+    .panel { display: none; animation: fadeUp 0.5s ease forwards; }
+    .panel.active { display: block; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── PANEL 1 : CALENDRIER ── */
+    .booking-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* Calendrier */
+    .calendar-card {
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      padding: 2rem;
+    }
+    .cal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .cal-nav-btn {
+      background: none; border: 1px solid var(--cream-dark);
+      width: 34px; height: 34px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; color: var(--green-deep);
+      transition: all 0.2s;
+    }
+    .cal-nav-btn:hover { background: var(--green-deep); color: var(--white); border-color: var(--green-deep); }
+    .cal-month-title {
+      font-family: var(--serif); font-size: 1.3rem; color: var(--green-deep);
+    }
+    .cal-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+    }
+    .cal-day-name {
+      text-align: center; font-size: 0.7rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-mid);
+      padding: 0.4rem 0; font-weight: 500;
+    }
+    .cal-day {
+      aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+      font-size: 0.88rem; cursor: pointer; border-radius: 50%;
+      border: 1px solid transparent; transition: all 0.2s; color: var(--text-dark);
+    }
+    .cal-day:hover:not(.disabled):not(.empty) {
+      border-color: var(--green-light); color: var(--green-mid);
+    }
+    .cal-day.today { font-weight: 500; color: var(--amber); }
+    .cal-day.selected {
+      background: var(--green-deep); color: var(--white) !important;
+      border-color: var(--green-deep);
+    }
+    .cal-day.disabled { color: var(--cream-dark); cursor: not-allowed; }
+    .cal-day.has-slots { position: relative; }
+    .cal-day.has-slots::after {
+      content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px; border-radius: 50%; background: var(--green-light);
+    }
+    .cal-day.selected::after { background: var(--amber-light); }
+    .cal-day.empty { cursor: default; }
+
+    /* Légende */
+    .cal-legend {
+      display: flex; gap: 1.2rem; margin-top: 1.2rem; flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.72rem; color: var(--text-mid);
+    }
+    .legend-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+
+    /* Formule */
+    .formule-card {
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      padding: 2rem;
+    }
+    .formule-title {
+      font-family: var(--serif); font-size: 1.2rem; color: var(--green-deep);
+      margin-bottom: 1.2rem;
+    }
+    .formule-options { display: flex; flex-direction: column; gap: 0.8rem; }
+    .formule-option {
+      border: 2px solid var(--cream-dark);
+      padding: 1rem 1.2rem;
+      cursor: pointer; transition: all 0.25s;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .formule-option:hover { border-color: var(--green-light); }
+    .formule-option.selected { border-color: var(--green-deep); background: rgba(26,58,42,0.03); }
+    .formule-option input[type="radio"] { display: none; }
+    .formule-radio {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--cream-dark);
+      flex-shrink: 0; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .formule-option.selected .formule-radio {
+      border-color: var(--green-deep); background: var(--green-deep);
+    }
+    .formule-option.selected .formule-radio::after {
+      content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--white);
+    }
+    .formule-name { font-size: 0.9rem; font-weight: 500; color: var(--text-dark); }
+    .formule-price { font-family: var(--serif); font-size: 1rem; color: var(--amber); margin-left: auto; }
+
+    /* Info box */
+    .info-box {
+      margin-top: 1.5rem;
+      background: rgba(26,58,42,0.04);
+      border-left: 3px solid var(--green-light);
+      padding: 1rem 1.2rem;
+      font-size: 0.85rem; color: var(--text-mid); line-height: 1.6;
+    }
+
+    /* ── PANEL 2 : CRÉNEAUX ── */
+    .slots-header {
+      font-family: var(--serif); font-size: 1.4rem; color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+    .slots-sub { font-size: 0.88rem; color: var(--text-mid); margin-bottom: 2rem; }
+    .slots-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+    }
+    .slot-btn {
+      border: 2px solid var(--cream-dark);
+      background: var(--white);
+      padding: 1rem; text-align: center;
+      cursor: pointer; transition: all 0.25s;
+      font-family: var(--sans); font-size: 0.9rem; color: var(--text-dark);
+    }
+    .slot-btn:hover:not(.taken) { border-color: var(--green-light); color: var(--green-mid); }
+    .slot-btn.selected { border-color: var(--green-deep); background: var(--green-deep); color: var(--white); }
+    .slot-btn.taken {
+      background: var(--cream-dark); color: rgba(0,0,0,0.3);
+      cursor: not-allowed; text-decoration: line-through;
+    }
+    .slot-time { font-weight: 500; display: block; }
+    .slot-duration { font-size: 0.72rem; color: inherit; opacity: 0.7; }
+
+    /* ── PANEL 3 : FORMULAIRE ── */
+    .form-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-mid); font-weight: 500;
+    }
+    .form-input, .form-select, .form-textarea {
+      border: 1px solid var(--cream-dark);
+      background: var(--white);
+      padding: 0.85rem 1rem;
+      font-family: var(--sans); font-size: 0.92rem; color: var(--text-dark);
+      outline: none; transition: border-color 0.2s;
+      width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--green-mid);
+    }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .form-select { appearance: none; cursor: pointer; }
+    .form-card {
+      background: var(--white); border: 1px solid var(--cream-dark);
+      padding: 2.5rem;
+    }
+    .form-section-title {
+      font-family: var(--serif); font-size: 1.2rem; color: var(--green-deep);
+      margin-bottom: 1.5rem; padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+
+    /* Recap */
+    .recap-box {
+      background: var(--green-deep); color: var(--cream);
+      padding: 1.5rem; margin-top: 2rem;
+      display: flex; gap: 2rem; flex-wrap: wrap;
+    }
+    .recap-item { flex: 1; min-width: 120px; }
+    .recap-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; margin-bottom: 0.3rem; }
+    .recap-value { font-family: var(--serif); font-size: 1.1rem; }
+
+    /* ── PANEL 4 : CONFIRMATION ── */
+    .confirmation-wrapper {
+      max-width: 600px; margin: 0 auto; text-align: center;
+    }
+    .confirmation-icon {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--green-light); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin: 0 auto 2rem;
+      animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes pop {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .confirmation-title {
+      font-family: var(--serif); font-size: 2.8rem; color: var(--green-deep);
+      margin-bottom: 1rem; line-height: 1.1;
+    }
+    .confirmation-title em { font-style: italic; color: var(--amber); }
+    .confirmation-text { font-size: 1rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 2.5rem; }
+    .confirmation-recap {
+      background: var(--white); border: 1px solid var(--cream-dark);
+      padding: 2rem; text-align: left; margin-bottom: 2.5rem;
+    }
+    .confirmation-recap-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.7rem 0; border-bottom: 1px solid var(--cream-dark);
+      font-size: 0.9rem;
+    }
+    .confirmation-recap-row:last-child { border-bottom: none; }
+    .recap-key { color: var(--text-mid); }
+    .recap-val { font-weight: 500; color: var(--text-dark); text-align: right; }
+    .payment-section {
+      background: var(--amber); padding: 2rem; text-align: left; margin-bottom: 1.5rem;
+    }
+    .payment-title { font-family: var(--serif); font-size: 1.3rem; color: var(--white); margin-bottom: 0.5rem; }
+    .payment-text { font-size: 0.85rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; line-height: 1.6; }
+
+    /* ── BOUTONS ── */
+    .btn { 
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 1rem 2rem; font-family: var(--sans); font-size: 0.88rem;
+      font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.3s; border: 2px solid transparent;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--green-deep); color: var(--cream); border-color: var(--green-deep);
+    }
+    .btn-primary:hover { background: transparent; color: var(--green-deep); }
+    .btn-primary:disabled {
+      background: var(--cream-dark); color: rgba(0,0,0,0.3); border-color: var(--cream-dark);
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: transparent; color: var(--green-deep); border-color: var(--green-deep);
+    }
+    .btn-secondary:hover { background: var(--green-deep); color: var(--cream); }
+    .btn-white {
+      background: var(--white); color: var(--amber); border-color: var(--white);
+    }
+    .btn-white:hover { background: var(--green-deep); color: var(--white); border-color: var(--green-deep); }
+    .btn-loading { opacity: 0.7; cursor: wait; pointer-events: none; }
+
+    .nav-buttons {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--cream-dark);
+    }
+
+    /* ── MESSAGES ── */
+    .msg { padding: 0.8rem 1.2rem; font-size: 0.88rem; margin-top: 1rem; }
+    .msg-error { background: rgba(192,57,43,0.08); color: var(--red); border-left: 3px solid var(--red); }
+    .msg-success { background: rgba(82,183,136,0.1); color: var(--green-mid); border-left: 3px solid var(--green-light); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .page-wrapper { padding: 6rem 1rem 3rem; }
+      .booking-grid { grid-template-columns: 1fr; }
+      .slots-grid { grid-template-columns: repeat(3, 1fr); }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      .step-line { width: 40px; }
+      .step-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav>
+    <a href="index.html" class="nav-logo">SVT<span>.</span>Cours</a>
+    <a href="index.html" class="nav-back">← Retour au site</a>
+  </nav>
+
+  <div class="page-wrapper">
+
+    <!-- En-tête -->
+    <div class="page-header">
+      <p class="page-eyebrow">Réservation en ligne</p>
+      <h1 class="page-title">Réservez votre <em>premier cours</em></h1>
+      <p class="page-subtitle">Choisissez un créneau, remplissez le formulaire, et recevez une confirmation par email.</p>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper" id="stepper">
+      <div class="step active" id="step-1">
+        <div class="step-circle">1</div>
+        <span class="step-label">Date & formule</span>
+      </div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step" id="step-2">
+        <div class="step-circle">2</div>
+        <span class="step-label">Créneau horaire</span>
+      </div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step" id="step-3">
+        <div class="step-circle">3</div>
+        <span class="step-label">Vos informations</span>
+      </div>
+      <div class="step-line" id="line-3"></div>
+      <div class="step" id="step-4">
+        <div class="step-circle">✓</div>
+        <span class="step-label">Confirmation</span>
+      </div>
+    </div>
+
+    <!-- ══ PANEL 1 : DATE & FORMULE ══ -->
+    <div class="panel active" id="panel-1">
+      <div class="booking-grid">
+
+        <!-- Calendrier -->
+        <div class="calendar-card">
+          <div class="cal-header">
+            <button class="cal-nav-btn" id="prevMonth">&#8592;</button>
+            <span class="cal-month-title" id="calMonthTitle"></span>
+            <button class="cal-nav-btn" id="nextMonth">&#8594;</button>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:var(--green-light)"></div>
+              <span>Créneaux disponibles</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:var(--green-deep)"></div>
+              <span>Date sélectionnée</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:var(--cream-dark)"></div>
+              <span>Indisponible</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formule -->
+        <div>
+          <div class="formule-card">
+            <p class="formule-title">Choisissez votre formule</p>
+            <div class="formule-options" id="formuleOptions">
+              <label class="formule-option selected" data-formule="carte">
+                <input type="radio" name="formule" value="carte" checked/>
+                <div class="formule-radio"></div>
+                <div>
+                  <p class="formule-name">Cours à la carte</p>
+                  <p style="font-size:0.75rem;color:var(--text-mid)">1 heure — sans engagement</p>
+                </div>
+                <span class="formule-price">35€</span>
+              </label>
+              <label class="formule-option" data-formule="mensuel">
+                <input type="radio" name="formule" value="mensuel"/>
+                <div class="formule-radio"></div>
+                <div>
+                  <p class="formule-name">Pack mensuel</p>
+                  <p style="font-size:0.75rem;color:var(--text-mid)">4 cours — suivi régulier</p>
+                </div>
+                <span class="formule-price">120€</span>
+              </label>
+              <label class="formule-option" data-formule="bac">
+                <input type="radio" name="formule" value="bac"/>
+                <div class="formule-radio"></div>
+                <div>
+                  <p class="formule-name">Prépa Bac</p>
+                  <p style="font-size:0.75rem;color:var(--text-mid)">Stage intensif 2 semaines</p>
+                </div>
+                <span class="formule-price">220€</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="info-box" id="infoBox">
+            📅 Sélectionnez une date sur le calendrier pour continuer.
+          </div>
+
+          <div class="nav-buttons">
+            <span></span>
+            <button class="btn btn-primary" id="btn1Next" disabled>
+              Choisir un créneau →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL 2 : CRÉNEAUX ══ -->
+    <div class="panel" id="panel-2">
+      <h2 class="slots-header" id="slotsHeader">Créneaux disponibles</h2>
+      <p class="slots-sub" id="slotsSub">Choisissez l'heure qui vous convient</p>
+      <div class="slots-grid" id="slotsGrid"></div>
+      <div id="slotError" class="msg msg-error" style="display:none">Veuillez sélectionner un créneau horaire.</div>
+      <div class="nav-buttons">
+        <button class="btn btn-secondary" id="btn2Back">← Retour</button>
+        <button class="btn btn-primary" id="btn2Next" disabled>Remplir le formulaire →</button>
+      </div>
+    </div>
+
+    <!-- ══ PANEL 3 : FORMULAIRE ══ -->
+    <div class="panel" id="panel-3">
+      <div class="form-card">
+        <p class="form-section-title">Vos informations</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="firstName">Prénom *</label>
+            <input class="form-input" type="text" id="firstName" placeholder="Marie" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lastName">Nom *</label>
+            <input class="form-input" type="text" id="lastName" placeholder="Dupont" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email *</label>
+            <input class="form-input" type="email" id="email" placeholder="marie@email.com" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">Téléphone</label>
+            <input class="form-input" type="tel" id="phone" placeholder="06 00 00 00 00"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="niveau">Niveau scolaire *</label>
+            <select class="form-select form-input" id="niveau" required>
+              <option value="">Sélectionner…</option>
+              <option>6ème</option><option>5ème</option><option>4ème</option><option>3ème</option>
+              <option>2nde</option><option>1ère</option><option>Terminale</option>
+              <option>Post-bac</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="matiere">Besoin principal *</label>
+            <select class="form-select form-input" id="matiere" required>
+              <option value="">Sélectionner…</option>
+              <option>Biologie cellulaire</option>
+              <option>Génétique & Évolution</option>
+              <option>Sciences de la Terre</option>
+              <option>Corps humain & Santé</option>
+              <option>Écosystèmes</option>
+              <option>Méthodologie Bac</option>
+              <option>Révision générale</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label" for="message">Message (objectifs, difficultés…)</label>
+            <textarea class="form-textarea" id="message" placeholder="Décrivez vos besoins, difficultés actuelles, objectifs…"></textarea>
+          </div>
+        </div>
+
+        <!-- Récap -->
+        <div class="recap-box" id="recapBox">
+          <div class="recap-item">
+            <p class="recap-label">Date</p>
+            <p class="recap-value" id="recapDate">—</p>
+          </div>
+          <div class="recap-item">
+            <p class="recap-label">Heure</p>
+            <p class="recap-value" id="recapHeure">—</p>
+          </div>
+          <div class="recap-item">
+            <p class="recap-label">Formule</p>
+            <p class="recap-value" id="recapFormule">—</p>
+          </div>
+          <div class="recap-item">
+            <p class="recap-label">Tarif</p>
+            <p class="recap-value" id="recapTarif">—</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="formError" class="msg msg-error" style="display:none">Veuillez remplir tous les champs obligatoires (*).</div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-secondary" id="btn3Back">← Retour</button>
+        <button class="btn btn-primary" id="btn3Next">Confirmer la réservation →</button>
+      </div>
+    </div>
+
+    <!-- ══ PANEL 4 : CONFIRMATION ══ -->
+    <div class="panel" id="panel-4">
+      <div class="confirmation-wrapper">
+        <div class="confirmation-icon">✓</div>
+        <h2 class="confirmation-title">Réservation <em>confirmée !</em></h2>
+        <p class="confirmation-text">
+          Merci <strong id="confirmName"></strong> ! Votre demande a bien été enregistrée.
+          Vous allez recevoir un email de confirmation à <strong id="confirmEmail"></strong>.
+        </p>
+
+        <div class="confirmation-recap">
+          <div class="confirmation-recap-row">
+            <span class="recap-key">📅 Date</span>
+            <span class="recap-val" id="confirmDate"></span>
+          </div>
+          <div class="confirmation-recap-row">
+            <span class="recap-key">🕐 Heure</span>
+            <span class="recap-val" id="confirmHeure"></span>
+          </div>
+          <div class="confirmation-recap-row">
+            <span class="recap-key">📚 Formule</span>
+            <span class="recap-val" id="confirmFormule"></span>
+          </div>
+          <div class="confirmation-recap-row">
+            <span class="recap-key">🎓 Niveau</span>
+            <span class="recap-val" id="confirmNiveau"></span>
+          </div>
+          <div class="confirmation-recap-row">
+            <span class="recap-key">💶 Tarif</span>
+            <span class="recap-val" id="confirmTarif"></span>
+          </div>
+        </div>
+
+        <!-- PAIEMENT -->
+        <div class="payment-section">
+          <p class="payment-title">💳 Finaliser le paiement</p>
+          <p class="payment-text">
+            Pour confirmer définitivement votre réservation, réglez en ligne en toute sécurité via Stripe.
+            Le cours est confirmé dès réception du paiement.
+          </p>
+          <!-- ⚠️ Remplace ce lien par ton vrai lien Stripe Payment Link -->
+          <a href="https://buy.stripe.com/ton-lien-ici" target="_blank" class="btn btn-white">
+            💳 Payer en ligne →
+          </a>
+        </div>
+
+        <div id="emailStatus" class="msg" style="display:none"></div>
+
+        <a href="index.html" class="btn btn-secondary" style="margin-top:1rem">← Retour à l'accueil</a>
+      </div>
+    </div>
+
+  </div><!-- .page-wrapper -->
+
+  <script>
+  // ══════════════════════════════════════════════
+  // CONFIGURATION — Modifie ces valeurs
+  // ══════════════════════════════════════════════
+
+  // EmailJS — Crée un compte sur emailjs.com (gratuit)
+  // Puis remplace ces 3 valeurs :
+  const EMAILJS_PUBLIC_KEY  = "BnKgpXzYQ9U2C2-ao";   // Account > API Keys
+  const EMAILJS_SERVICE_ID  = "service_v6ffs8i";   // Email Services
+  const EMAILJS_TEMPLATE_ID = "template_3g3zp41";  // Email Templates
+
+  // Créneaux disponibles par jour de la semaine
+  // 0=Dimanche, 1=Lundi ... 6=Samedi
+  // true = disponible, false = indisponible
+  const AVAILABLE_DAYS = [false, true, true, true, true, true, true]; // Lun-Sam
+
+  // Créneaux horaires par jour (modifie selon tes dispo)
+  const TIME_SLOTS = {
+    1: ["09:00","10:00","11:00","14:00","15:00","16:00","17:00","18:00"], // Lundi
+    2: ["09:00","10:00","14:00","15:00","17:00","18:00"],                 // Mardi
+    3: ["09:00","10:00","11:00","16:00","17:00","18:00"],                 // Mercredi
+    4: ["09:00","14:00","15:00","16:00","17:00","18:00"],                 // Jeudi
+    5: ["09:00","10:00","11:00","14:00","15:00","16:00"],                 // Vendredi
+    6: ["10:00","11:00","14:00","15:00","16:00"],                         // Samedi
+  };
+
+  // Créneaux déjà réservés (format "YYYY-MM-DD HH:MM")
+  // À terme, tu pourras gérer ça via une base de données
+  const TAKEN_SLOTS = [
+    // Exemple : "2025-06-10 14:00"
+  ];
+
+  const FORMULES = {
+    carte:   { label: "Cours à la carte",  price: "35€",  stripe: "https://buy.stripe.com/ton-lien-carte" },
+    mensuel: { label: "Pack mensuel",      price: "120€", stripe: "https://buy.stripe.com/ton-lien-mensuel" },
+    bac:     { label: "Prépa Bac",         price: "220€", stripe: "https://buy.stripe.com/ton-lien-bac" },
+  };
+
+  // ══════════════════════════════════════════════
+  // ÉTAT DE L'APPLICATION
+  // ══════════════════════════════════════════════
+  let state = {
+    currentStep: 1,
+    selectedDate: null,
+    selectedSlot: null,
+    selectedFormule: "carte",
+    viewYear: null,
+    viewMonth: null,
+  };
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  // ══════════════════════════════════════════════
+  // CALENDRIER
+  // ══════════════════════════════════════════════
+  function initCalendar() {
+    state.viewYear  = today.getFullYear();
+    state.viewMonth = today.getMonth();
+    renderCalendar();
+  }
+
+  function renderCalendar() {
+    const { viewYear: y, viewMonth: m } = state;
+    const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+    document.getElementById("calMonthTitle").textContent = `${monthNames[m]} ${y}`;
+
+    const grid = document.getElementById("calGrid");
+    grid.innerHTML = "";
+
+    // En-têtes jours
+    ["Lu","Ma","Me","Je","Ve","Sa","Di"].forEach(d => {
+      const el = document.createElement("div");
+      el.className = "cal-day-name"; el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const firstDay = new Date(y, m, 1).getDay(); // 0=dimanche
+    const offset = firstDay === 0 ? 6 : firstDay - 1; // Lundi = 0
+    const daysInMonth = new Date(y, m+1, 0).getDate();
+
+    // Cases vides
+    for (let i = 0; i < offset; i++) {
+      const el = document.createElement("div");
+      el.className = "cal-day empty";
+      grid.appendChild(el);
+    }
+
+    // Jours
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(y, m, d);
+      const dow  = date.getDay(); // 0=dimanche
+      const dateStr = formatDate(date);
+      const isPast  = date < today;
+      const isAvail = AVAILABLE_DAYS[dow] && !isPast;
+      const isToday = date.getTime() === today.getTime();
+      const isSel   = state.selectedDate === dateStr;
+
+      const el = document.createElement("div");
+      el.textContent = d;
+      el.className = "cal-day"
+        + (isPast || !AVAILABLE_DAYS[dow] ? " disabled" : "")
+        + (isAvail ? " has-slots" : "")
+        + (isToday ? " today" : "")
+        + (isSel   ? " selected" : "");
+
+      if (isAvail) {
+        el.addEventListener("click", () => selectDate(dateStr, date));
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  function selectDate(dateStr, dateObj) {
+    state.selectedDate = dateStr;
+    renderCalendar();
+    const dayNames = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+    const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+    const label = `${dayNames[dateObj.getDay()]} ${dateObj.getDate()} ${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+    document.getElementById("infoBox").innerHTML = `✅ <strong>${label}</strong> sélectionné — choisissez votre formule puis continuez.`;
+    document.getElementById("btn1Next").disabled = false;
+  }
+
+  document.getElementById("prevMonth").addEventListener("click", () => {
+    state.viewMonth--;
+    if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear--; }
+    renderCalendar();
+  });
+  document.getElementById("nextMonth").addEventListener("click", () => {
+    state.viewMonth++;
+    if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear++; }
+    renderCalendar();
+  });
+
+  // ══════════════════════════════════════════════
+  // FORMULES
+  // ══════════════════════════════════════════════
+  document.querySelectorAll(".formule-option").forEach(opt => {
+    opt.addEventListener("click", () => {
+      document.querySelectorAll(".formule-option").forEach(o => o.classList.remove("selected"));
+      opt.classList.add("selected");
+      state.selectedFormule = opt.dataset.formule;
+    });
+  });
+
+  // ══════════════════════════════════════════════
+  // CRÉNEAUX
+  // ══════════════════════════════════════════════
+  function renderSlots() {
+    const dateObj = new Date(state.selectedDate + "T12:00:00");
+    const dow = dateObj.getDay();
+    const slots = TIME_SLOTS[dow] || [];
+    const grid = document.getElementById("slotsGrid");
+    grid.innerHTML = "";
+    state.selectedSlot = null;
+    document.getElementById("btn2Next").disabled = true;
+
+    const dayNames = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+    const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+    document.getElementById("slotsHeader").textContent = "Créneaux du " + dayNames[dow] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()];
+
+    slots.forEach(time => {
+      const key = state.selectedDate + " " + time;
+      const isTaken = TAKEN_SLOTS.includes(key);
+      const btn = document.createElement("button");
+      btn.className = "slot-btn" + (isTaken ? " taken" : "");
+      btn.disabled = isTaken;
+      btn.innerHTML = `<span class="slot-time">${time}</span><span class="slot-duration">1h de cours</span>`;
+      if (!isTaken) {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".slot-btn").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          state.selectedSlot = time;
+          document.getElementById("btn2Next").disabled = false;
+          document.getElementById("slotError").style.display = "none";
+        });
+      }
+      grid.appendChild(btn);
+    });
+  }
+
+  // ══════════════════════════════════════════════
+  // NAVIGATION ENTRE ÉTAPES
+  // ══════════════════════════════════════════════
+  function goTo(step) {
+    document.querySelector(`.panel.active`)?.classList.remove("active");
+    document.getElementById(`panel-${step}`).classList.add("active");
+
+    for (let i = 1; i <= 4; i++) {
+      const s = document.getElementById(`step-${i}`);
+      s.classList.remove("active","done");
+      if (i < step) s.classList.add("done");
+      if (i === step) s.classList.add("active");
+    }
+    for (let i = 1; i <= 3; i++) {
+      const l = document.getElementById(`line-${i}`);
+      l.classList.toggle("done", i < step);
+    }
+    state.currentStep = step;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  document.getElementById("btn1Next").addEventListener("click", () => {
+    renderSlots();
+    goTo(2);
+  });
+
+  document.getElementById("btn2Back").addEventListener("click", () => goTo(1));
+  document.getElementById("btn2Next").addEventListener("click", () => {
+    if (!state.selectedSlot) {
+      document.getElementById("slotError").style.display = "block"; return;
+    }
+    updateRecap();
+    goTo(3);
+  });
+
+  document.getElementById("btn3Back").addEventListener("click", () => goTo(2));
+  document.getElementById("btn3Next").addEventListener("click", () => submitForm());
+
+  // ══════════════════════════════════════════════
+  // RÉCAP
+  // ══════════════════════════════════════════════
+  function updateRecap() {
+    const dateObj = new Date(state.selectedDate + "T12:00:00");
+    const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+    const dayNames = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+    const dateLabel = dayNames[dateObj.getDay()] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
+    const formule = FORMULES[state.selectedFormule];
+
+    document.getElementById("recapDate").textContent    = dateLabel;
+    document.getElementById("recapHeure").textContent   = state.selectedSlot;
+    document.getElementById("recapFormule").textContent = formule.label;
+    document.getElementById("recapTarif").textContent   = formule.price;
+  }
+
+  // ══════════════════════════════════════════════
+  // SOUMISSION DU FORMULAIRE
+  // ══════════════════════════════════════════════
+  function submitForm() {
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName  = document.getElementById("lastName").value.trim();
+    const email     = document.getElementById("email").value.trim();
+    const niveau    = document.getElementById("niveau").value;
+    const matiere   = document.getElementById("matiere").value;
+    const phone     = document.getElementById("phone").value.trim();
+    const message   = document.getElementById("message").value.trim();
+    const errEl     = document.getElementById("formError");
+
+    if (!firstName || !lastName || !email || !niveau || !matiere) {
+      errEl.style.display = "block"; return;
+    }
+    errEl.style.display = "none";
+
+    const dateObj = new Date(state.selectedDate + "T12:00:00");
+    const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+    const dayNames = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+    const dateLabel = dayNames[dateObj.getDay()] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
+    const formule = FORMULES[state.selectedFormule];
+
+    // Remplir la page de confirmation
+    document.getElementById("confirmName").textContent    = firstName;
+    document.getElementById("confirmEmail").textContent   = email;
+    document.getElementById("confirmDate").textContent    = dateLabel;
+    document.getElementById("confirmHeure").textContent   = state.selectedSlot;
+    document.getElementById("confirmFormule").textContent = formule.label;
+    document.getElementById("confirmNiveau").textContent  = niveau;
+    document.getElementById("confirmTarif").textContent   = formule.price;
+
+    // Lien Stripe dynamique selon la formule
+    document.querySelector(".payment-section .btn-white").href = formule.stripe;
+
+    goTo(4);
+
+    // Envoi email via EmailJS
+    sendConfirmationEmail({
+      to_name:    firstName + " " + lastName,
+      to_email:   email,
+      date:       dateLabel,
+      heure:      state.selectedSlot,
+      formule:    formule.label,
+      tarif:      formule.price,
+      niveau:     niveau,
+      matiere:    matiere,
+      phone:      phone || "Non renseigné",
+      message:    message || "Aucun message",
+    });
+  }
+
+  // ══════════════════════════════════════════════
+  // EMAILJS
+  // ══════════════════════════════════════════════
+  function sendConfirmationEmail(params) {
+    if (EMAILJS_PUBLIC_KEY === "VOTRE_PUBLIC_KEY") {
+      console.log("EmailJS non configuré — paramètres :", params);
+      showEmailStatus("info", "💡 EmailJS non configuré. L'email de confirmation n'a pas été envoyé (voir console).");
+      return;
+    }
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+      .then(() => {
+        showEmailStatus("success", "📧 Email de confirmation envoyé à " + params.to_email);
+      })
+      .catch(err => {
+        console.error("EmailJS error:", err);
+        showEmailStatus("error", "⚠️ L'email de confirmation n'a pas pu être envoyé. Vérifiez votre configuration EmailJS.");
+      });
+  }
+
+  function showEmailStatus(type, msg) {
+    const el = document.getElementById("emailStatus");
+    el.className = "msg msg-" + (type === "success" ? "success" : type === "info" ? "success" : "error");
+    el.textContent = msg;
+    el.style.display = "block";
+  }
+
+  // ══════════════════════════════════════════════
+  // UTILS
+  // ══════════════════════════════════════════════
+  function formatDate(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth()+1).padStart(2,"0");
+    const d = String(date.getDate()).padStart(2,"0");
+    return `${y}-${m}-${d}`;
+  }
+
+  // ── INIT ──
+  initCalendar();
+  </script>
+</body>
+</html>
