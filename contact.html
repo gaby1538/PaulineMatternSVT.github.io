@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — Cours de SVT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green-deep:#1a3a2a;--green-mid:#2d6a4f;--green-light:#52b788;
+      --cream:#f5f0e8;--cream-dark:#e8e0d0;--amber:#c9881c;--amber-light:#e8b84b;
+      --text-dark:#1c1c1c;--text-mid:#4a4a4a;--white:#ffffff;
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--cream);color:var(--text-dark)}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(45,106,79,0.15)}
+    .nav-logo{font-family:var(--serif);font-size:1.4rem;color:var(--green-deep);text-decoration:none}
+    .nav-logo span{color:var(--amber)}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--green-mid)}
+    .nav-cta{background:var(--green-deep);color:var(--cream)!important;padding:0.5rem 1.2rem}
+    @media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}}
+
+    /* HERO */
+    .hero{min-height:42vh;background:var(--green-deep);display:flex;align-items:flex-end;padding:0 6rem 4rem;position:relative;overflow:hidden;padding-top:7rem}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(82,183,136,0.25) 0%,transparent 60%)}
+    .hero-inner{position:relative;z-index:2}
+    .hero-eyebrow{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--amber-light);margin-bottom:1rem}
+    .hero-title{font-family:var(--serif);font-size:clamp(2.8rem,5vw,4.5rem);color:var(--cream);line-height:1.1}
+    .hero-title em{font-style:italic;color:var(--green-light)}
+    @media(max-width:768px){.hero{padding:7rem 1.5rem 3rem}}
+
+    /* MAIN GRID */
+    .main{max-width:1100px;margin:0 auto;padding:5rem 2rem;display:grid;grid-template-columns:5fr 4fr;gap:4rem;align-items:start}
+    @media(max-width:860px){.main{grid-template-columns:1fr;gap:3rem}}
+
+    /* FORMULAIRE */
+    .form-card{background:var(--white);border:1px solid var(--cream-dark);padding:2.5rem}
+    .form-title{font-family:var(--serif);font-size:1.8rem;color:var(--green-deep);margin-bottom:0.4rem}
+    .form-sub{font-size:0.88rem;color:var(--text-mid);margin-bottom:2rem;font-weight:300;line-height:1.6}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem}
+    .form-group{display:flex;flex-direction:column;gap:0.4rem}
+    .form-group.full{grid-column:1/-1}
+    .form-label{font-size:0.73rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);font-weight:500}
+    .form-input,.form-select,.form-textarea{border:1px solid var(--cream-dark);background:var(--cream);padding:0.85rem 1rem;font-family:var(--sans);font-size:0.9rem;color:var(--text-dark);outline:none;transition:border-color 0.2s;width:100%}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--green-mid);background:var(--white)}
+    .form-textarea{resize:vertical;min-height:120px}
+    .form-select{appearance:none;cursor:pointer}
+    @media(max-width:580px){.form-row{grid-template-columns:1fr}}
+
+    .btn-submit{width:100%;background:var(--green-deep);color:var(--cream);border:2px solid var(--green-deep);padding:1rem;font-family:var(--sans);font-size:0.88rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;margin-top:1rem;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+    .btn-submit:hover:not(:disabled){background:transparent;color:var(--green-deep)}
+    .btn-submit:disabled{opacity:0.6;cursor:wait}
+
+    .msg{padding:0.8rem 1.1rem;font-size:0.85rem;margin-top:1rem;display:none}
+    .msg.show{display:block}
+    .msg-ok{background:rgba(82,183,136,0.1);color:var(--green-mid);border-left:3px solid var(--green-light)}
+    .msg-ko{background:rgba(192,57,43,0.08);color:#c0392b;border-left:3px solid #c0392b}
+
+    /* SIDEBAR INFO */
+    .sidebar{display:flex;flex-direction:column;gap:1.5rem}
+
+    .info-card{background:var(--white);border:1px solid var(--cream-dark);padding:2rem}
+    .info-card-title{font-family:var(--serif);font-size:1.2rem;color:var(--green-deep);margin-bottom:1.2rem;padding-bottom:0.7rem;border-bottom:1px solid var(--cream-dark)}
+    .info-row{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.2rem}
+    .info-icon{font-size:1.2rem;flex-shrink:0;margin-top:0.1rem}
+    .info-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);margin-bottom:0.2rem}
+    .info-value{font-size:0.9rem;color:var(--text-dark);font-weight:400}
+    .info-value a{color:var(--green-mid);text-decoration:none}
+    .info-value a:hover{text-decoration:underline}
+
+    .dispo-card{background:var(--green-deep);color:var(--cream);padding:2rem}
+    .dispo-title{font-family:var(--serif);font-size:1.2rem;margin-bottom:1.2rem}
+    .dispo-row{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.1);font-size:0.85rem}
+    .dispo-row:last-child{border-bottom:none}
+    .dispo-day{color:rgba(245,240,232,0.7)}
+    .dispo-hours{color:var(--amber-light);font-weight:500}
+    .dispo-off{color:rgba(245,240,232,0.3);font-style:italic}
+
+    .faq-card{background:var(--cream-dark);padding:2rem}
+    .faq-title{font-family:var(--serif);font-size:1.2rem;color:var(--green-deep);margin-bottom:1.2rem}
+    .faq-item{margin-bottom:1rem}
+    .faq-q{font-size:0.85rem;font-weight:500;color:var(--green-deep);margin-bottom:0.3rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+    .faq-q:hover{color:var(--amber)}
+    .faq-a{font-size:0.82rem;color:var(--text-mid);line-height:1.6;font-weight:300;display:none;padding-top:0.3rem}
+    .faq-item.open .faq-a{display:block}
+    .faq-item.open .faq-arrow{transform:rotate(180deg)}
+    .faq-arrow{transition:transform 0.2s;font-size:0.7rem}
+
+    .cta-card{background:var(--amber);color:var(--white);padding:2rem;text-align:center}
+    .cta-card-title{font-family:var(--serif);font-size:1.4rem;margin-bottom:0.5rem}
+    .cta-card-sub{font-size:0.83rem;opacity:0.85;margin-bottom:1.5rem;line-height:1.6}
+    .btn-cta{display:inline-block;background:var(--white);color:var(--amber);padding:0.75rem 1.5rem;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;font-family:var(--sans);text-decoration:none;font-weight:500;transition:all 0.2s}
+    .btn-cta:hover{background:var(--green-deep);color:var(--white)}
+
+    .reveal{opacity:0;transform:translateY(20px);transition:all 0.6s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    /* SUCCESS STATE */
+    .success-state{display:none;text-align:center;padding:3rem 2rem}
+    .success-icon{font-size:3rem;margin-bottom:1rem}
+    .success-title{font-family:var(--serif);font-size:2rem;color:var(--green-deep);margin-bottom:0.8rem}
+    .success-text{font-size:0.95rem;color:var(--text-mid);line-height:1.7}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">SVT<span>.</span>Cours</a>
+    <ul class="nav-links">
+      <li><a href="cours.html">Cours</a></li>
+      <li><a href="fiches.html">Fiches</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+      <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Me contacter</p>
+      <h1 class="hero-title">Une question ?<br/><em>Écrivez-moi.</em></h1>
+    </div>
+  </section>
+
+  <div class="main">
+
+    <!-- FORMULAIRE -->
+    <div class="form-card reveal">
+      <!-- Formulaire -->
+      <div id="formState">
+        <h2 class="form-title">Envoyer un message</h2>
+        <p class="form-sub">Je réponds généralement sous 24h. Pour réserver directement un cours, utilisez la page de réservation.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="prenom">Prénom *</label>
+            <input class="form-input" type="text" id="prenom" placeholder="Marie" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="nom">Nom *</label>
+            <input class="form-input" type="text" id="nom" placeholder="Dupont" required/>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="email">Email *</label>
+            <input class="form-input" type="email" id="email" placeholder="marie@email.com" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tel">Téléphone</label>
+            <input class="form-input" type="tel" id="tel" placeholder="06 00 00 00 00"/>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="niveau">Niveau scolaire</label>
+            <select class="form-select form-input" id="niveau">
+              <option value="">Sélectionner…</option>
+              <option>6ème</option><option>5ème</option><option>4ème</option><option>3ème</option>
+              <option>2nde</option><option>1ère</option><option>Terminale</option><option>Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sujet">Sujet *</label>
+            <select class="form-select form-input" id="sujet" required>
+              <option value="">Sélectionner…</option>
+              <option>Demande d'information</option>
+              <option>Réservation d'un cours</option>
+              <option>Question pédagogique</option>
+              <option>Partenariat / établissement</option>
+              <option>Autre</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" for="message">Message *</label>
+          <textarea class="form-textarea" id="message" placeholder="Décrivez votre demande, vos besoins, vos questions…" required></textarea>
+        </div>
+
+        <div id="formMsg" class="msg"></div>
+
+        <button class="btn-submit" id="btnSubmit" onclick="sendMessage()">
+          <span id="btnTxt">Envoyer le message →</span>
+        </button>
+      </div>
+
+      <!-- État succès -->
+      <div class="success-state" id="successState">
+        <div class="success-icon">✅</div>
+        <h3 class="success-title">Message envoyé !</h3>
+        <p class="success-text">Merci pour votre message.<br/>Je vous répondrai dans les 24 heures.</p>
+        <br/>
+        <a href="reservation.html" style="font-size:0.85rem;color:var(--green-mid)">→ Réserver un cours directement</a>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- Coordonnées -->
+      <div class="info-card reveal">
+        <h3 class="info-card-title">Coordonnées</h3>
+        <div class="info-row">
+          <span class="info-icon">📧</span>
+          <div>
+            <p class="info-label">Email</p>
+            <!-- ✏️ Remplace par ton email -->
+            <p class="info-value"><a href="mailto:pauline.mattern04@gmail.com">pauline.mattern04@gmail.com</a></p>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📱</span>
+          <div>
+            <p class="info-label">Téléphone / WhatsApp</p>
+            <!-- ✏️ Remplace par ton numéro -->
+            <p class="info-value"><a href="tel:+33600000000">06 00 00 00 00</a></p>
+          </div>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <div>
+            <p class="info-label">Lieu des cours</p>
+            <p class="info-value">En ligne (Zoom / Meet)<br/>ou à domicile (Paris & région)</p>
+          </div>
+        </div>
+        <div class="info-row" style="margin-bottom:0">
+          <span class="info-icon">⏱️</span>
+          <div>
+            <p class="info-label">Délai de réponse</p>
+            <p class="info-value">Sous 24h en semaine</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disponibilités -->
+      <div class="dispo-card reveal">
+        <h3 class="dispo-title">🗓️ Disponibilités</h3>
+        <div class="dispo-row"><span class="dispo-day">Lundi</span><span class="dispo-hours">9h – 19h</span></div>
+        <div class="dispo-row"><span class="dispo-day">Mardi</span><span class="dispo-hours">9h – 19h</span></div>
+        <div class="dispo-row"><span class="dispo-day">Mercredi</span><span class="dispo-hours">9h – 19h</span></div>
+        <div class="dispo-row"><span class="dispo-day">Jeudi</span><span class="dispo-hours">9h – 19h</span></div>
+        <div class="dispo-row"><span class="dispo-day">Vendredi</span><span class="dispo-hours">9h – 17h</span></div>
+        <div class="dispo-row"><span class="dispo-day">Samedi</span><span class="dispo-hours">10h – 16h</span></div>
+        <div class="dispo-row"><span class="dispo-day">Dimanche</span><span class="dispo-off">Indisponible</span></div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq-card reveal">
+        <h3 class="faq-title">Questions fréquentes</h3>
+        <div class="faq-item">
+          <p class="faq-q" onclick="toggleFaq(this)">Comment se déroule le premier cours ? <span class="faq-arrow">▼</span></p>
+          <p class="faq-a">Le premier cours est un cours diagnostic : on évalue le niveau, les lacunes et les objectifs. C'est aussi l'occasion de se rencontrer et de définir un programme personnalisé.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q" onclick="toggleFaq(this)">Les cours ont-ils lieu en ligne ou en présentiel ? <span class="faq-arrow">▼</span></p>
+          <p class="faq-a">Les deux ! Les cours en ligne se font via Zoom ou Google Meet avec un tableau blanc interactif. En présentiel, je me déplace à domicile dans Paris et sa banlieue.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q" onclick="toggleFaq(this)">Peut-on annuler ou reporter un cours ? <span class="faq-arrow">▼</span></p>
+          <p class="faq-a">Oui, avec un préavis de 24h. En dessous de 24h, le cours est dû sauf cas de force majeure. Je suis flexible et humain !</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q" onclick="toggleFaq(this)">Y a-t-il un engagement de durée ? <span class="faq-arrow">▼</span></p>
+          <p class="faq-a">Aucun engagement ! Vous pouvez prendre des cours à la carte ou opter pour le pack mensuel. Vous arrêtez quand vous voulez.</p>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-card reveal">
+        <h3 class="cta-card-title">Prêt à commencer ?</h3>
+        <p class="cta-card-sub">Réservez directement votre premier cours en ligne — sans engagement.</p>
+        <a href="reservation.html" class="btn-cta">📅 Réserver un cours</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+  // ══ EMAILJS — mêmes clés que reservation.html ══
+  const EMAILJS_PUBLIC_KEY  = "BnKgpXzYQ9U2C2-ao";   // Account > API Keys
+  const EMAILJS_SERVICE_ID  = "service_v6ffs8i";   // Email Services
+  const EMAILJS_TEMPLATE_ID = "template_3g3zp41";  // Email Templates
+
+  function sendMessage(){
+    const prenom  = document.getElementById("prenom").value.trim();
+    const nom     = document.getElementById("nom").value.trim();
+    const email   = document.getElementById("email").value.trim();
+    const sujet   = document.getElementById("sujet").value;
+    const message = document.getElementById("message").value.trim();
+    const msg     = document.getElementById("formMsg");
+
+    if(!prenom||!nom||!email||!sujet||!message){
+      msg.className="msg msg-ko show";
+      msg.textContent="Veuillez remplir tous les champs obligatoires (*).";
+      return;
+    }
+
+    const btn=document.getElementById("btnSubmit");
+    btn.disabled=true;
+    document.getElementById("btnTxt").textContent="Envoi en cours…";
+
+    if(EMAILJS_PUBLIC_KEY==="VOTRE_PUBLIC_KEY"){
+      // Sans EmailJS configuré : affiche juste le succès
+      setTimeout(()=>showSuccess(),800);
+      return;
+    }
+
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      from_name: prenom+" "+nom,
+      from_email: email,
+      phone: document.getElementById("tel").value||"Non renseigné",
+      niveau: document.getElementById("niveau").value||"Non renseigné",
+      subject: sujet,
+      message: message,
+    })
+    .then(()=>showSuccess())
+    .catch(()=>{
+      btn.disabled=false;
+      document.getElementById("btnTxt").textContent="Envoyer le message →";
+      msg.className="msg msg-ko show";
+      msg.textContent="Une erreur est survenue. Réessayez ou envoyez-moi un email directement.";
+    });
+  }
+
+  function showSuccess(){
+    document.getElementById("formState").style.display="none";
+    document.getElementById("successState").style.display="block";
+  }
+
+  function toggleFaq(el){
+    const item=el.parentElement;
+    item.classList.toggle("open");
+  }
+
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fiches méthode — SVT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green-deep:#1a3a2a;--green-mid:#2d6a4f;--green-light:#52b788;
+      --cream:#f5f0e8;--cream-dark:#e8e0d0;--amber:#c9881c;--amber-light:#e8b84b;
+      --text-dark:#1c1c1c;--text-mid:#4a4a4a;--white:#ffffff;
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--cream);color:var(--text-dark)}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(45,106,79,0.15)}
+    .nav-logo{font-family:var(--serif);font-size:1.4rem;color:var(--green-deep);text-decoration:none}
+    .nav-logo span{color:var(--amber)}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--green-mid)}
+    .nav-cta{background:var(--green-deep);color:var(--cream)!important;padding:0.5rem 1.2rem}
+    @media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}}
+
+    /* HERO */
+    .hero{background:var(--amber);color:var(--white);padding:9rem 6rem 5rem;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 80%,rgba(255,255,255,0.1) 0%,transparent 60%)}
+    .hero::after{content:'FICHES';position:absolute;right:-2rem;top:50%;transform:translateY(-50%);font-family:var(--serif);font-size:18rem;color:rgba(255,255,255,0.06);line-height:1;pointer-events:none}
+    .hero-inner{max-width:600px;position:relative;z-index:2}
+    .hero-eyebrow{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:1rem}
+    .hero-title{font-family:var(--serif);font-size:clamp(2.8rem,5vw,4.5rem);line-height:1.1;margin-bottom:1.2rem}
+    .hero-title em{font-style:italic;color:rgba(255,255,255,0.8)}
+    .hero-sub{font-size:1rem;font-weight:300;line-height:1.7;color:rgba(255,255,255,0.85)}
+    @media(max-width:768px){.hero{padding:7rem 1.5rem 3rem}.hero::after{display:none}}
+
+    /* TABS NAVIGATION */
+    .tabs-nav{background:var(--white);border-bottom:1px solid var(--cream-dark);padding:0 6rem;display:flex;gap:0;position:sticky;top:72px;z-index:50;overflow-x:auto}
+    .tab-btn{padding:1.1rem 1.8rem;font-family:var(--sans);font-size:0.83rem;letter-spacing:0.07em;text-transform:uppercase;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;color:var(--text-mid);white-space:nowrap;transition:all 0.2s}
+    .tab-btn:hover{color:var(--green-mid)}
+    .tab-btn.active{color:var(--green-deep);border-bottom-color:var(--amber);font-weight:500}
+    @media(max-width:768px){.tabs-nav{padding:0 0.5rem}}
+
+    /* MAIN */
+    .main{max-width:1100px;margin:0 auto;padding:4rem 2rem}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block;animation:fadeUp 0.4s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+    /* INTRO NIVEAU */
+    .niveau-intro{display:flex;align-items:center;gap:2rem;margin-bottom:3rem;padding:2rem;background:var(--white);border-left:4px solid var(--amber)}
+    .niveau-icon{font-size:2.5rem;flex-shrink:0}
+    .niveau-title{font-family:var(--serif);font-size:1.6rem;color:var(--green-deep);margin-bottom:0.3rem}
+    .niveau-desc{font-size:0.88rem;color:var(--text-mid);line-height:1.6;font-weight:300}
+
+    /* THEME SECTION */
+    .theme-section{margin-bottom:3rem}
+    .theme-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+    .theme-dot{width:12px;height:12px;border-radius:50%;background:var(--green-light);flex-shrink:0}
+    .theme-title-txt{font-family:var(--serif);font-size:1.3rem;color:var(--green-deep)}
+    .theme-count{font-size:0.75rem;color:var(--text-mid);background:var(--cream-dark);padding:0.15rem 0.6rem;border-radius:2px}
+
+    .fiches-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+    @media(max-width:900px){.fiches-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:580px){.fiches-grid{grid-template-columns:1fr}}
+
+    .fiche-card{background:var(--white);border:1px solid var(--cream-dark);padding:1.5rem;position:relative;overflow:hidden;transition:all 0.25s}
+    .fiche-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--green-light)}
+    .fiche-card.orange::before{background:var(--amber)}
+    .fiche-card.deep::before{background:var(--green-deep)}
+    .fiche-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(26,58,42,0.1)}
+
+    .fiche-type{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-mid);margin-bottom:0.5rem}
+    .fiche-title{font-family:var(--serif);font-size:1.05rem;color:var(--green-deep);margin-bottom:0.6rem;line-height:1.3}
+    .fiche-desc{font-size:0.8rem;color:var(--text-mid);line-height:1.55;font-weight:300;margin-bottom:1.2rem}
+    .fiche-tags{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem}
+    .fiche-tag{font-size:0.65rem;letter-spacing:0.06em;text-transform:uppercase;background:var(--cream);border:1px solid var(--cream-dark);padding:0.15rem 0.5rem;color:var(--text-mid)}
+    .fiche-footer{display:flex;align-items:center;justify-content:space-between;padding-top:0.8rem;border-top:1px solid var(--cream-dark)}
+    .fiche-pages{font-size:0.72rem;color:var(--text-mid)}
+    .btn-fiche{font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;background:var(--green-deep);color:var(--cream);border:none;padding:0.45rem 0.9rem;cursor:pointer;font-family:var(--sans);transition:all 0.2s;text-decoration:none;display:inline-block}
+    .btn-fiche:hover{background:var(--amber)}
+
+    /* MODAL FICHE */
+    .modal-overlay{position:fixed;inset:0;background:rgba(26,58,42,0.75);z-index:200;display:none;align-items:center;justify-content:center;padding:2rem;backdrop-filter:blur(4px)}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--cream);max-width:700px;width:100%;max-height:90vh;overflow-y:auto;animation:mIn 0.3s ease}
+    @keyframes mIn{from{opacity:0;transform:scale(0.96) translateY(16px)}to{opacity:1;transform:none}}
+    .modal-header{background:var(--amber);color:var(--white);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:flex-start}
+    .modal-close{background:none;border:none;color:rgba(255,255,255,0.7);font-size:1.5rem;cursor:pointer;line-height:1;padding:0;transition:color 0.2s}
+    .modal-close:hover{color:var(--white)}
+    .modal-body{padding:2rem 2.5rem}
+    .fiche-content{font-size:0.9rem;line-height:1.85;color:var(--text-mid);font-weight:300}
+    .fiche-content h4{font-family:var(--serif);font-size:1.1rem;color:var(--green-deep);margin:1.5rem 0 0.5rem}
+    .fiche-content p{margin-bottom:0.7rem}
+    .fiche-content ul{padding-left:1.4rem;margin-bottom:0.7rem}
+    .fiche-content li{margin-bottom:0.35rem}
+    .fiche-content .encadre{background:rgba(26,58,42,0.05);border-left:3px solid var(--green-light);padding:0.8rem 1rem;margin:1rem 0;font-style:italic}
+    .dl-btn{display:inline-flex;align-items:center;gap:0.5rem;background:var(--green-deep);color:var(--cream);padding:0.7rem 1.4rem;font-size:0.82rem;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--sans);border:none;cursor:pointer;text-decoration:none;transition:background 0.2s;margin-top:1.5rem}
+    .dl-btn:hover{background:var(--amber)}
+
+    .reveal{opacity:0;transform:translateY(20px);transition:all 0.5s ease}
+    .reveal.visible{opacity:1;transform:none}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">SVT<span>.</span>Cours</a>
+    <ul class="nav-links">
+      <li><a href="cours.html">Cours</a></li>
+      <li><a href="fiches.html" class="active">Fiches</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Méthodologie SVT</p>
+      <h1 class="hero-title">Fiches <em>méthode</em><br/>& révision</h1>
+      <p class="hero-sub">Organisées par niveau et par thème — pour réviser efficacement et maîtriser les attendus du bac.</p>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="college">🏫 Collège</button>
+    <button class="tab-btn" data-tab="lycee">📚 Lycée (2nde · 1ère)</button>
+    <button class="tab-btn" data-tab="terminale">🎓 Terminale</button>
+    <button class="tab-btn" data-tab="methodo">✏️ Méthodologie</button>
+  </div>
+
+  <div class="main">
+
+    <!-- COLLÈGE -->
+    <div class="tab-panel active" id="tab-college">
+      <div class="niveau-intro reveal">
+        <span class="niveau-icon">🏫</span>
+        <div>
+          <p class="niveau-title">Collège — 5ème, 4ème, 3ème</p>
+          <p class="niveau-desc">Fiches de révision et mémos pour consolider les bases avant le brevet. Chaque fiche résume l'essentiel en 1-2 pages.</p>
+        </div>
+      </div>
+
+      <div class="theme-section reveal">
+        <div class="theme-header">
+          <div class="theme-dot"></div>
+          <span class="theme-title-txt">Biologie & Corps humain</span>
+          <span class="theme-count">4 fiches</span>
+        </div>
+        <div class="fiches-grid">
+          <div class="fiche-card">
+            <p class="fiche-type">Mémo</p>
+            <h3 class="fiche-title">Les écosystèmes — l'essentiel</h3>
+            <p class="fiche-desc">Chaînes alimentaires, biocénose, biotope, biodiversité.</p>
+            <div class="fiche-tags"><span class="fiche-tag">5ème</span><span class="fiche-tag">Écologie</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 1 page</span><button class="btn-fiche" onclick="openFiche('ecosystemes')">Lire →</button></div>
+          </div>
+          <div class="fiche-card orange">
+            <p class="fiche-type">Fiche révision</p>
+            <h3 class="fiche-title">La reproduction humaine</h3>
+            <p class="fiche-desc">Organes, puberté, fécondation, contraception.</p>
+            <div class="fiche-tags"><span class="fiche-tag">4ème</span><span class="fiche-tag">Biologie</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('repro')">Lire →</button></div>
+          </div>
+          <div class="fiche-card deep">
+            <p class="fiche-type">Fiche révision</p>
+            <h3 class="fiche-title">Le système nerveux</h3>
+            <p class="fiche-desc">Neurones, arc réflexe, cerveau, sens.</p>
+            <div class="fiche-tags"><span class="fiche-tag">4ème</span><span class="fiche-tag">Biologie</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('nerveux')">Lire →</button></div>
+          </div>
+          <div class="fiche-card">
+            <p class="fiche-type">Mémo brevet</p>
+            <h3 class="fiche-title">Génétique & Hérédité (3ème)</h3>
+            <p class="fiche-desc">Chromosomes, gènes, allèles, maladies génétiques.</p>
+            <div class="fiche-tags"><span class="fiche-tag">3ème</span><span class="fiche-tag">Génétique</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('heredite')">Lire →</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="theme-section reveal">
+        <div class="theme-header">
+          <div class="theme-dot" style="background:var(--amber)"></div>
+          <span class="theme-title-txt">Géologie & Terre</span>
+          <span class="theme-count">2 fiches</span>
+        </div>
+        <div class="fiches-grid">
+          <div class="fiche-card orange">
+            <p class="fiche-type">Mémo</p>
+            <h3 class="fiche-title">Tectonique des plaques</h3>
+            <p class="fiche-desc">Plaques lithosphériques, séismes, volcans, dorsales.</p>
+            <div class="fiche-tags"><span class="fiche-tag">3ème</span><span class="fiche-tag">Géologie</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 1 page</span><button class="btn-fiche" onclick="openFiche('tectonique')">Lire →</button></div>
+          </div>
+          <div class="fiche-card deep">
+            <p class="fiche-type">Mémo</p>
+            <h3 class="fiche-title">L'évolution de la Terre</h3>
+            <p class="fiche-desc">Histoire géologique, ères, fossiles, datation.</p>
+            <div class="fiche-tags"><span class="fiche-tag">3ème</span><span class="fiche-tag">Géologie</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 1 page</span><button class="btn-fiche" onclick="openFiche('terreEvol')">Lire →</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LYCÉE -->
+    <div class="tab-panel" id="tab-lycee">
+      <div class="niveau-intro reveal">
+        <span class="niveau-icon">📚</span>
+        <div>
+          <p class="niveau-title">Lycée — 2nde & 1ère</p>
+          <p class="niveau-desc">Fiches structurées pour consolider les nouveaux concepts du lycée et préparer les contrôles.</p>
+        </div>
+      </div>
+      <div class="theme-section reveal">
+        <div class="theme-header">
+          <div class="theme-dot"></div>
+          <span class="theme-title-txt">Biologie cellulaire & moléculaire</span>
+          <span class="theme-count">3 fiches</span>
+        </div>
+        <div class="fiches-grid">
+          <div class="fiche-card">
+            <p class="fiche-type">Fiche cours</p>
+            <h3 class="fiche-title">La cellule eucaryote</h3>
+            <p class="fiche-desc">Organites, membranes, compartiments cellulaires.</p>
+            <div class="fiche-tags"><span class="fiche-tag">2nde</span><span class="fiche-tag">Biologie</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('celluleLycee')">Lire →</button></div>
+          </div>
+          <div class="fiche-card orange">
+            <p class="fiche-type">Fiche cours</p>
+            <h3 class="fiche-title">La photosynthèse</h3>
+            <p class="fiche-desc">Réactions lumineuses, cycle de Calvin, chloroplaste.</p>
+            <div class="fiche-tags"><span class="fiche-tag">1ère</span><span class="fiche-tag">Biologie</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('photosynthese')">Lire →</button></div>
+          </div>
+          <div class="fiche-card deep">
+            <p class="fiche-type">Fiche cours</p>
+            <h3 class="fiche-title">Le système immunitaire</h3>
+            <p class="fiche-desc">Immunité innée, adaptative, anticorps, vaccination.</p>
+            <div class="fiche-tags"><span class="fiche-tag">1ère</span><span class="fiche-tag">Biologie</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 3 pages</span><button class="btn-fiche" onclick="openFiche('immunLycee')">Lire →</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TERMINALE -->
+    <div class="tab-panel" id="tab-terminale">
+      <div class="niveau-intro reveal">
+        <span class="niveau-icon">🎓</span>
+        <div>
+          <p class="niveau-title">Terminale — Préparation Bac</p>
+          <p class="niveau-desc">Fiches synthèse pour les grands thèmes du bac. Conçues pour réviser vite et efficacement avant les épreuves.</p>
+        </div>
+      </div>
+      <div class="theme-section reveal">
+        <div class="theme-header">
+          <div class="theme-dot"></div>
+          <span class="theme-title-txt">Génétique & Évolution</span>
+          <span class="theme-count">4 fiches</span>
+        </div>
+        <div class="fiches-grid">
+          <div class="fiche-card">
+            <p class="fiche-type">Synthèse bac</p>
+            <h3 class="fiche-title">Génétique moléculaire</h3>
+            <p class="fiche-desc">Réplication, transcription, traduction, mutations.</p>
+            <div class="fiche-tags"><span class="fiche-tag">Terminale</span><span class="fiche-tag">Bac</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 3 pages</span><button class="btn-fiche" onclick="openFiche('genetiqueT')">Lire →</button></div>
+          </div>
+          <div class="fiche-card orange">
+            <p class="fiche-type">Synthèse bac</p>
+            <h3 class="fiche-title">L'évolution du vivant</h3>
+            <p class="fiche-desc">Sélection naturelle, dérive, spéciation, phylogénèse.</p>
+            <div class="fiche-tags"><span class="fiche-tag">Terminale</span><span class="fiche-tag">Bac</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('evolutionT')">Lire →</button></div>
+          </div>
+          <div class="fiche-card deep">
+            <p class="fiche-type">Synthèse bac</p>
+            <h3 class="fiche-title">Neurosciences & comportement</h3>
+            <p class="fiche-desc">Système nerveux, plasticité synaptique, apprentissage.</p>
+            <div class="fiche-tags"><span class="fiche-tag">Terminale</span><span class="fiche-tag">Bac</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('neuro')">Lire →</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÉTHODOLOGIE -->
+    <div class="tab-panel" id="tab-methodo">
+      <div class="niveau-intro reveal">
+        <span class="niveau-icon">✏️</span>
+        <div>
+          <p class="niveau-title">Fiches Méthodologie</p>
+          <p class="niveau-desc">Maîtrisez les exercices types attendus au bac : synthèse de documents, schéma bilan, argumentation scientifique.</p>
+        </div>
+      </div>
+      <div class="theme-section reveal">
+        <div class="theme-header">
+          <div class="theme-dot" style="background:var(--amber)"></div>
+          <span class="theme-title-txt">Exercices types du Bac</span>
+          <span class="theme-count">4 fiches</span>
+        </div>
+        <div class="fiches-grid">
+          <div class="fiche-card">
+            <p class="fiche-type">Méthode</p>
+            <h3 class="fiche-title">Rédiger une synthèse de documents</h3>
+            <p class="fiche-desc">Structure, introduction, développement, conclusion. Pièges à éviter.</p>
+            <div class="fiche-tags"><span class="fiche-tag">Bac</span><span class="fiche-tag">Rédaction</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('synthese')">Lire →</button></div>
+          </div>
+          <div class="fiche-card orange">
+            <p class="fiche-type">Méthode</p>
+            <h3 class="fiche-title">Réaliser un schéma bilan</h3>
+            <p class="fiche-desc">Conventions, légendes, flèches, mise en page attendue.</p>
+            <div class="fiche-tags"><span class="fiche-tag">Bac</span><span class="fiche-tag">Schéma</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 1 page</span><button class="btn-fiche" onclick="openFiche('schema')">Lire →</button></div>
+          </div>
+          <div class="fiche-card deep">
+            <p class="fiche-type">Méthode</p>
+            <h3 class="fiche-title">Argumenter avec des données</h3>
+            <p class="fiche-desc">Comment exploiter un graphique, un tableau, une expérience.</p>
+            <div class="fiche-tags"><span class="fiche-tag">Bac</span><span class="fiche-tag">Analyse</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('argument')">Lire →</button></div>
+          </div>
+          <div class="fiche-card">
+            <p class="fiche-type">Méthode</p>
+            <h3 class="fiche-title">Préparer le Grand Oral SVT</h3>
+            <p class="fiche-desc">Choisir sa question, structurer la présentation, gérer les 5 minutes.</p>
+            <div class="fiche-tags"><span class="fiche-tag">Terminale</span><span class="fiche-tag">Oral</span></div>
+            <div class="fiche-footer"><span class="fiche-pages">📄 2 pages</span><button class="btn-fiche" onclick="openFiche('grandOral')">Lire →</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- .main -->
+
+  <!-- MODAL FICHE -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeOutside(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <p style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:0.4rem" id="fType"></p>
+          <h2 style="font-family:var(--serif);font-size:1.7rem;line-height:1.2" id="fTitle"></h2>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="fiche-content" id="fContent"></div>
+        <a href="#" class="dl-btn">📄 Télécharger la fiche PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const FICHES = {
+    ecosystemes:{type:"Mémo · 5ème",title:"Les écosystèmes — l'essentiel",content:`
+      <h4>Définitions clés</h4>
+      <p>Un <strong>écosystème</strong> est l'association d'un milieu de vie (biotope) et de l'ensemble des êtres vivants (biocénose) qui l'habitent et interagissent entre eux.</p>
+      <h4>Les relations alimentaires</h4>
+      <ul><li><strong>Producteurs</strong> : végétaux qui fabriquent leur matière organique grâce à la photosynthèse</li>
+      <li><strong>Consommateurs primaires</strong> : herbivores (lapins, insectes...)</li>
+      <li><strong>Consommateurs secondaires</strong> : carnivores (renards, oiseaux...)</li>
+      <li><strong>Décomposeurs</strong> : bactéries et champignons qui recyclent la matière</li></ul>
+      <h4>La biodiversité</h4>
+      <p>La biodiversité désigne la variété du vivant à toutes les échelles. Elle est menacée par la déforestation, la pollution et les espèces invasives.</p>
+      <div class="encadre">À retenir : dans une chaîne alimentaire, l'énergie diminue à chaque maillon (environ 90% est perdue sous forme de chaleur).</div>`
+    },
+    synthese:{type:"Méthode · Bac",title:"Rédiger une synthèse de documents",content:`
+      <h4>Structure attendue</h4>
+      <ul><li><strong>Introduction</strong> : présenter le thème, la problématique, annoncer le plan</li>
+      <li><strong>Développement</strong> : 2-3 parties avec des titres, chaque idée appuyée par les documents</li>
+      <li><strong>Conclusion</strong> : répondre à la problématique, ouvrir sur une perspective</li></ul>
+      <h4>Comment exploiter les documents</h4>
+      <p>Ne pas résumer les documents séparément. Croiser les informations pour construire une réponse argumentée.</p>
+      <div class="encadre">Formules utiles : "D'après le document 1…", "En croisant les documents 2 et 3, on constate que…", "Ces résultats montrent que…"</div>
+      <h4>Erreurs fréquentes</h4>
+      <ul><li>Copier-coller des phrases du document ❌</li>
+      <li>Oublier de citer les documents ❌</li>
+      <li>Faire une liste sans raisonnement ❌</li></ul>`
+    },
+    schema:{type:"Méthode · Bac",title:"Réaliser un schéma bilan",content:`
+      <h4>Conventions à respecter</h4>
+      <ul><li>Crayon à papier pour les tracés, puis stylo</li>
+      <li>Titre obligatoire, souligné</li>
+      <li>Légende complète avec numérotation</li>
+      <li>Flèches pour indiquer les flux ou relations</li></ul>
+      <h4>Organisation visuelle</h4>
+      <p>Placer les éléments de façon logique (du plus simple au plus complexe, du haut vers le bas pour une cascade de réactions).</p>
+      <div class="encadre">Conseil : toujours réaliser un brouillon avant le schéma définitif. 5 min de planification = schéma propre du premier coup.</div>`
+    },
+    grandOral:{type:"Méthode · Terminale",title:"Préparer le Grand Oral SVT",content:`
+      <h4>Choisir sa question</h4>
+      <p>La question doit être en lien avec les enseignements suivis ET votre projet d'orientation. Elle doit être ouverte (pas de réponse par oui/non) et réelle vous.</p>
+      <h4>Structure des 5 minutes</h4>
+      <ul><li><strong>Accroche</strong> (30 sec) : fait marquant, chiffre, anecdote</li>
+      <li><strong>Plan annoncé</strong> (30 sec) : 2-3 axes clairement posés</li>
+      <li><strong>Développement</strong> (3 min) : arguments + exemples concrets</li>
+      <li><strong>Conclusion</strong> (1 min) : réponse à la question + ouverture</li></ul>
+      <div class="encadre">Astuce : parler lentement (120 mots/min max), regarder le jury, ne pas lire ses notes.</div>`
+    },
+    genetiqueT:{type:"Synthèse · Terminale",title:"Génétique moléculaire",content:`
+      <h4>Le flux d'information génétique</h4>
+      <p><strong>ADN → ARNm → Protéine</strong> (dogme central de la biologie moléculaire)</p>
+      <h4>1. Réplication (semi-conservative)</h4>
+      <p>Avant chaque division, l'ADN est dupliqué. Chaque brin parental sert de matrice. Enzyme clé : ADN polymérase.</p>
+      <h4>2. Transcription (dans le noyau)</h4>
+      <p>L'ARN polymérase synthétise un ARNm complémentaire au brin matrice d'ADN.</p>
+      <h4>3. Traduction (dans le cytoplasme)</h4>
+      <p>Les ribosomes lisent l'ARNm codon par codon (3 bases = 1 acide aminé) pour assembler une protéine.</p>
+      <div class="encadre">Mutations : substitution, délétion, insertion → peuvent modifier la protéine ou être silencieuses.</div>`
+    },
+    evolutionT:{type:"Synthèse · Terminale",title:"L'évolution du vivant",content:`
+      <h4>Mécanismes de l'évolution</h4>
+      <ul><li><strong>Sélection naturelle</strong> : les individus les mieux adaptés survivent et se reproduisent davantage (Darwin, 1859)</li>
+      <li><strong>Dérive génétique</strong> : variations aléatoires des fréquences alléliques (effet important dans les petites populations)</li>
+      <li><strong>Mutations</strong> : seule source de nouveauté génétique</li>
+      <li><strong>Flux génique</strong> : échanges d'allèles entre populations</li></ul>
+      <h4>La spéciation</h4>
+      <p>Formation de nouvelles espèces par isolement reproducteur (géographique ou comportemental).</p>
+      <div class="encadre">Phylogénèse : les arbres phylogénétiques représentent les relations évolutives. Un nœud = ancêtre commun.</div>`
+    }
+  };
+
+  const DEFAULT = {type:"Fiche méthode",title:"",content:`<p>Cette fiche sera bientôt disponible. En attendant, <a href="contact.html">contactez-moi</a> pour l'obtenir directement !</p>`};
+
+  function openModal(id){
+    const f=FICHES[id]||{...DEFAULT,title:id};
+    document.getElementById("fType").textContent=f.type;
+    document.getElementById("fTitle").textContent=f.title;
+    document.getElementById("fContent").innerHTML=f.content;
+    document.getElementById("modalOverlay").classList.add("open");
+    document.body.style.overflow="hidden";
+  }
+  function closeModal(){document.getElementById("modalOverlay").classList.remove("open");document.body.style.overflow="";}
+  function closeOutside(e){if(e.target===document.getElementById("modalOverlay"))closeModal();}
+
+  // TABS
+  document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("tab-"+btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+  </script>
+</body>
+</html>
