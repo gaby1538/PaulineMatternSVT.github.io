@@ -1,0 +1,43 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#1a3a2a"/>
+  <g transform="translate(200, 210)">
+    <!-- tige -->
+    <line x1="0" y1="100" x2="0" y2="-100" stroke="#52b788" stroke-width="3" opacity="0.7"/>
+    <!-- feuilles basses gauche -->
+    <path d="M0 55 C-32 33 -58 15 -54 -7 C-36 0 -15 29 0 55Z" fill="#52b788" opacity="0.35"/>
+    <path d="M0 55 C-32 33 -58 15 -54 -7 C-36 0 -15 29 0 55Z" fill="none" stroke="#52b788" stroke-width="1.8"/>
+    <!-- feuilles basses droite -->
+    <path d="M0 55 C32 33 58 15 54 -7 C36 0 15 29 0 55Z" fill="#52b788" opacity="0.35"/>
+    <path d="M0 55 C32 33 58 15 54 -7 C36 0 15 29 0 55Z" fill="none" stroke="#52b788" stroke-width="1.8"/>
+    <!-- feuilles hautes gauche -->
+    <path d="M0 9 C-29 -7 -51 -25 -47 -47 C-29 -40 -11 -15 0 9Z" fill="#52b788" opacity="0.25"/>
+    <path d="M0 9 C-29 -7 -51 -25 -47 -47 C-29 -40 -11 -15 0 9Z" fill="none" stroke="#52b788" stroke-width="1.4" opacity="0.9"/>
+    <!-- feuilles hautes droite -->
+    <path d="M0 9 C29 -7 51 -25 47 -47 C29 -40 11 -15 0 9Z" fill="#52b788" opacity="0.25"/>
+    <path d="M0 9 C29 -7 51 -25 47 -47 C29 -40 11 -15 0 9Z" fill="none" stroke="#52b788" stroke-width="1.4" opacity="0.9"/>
+    <!-- pétale haut -->
+    <path d="M0 -36 C-11 -65 -7 -94 0 -105 C7 -94 11 -65 0 -36Z" fill="#52b788" opacity="0.5"/>
+    <path d="M0 -36 C-11 -65 -7 -94 0 -105 C7 -94 11 -65 0 -36Z" fill="none" stroke="#52b788" stroke-width="1.8"/>
+    <!-- pétale droite -->
+    <path d="M0 -36 C25 -51 51 -47 58 -40 C47 -29 22 -33 0 -36Z" fill="#52b788" opacity="0.4"/>
+    <path d="M0 -36 C25 -51 51 -47 58 -40 C47 -29 22 -33 0 -36Z" fill="none" stroke="#52b788" stroke-width="1.8"/>
+    <!-- pétale gauche -->
+    <path d="M0 -36 C-25 -51 -51 -47 -58 -40 C-47 -29 -22 -33 0 -36Z" fill="#52b788" opacity="0.4"/>
+    <path d="M0 -36 C-25 -51 -51 -47 -58 -40 C-47 -29 -22 -33 0 -36Z" fill="none" stroke="#52b788" stroke-width="1.8"/>
+    <!-- pétale diagonale droite -->
+    <path d="M0 -36 C18 -58 40 -76 51 -69 C44 -54 18 -44 0 -36Z" fill="#52b788" opacity="0.3"/>
+    <!-- pétale diagonale gauche -->
+    <path d="M0 -36 C-18 -58 -40 -76 -51 -69 C-44 -54 -18 -44 0 -36Z" fill="#52b788" opacity="0.3"/>
+    <!-- coeur ambré -->
+    <circle cx="0" cy="-36" r="13" fill="#c9881c"/>
+    <circle cx="0" cy="-36" r="6.5" fill="#e8b84b"/>
+    <!-- petits points décoratifs -->
+    <circle cx="-54" cy="-7" r="3.5" fill="#c9881c" opacity="0.7"/>
+    <circle cx="54" cy="-7" r="3.5" fill="#c9881c" opacity="0.7"/>
+    <circle cx="0" cy="-105" r="4" fill="#52b788" opacity="0.6"/>
+    <circle cx="58" cy="-40" r="3" fill="#52b788" opacity="0.5"/>
+    <circle cx="-58" cy="-40" r="3" fill="#52b788" opacity="0.5"/>
+    <circle cx="51" cy="-69" r="2.5" fill="#c9881c" opacity="0.5"/>
+    <circle cx="-51" cy="-69" r="2.5" fill="#c9881c" opacity="0.5"/>
+  </g>
+</svg>
