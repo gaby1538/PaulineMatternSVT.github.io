@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ressources SVT — Cours, Annales & Liens utiles</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green-deep:#1a3a2a;--green-mid:#2d6a4f;--green-light:#52b788;
+      --cream:#f5f0e8;--cream-dark:#e8e0d0;--amber:#c9881c;--amber-light:#e8b84b;
+      --text-dark:#1c1c1c;--text-mid:#4a4a4a;--white:#ffffff;
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--cream);color:var(--text-dark)}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(45,106,79,0.15)}
+    .nav-logo{font-family:var(--serif);font-size:1.4rem;color:var(--green-deep);text-decoration:none}
+    .nav-logo span{color:var(--amber)}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--green-mid)}
+    .nav-cta{background:var(--green-deep);color:var(--cream)!important;padding:0.5rem 1.2rem}
+    @media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}}
+
+    /* HERO */
+    .hero{background:var(--green-mid);color:var(--cream);padding:9rem 6rem 5rem;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(82,183,136,0.25) 0%,transparent 60%)}
+    .hero::after{content:'SVT';position:absolute;right:-1rem;top:50%;transform:translateY(-50%);font-family:var(--serif);font-size:16rem;color:rgba(255,255,255,0.05);line-height:1;pointer-events:none}
+    .hero-inner{max-width:600px;position:relative;z-index:2}
+    .hero-eyebrow{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--amber-light);margin-bottom:1rem}
+    .hero-title{font-family:var(--serif);font-size:clamp(2.8rem,5vw,4.5rem);line-height:1.1;margin-bottom:1.2rem}
+    .hero-title em{font-style:italic;color:var(--green-light)}
+    .hero-sub{font-size:1rem;font-weight:300;line-height:1.7;color:rgba(245,240,232,0.8);max-width:480px}
+    @media(max-width:768px){.hero{padding:7rem 1.5rem 3rem}.hero::after{display:none}}
+
+    /* TABS */
+    .tabs-nav{background:var(--white);border-bottom:1px solid var(--cream-dark);padding:0 6rem;display:flex;gap:0;position:sticky;top:72px;z-index:50;overflow-x:auto}
+    .tab-btn{padding:1.1rem 2rem;font-family:var(--sans);font-size:0.83rem;letter-spacing:0.07em;text-transform:uppercase;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;color:var(--text-mid);white-space:nowrap;transition:all 0.2s}
+    .tab-btn:hover{color:var(--green-mid)}
+    .tab-btn.active{color:var(--green-deep);border-bottom-color:var(--amber);font-weight:500}
+    @media(max-width:768px){.tabs-nav{padding:0 0.5rem}}
+
+    /* MAIN */
+    .main{max-width:1100px;margin:0 auto;padding:4rem 2rem}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block;animation:fadeUp 0.4s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+    /* INTRO */
+    .section-intro{margin-bottom:2.5rem}
+    .section-intro-title{font-family:var(--serif);font-size:2rem;color:var(--green-deep);margin-bottom:0.5rem}
+    .section-intro-title em{font-style:italic;color:var(--amber)}
+    .section-intro-sub{font-size:0.92rem;color:var(--text-mid);line-height:1.7;font-weight:300}
+
+    /* CARDS RESSOURCES */
+    .ressources-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:3rem}
+    @media(max-width:900px){.ressources-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:580px){.ressources-grid{grid-template-columns:1fr}}
+
+    .res-card{background:var(--white);border:1px solid var(--cream-dark);padding:1.8rem;display:flex;flex-direction:column;gap:1rem;transition:transform 0.25s,box-shadow 0.25s;text-decoration:none;color:inherit;position:relative;overflow:hidden}
+    .res-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:var(--green-light)}
+    .res-card.amber::before{background:var(--amber)}
+    .res-card.deep::before{background:var(--green-deep)}
+    .res-card:hover{transform:translateY(-4px);box-shadow:0 10px 32px rgba(26,58,42,0.1)}
+
+    .res-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:0.5rem}
+    .res-badge{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.2rem 0.6rem;border:1px solid;flex-shrink:0}
+    .badge-free{color:var(--green-mid);border-color:var(--green-light);background:rgba(82,183,136,0.08)}
+    .badge-premium{color:var(--amber);border-color:var(--amber);background:rgba(201,136,28,0.08)}
+
+    .res-site{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);margin-bottom:0.3rem}
+    .res-title{font-family:var(--serif);font-size:1.15rem;color:var(--green-deep);line-height:1.3}
+    .res-desc{font-size:0.82rem;color:var(--text-mid);line-height:1.6;font-weight:300;flex:1}
+    .res-tags{display:flex;gap:0.4rem;flex-wrap:wrap}
+    .res-tag{font-size:0.65rem;letter-spacing:0.06em;text-transform:uppercase;background:var(--cream);border:1px solid var(--cream-dark);padding:0.12rem 0.5rem;color:var(--text-mid)}
+    .res-link{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--green-mid);text-decoration:none;font-weight:500;margin-top:auto;padding-top:0.8rem;border-top:1px solid var(--cream-dark);transition:color 0.2s}
+    .res-link:hover{color:var(--amber)}
+
+    /* SECTION LABEL */
+    .section-label{font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+    .section-label::after{content:'';flex:1;height:1px;background:var(--cream-dark)}
+
+    /* CONSEIL BOX */
+    .conseil-box{background:var(--green-deep);color:var(--cream);padding:2rem;margin-bottom:3rem;display:flex;gap:1.5rem;align-items:flex-start}
+    .conseil-icon{font-size:1.5rem;flex-shrink:0;margin-top:0.1rem}
+    .conseil-title{font-family:var(--serif);font-size:1.1rem;margin-bottom:0.4rem}
+    .conseil-text{font-size:0.85rem;line-height:1.7;color:rgba(245,240,232,0.8);font-weight:300}
+
+    /* ANNALES TABLE */
+    .annales-table{width:100%;border-collapse:collapse;margin-bottom:2.5rem}
+    .annales-table th{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);text-align:left;padding:0.8rem 1rem;border-bottom:2px solid var(--cream-dark);font-weight:500;background:var(--white)}
+    .annales-table td{padding:0.9rem 1rem;border-bottom:1px solid var(--cream-dark);font-size:0.88rem;color:var(--text-dark);background:var(--white)}
+    .annales-table tr:hover td{background:var(--cream)}
+    .annales-table a{color:var(--green-mid);text-decoration:none;font-weight:500}
+    .annales-table a:hover{color:var(--amber);text-decoration:underline}
+    .tag-green{display:inline-block;background:rgba(82,183,136,0.1);color:var(--green-mid);border:1px solid rgba(82,183,136,0.3);padding:0.1rem 0.5rem;font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase}
+    .tag-amber{display:inline-block;background:rgba(201,136,28,0.1);color:var(--amber);border:1px solid rgba(201,136,28,0.3);padding:0.1rem 0.5rem;font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase}
+
+    .reveal{opacity:0;transform:translateY(20px);transition:all 0.5s ease}
+    .reveal.visible{opacity:1;transform:none}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">SVT<span>.</span>Cours</a>
+    <ul class="nav-links">
+      <li><a href="cours.html">Cours</a></li>
+      <li><a href="fiches.html">Fiches</a></li>
+      <li><a href="ressources.html" class="active">Ressources</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Sélection personnelle</p>
+      <h1 class="hero-title">Les meilleures<br/><em>ressources SVT</em></h1>
+      <p class="hero-sub">Cours en ligne gratuits, annales corrigées et sites de référence — sélectionnés et recommandés par Pauline.</p>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="cours">🎬 Cours en ligne</button>
+    <button class="tab-btn" data-tab="annales">📝 Annales corrigées</button>
+    <button class="tab-btn" data-tab="liens">🔗 Liens utiles</button>
+  </div>
+
+  <div class="main">
+
+    <!-- ══ COURS EN LIGNE ══ -->
+    <div class="tab-panel active" id="tab-cours">
+
+      <div class="section-intro reveal">
+        <h2 class="section-intro-title">Cours en ligne <em>recommandés</em></h2>
+        <p class="section-intro-sub">Des plateformes sérieuses, conformes aux programmes officiels, pour compléter les cours particuliers entre les séances.</p>
+      </div>
+
+      <div class="conseil-box reveal">
+        <span class="conseil-icon">💡</span>
+        <div>
+          <p class="conseil-title">Mon conseil</p>
+          <p class="conseil-text">Ces plateformes sont d'excellents compléments — mais elles ne remplacent pas un suivi personnalisé. Utilise-les pour revoir un point de cours, regarder une vidéo explicative, ou t'entraîner entre deux séances. Si tu bloques, note tes questions et on les travaille ensemble !</p>
+        </div>
+      </div>
+
+      <p class="section-label reveal">Gratuit — accès libre</p>
+      <div class="ressources-grid reveal">
+
+        <a href="https://www.vivelessvt.com" target="_blank" rel="noopener" class="res-card">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">vivelessvt.com</p>
+              <h3 class="res-title">Vive les SVT !</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">Le site de référence des profs de SVT. Cours complets, actualité scientifique, fiches méthode et soutien. Collège et lycée.</p>
+          <div class="res-tags">
+            <span class="res-tag">Collège</span>
+            <span class="res-tag">Lycée</span>
+            <span class="res-tag">Biologie</span>
+            <span class="res-tag">Géologie</span>
+          </div>
+          <span class="res-link">Accéder au site →</span>
+        </a>
+
+        <a href="https://clercsvt.jimdofree.com" target="_blank" rel="noopener" class="res-card amber">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">clercsvt.jimdofree.com</p>
+              <h3 class="res-title">Les SVT de M. Clerc</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">Site d'un professeur certifié avec des cours clairs de collège et lycée. Parfait pour revoir les bases de biologie cellulaire et génétique.</p>
+          <div class="res-tags">
+            <span class="res-tag">Collège</span>
+            <span class="res-tag">Lycée</span>
+            <span class="res-tag">Biologie</span>
+          </div>
+          <span class="res-link">Accéder au site →</span>
+        </a>
+
+        <a href="https://www.kartable.fr/svt" target="_blank" rel="noopener" class="res-card deep">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">kartable.fr</p>
+              <h3 class="res-title">Kartable SVT</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">Cours rédigés par des profs de l'Éducation nationale, conformes aux programmes. Quiz et exercices interactifs du collège à la terminale.</p>
+          <div class="res-tags">
+            <span class="res-tag">6ème → Terminale</span>
+            <span class="res-tag">Quiz</span>
+          </div>
+          <span class="res-link">Accéder au site →</span>
+        </a>
+
+      </div>
+
+      <p class="section-label reveal">Avec abonnement</p>
+      <div class="ressources-grid reveal">
+
+        <a href="https://www.schoolmouv.fr/svt" target="_blank" rel="noopener" class="res-card">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">schoolmouv.fr</p>
+              <h3 class="res-title">SchoolMouv</h3>
+            </div>
+            <span class="res-badge badge-premium">Premium</span>
+          </div>
+          <p class="res-desc">Vidéos explicatives de qualité, fiches de synthèse, quiz et sujets corrigés du bac. Tuteur IA disponible 24h/24. L'une des meilleures plateformes françaises.</p>
+          <div class="res-tags">
+            <span class="res-tag">6ème → Terminale</span>
+            <span class="res-tag">Vidéos</span>
+            <span class="res-tag">Bac</span>
+          </div>
+          <span class="res-link">Voir SchoolMouv →</span>
+        </a>
+
+        <a href="https://www.maxicours.com/se/svt" target="_blank" rel="noopener" class="res-card amber">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">maxicours.com</p>
+              <h3 class="res-title">Maxicours SVT</h3>
+            </div>
+            <span class="res-badge badge-premium">Premium</span>
+          </div>
+          <p class="res-desc">Cours structurés, exercices interactifs, vidéos pédagogiques et fiches de révision. Professeurs de l'Éducation nationale. De la 5ème à la Terminale.</p>
+          <div class="res-tags">
+            <span class="res-tag">5ème → Terminale</span>
+            <span class="res-tag">Exercices</span>
+          </div>
+          <span class="res-link">Voir Maxicours →</span>
+        </a>
+
+        <a href="https://happy-svt.fr" target="_blank" rel="noopener" class="res-card deep">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">happy-svt.fr</p>
+              <h3 class="res-title">Happy SVT</h3>
+            </div>
+            <span class="res-badge badge-premium">Cours en ligne</span>
+          </div>
+          <p class="res-desc">Cours particuliers en ligne par une professeure certifiée avec 15 ans d'expérience. Outils interactifs et préparation bac. Très bien noté par les élèves.</p>
+          <div class="res-tags">
+            <span class="res-tag">Lycée</span>
+            <span class="res-tag">Terminale</span>
+            <span class="res-tag">Bac</span>
+          </div>
+          <span class="res-link">Voir Happy SVT →</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ══ ANNALES ══ -->
+    <div class="tab-panel" id="tab-annales">
+
+      <div class="section-intro reveal">
+        <h2 class="section-intro-title">Annales <em>corrigées</em></h2>
+        <p class="section-intro-sub">Les meilleures sources pour s'entraîner sur de vrais sujets de bac et de brevet. Tout est gratuit.</p>
+      </div>
+
+      <div class="conseil-box reveal">
+        <span class="conseil-icon">🎯</span>
+        <div>
+          <p class="conseil-title">Comment bien utiliser les annales</p>
+          <p class="conseil-text">Commence toujours par faire le sujet <strong>sans regarder le corrigé</strong>, puis compare. Les sujets les plus récents (2025, 2024) sont les plus représentatifs du format actuel. Fais au minimum 5 sujets complets avant l'épreuve. On peut travailler les annales ensemble en cours !</p>
+        </div>
+      </div>
+
+      <p class="section-label reveal">Bac Terminale — Spécialité SVT</p>
+      <table class="annales-table reveal">
+        <thead>
+          <tr>
+            <th>Site</th>
+            <th>Contenu</th>
+            <th>Année</th>
+            <th>Corrigés</th>
+            <th>Lien</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SujetDeBac.fr</strong></td>
+            <td>87+ annales spé SVT</td>
+            <td>2021 → 2025</td>
+            <td><span class="tag-green">Oui ✓</span></td>
+            <td><a href="https://www.sujetdebac.fr/annales/specialites/spe-sciences-vie-terre/" target="_blank">Accéder →</a></td>
+          </tr>
+          <tr>
+            <td><strong>Didac-TIC</strong></td>
+            <td>Sujets depuis 2003, par thème</td>
+            <td>2003 → 2025</td>
+            <td><span class="tag-green">Partiel ✓</span></td>
+            <td><a href="https://www.didac-tic.fr/bac/" target="_blank">Accéder →</a></td>
+          </tr>
+          <tr>
+            <td><strong>SchoolMouv</strong></td>
+            <td>Annales + corrigés détaillés</td>
+            <td>2021 → 2025</td>
+            <td><span class="tag-green">Oui ✓</span></td>
+            <td><a href="https://www.schoolmouv.fr/terminale/svt/sujets-bac" target="_blank">Accéder →</a></td>
+          </tr>
+          <tr>
+            <td><strong>SujetDeBac 2025</strong></td>
+            <td>19 annales session 2025</td>
+            <td>2025</td>
+            <td><span class="tag-green">2 corrigés ✓</span></td>
+            <td><a href="https://www.sujetdebac.fr/annales/specialites/spe-sciences-vie-terre/2025/" target="_blank">Session 2025 →</a></td>
+          </tr>
+          <tr>
+            <td><strong>SujetDeBac 2024</strong></td>
+            <td>13 annales session 2024</td>
+            <td>2024</td>
+            <td><span class="tag-green">2 corrigés ✓</span></td>
+            <td><a href="https://www.sujetdebac.fr/annales/specialites/spe-sciences-vie-terre/2024/" target="_blank">Session 2024 →</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="section-label reveal">Brevet Collège — Sciences</p>
+      <table class="annales-table reveal">
+        <thead>
+          <tr>
+            <th>Site</th>
+            <th>Contenu</th>
+            <th>Gratuit</th>
+            <th>Lien</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SujetDeBac.fr</strong></td>
+            <td>Annales brevet sciences (SVT + Physique)</td>
+            <td><span class="tag-green">Gratuit ✓</span></td>
+            <td><a href="https://www.sujetdebac.fr/" target="_blank">Accéder →</a></td>
+          </tr>
+          <tr>
+            <td><strong>Kartable</strong></td>
+            <td>Sujets brevet avec corrections</td>
+            <td><span class="tag-amber">Partiel</span></td>
+            <td><a href="https://www.kartable.fr/svt" target="_blank">Accéder →</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- ══ LIENS UTILES ══ -->
+    <div class="tab-panel" id="tab-liens">
+
+      <div class="section-intro reveal">
+        <h2 class="section-intro-title">Liens <em>utiles</em></h2>
+        <p class="section-intro-sub">Sites officiels, simulateurs et outils pédagogiques pour aller plus loin et explorer la SVT autrement.</p>
+      </div>
+
+      <p class="section-label reveal">Programmes & ressources officielles</p>
+      <div class="ressources-grid reveal">
+
+        <a href="https://www.education.gouv.fr/les-programmes-de-svt-au-lycee-23" target="_blank" rel="noopener" class="res-card">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">education.gouv.fr</p>
+              <h3 class="res-title">Programmes officiels SVT</h3>
+            </div>
+            <span class="res-badge badge-free">Officiel</span>
+          </div>
+          <p class="res-desc">Les programmes officiels SVT du lycée publiés par le Ministère. La référence pour savoir exactement ce qui est au programme.</p>
+          <div class="res-tags"><span class="res-tag">Officiel</span><span class="res-tag">Lycée</span></div>
+          <span class="res-link">Voir les programmes →</span>
+        </a>
+
+        <a href="https://www.lumni.fr/lycee/seconde/svt" target="_blank" rel="noopener" class="res-card amber">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">lumni.fr — France TV</p>
+              <h3 class="res-title">Lumni SVT</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">La plateforme éducative de France Télévisions. Vidéos documentaires et explicatives sur tous les thèmes SVT du lycée.</p>
+          <div class="res-tags"><span class="res-tag">Vidéos</span><span class="res-tag">Lycée</span></div>
+          <span class="res-link">Voir Lumni →</span>
+        </a>
+
+        <a href="https://planet-terre.ens-lyon.fr" target="_blank" rel="noopener" class="res-card deep">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">ENS Lyon</p>
+              <h3 class="res-title">Planet-Terre</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">Site de géologie de l'ENS Lyon. Articles scientifiques de référence sur la tectonique, la géologie et les sciences de la Terre. Idéal pour approfondir.</p>
+          <div class="res-tags"><span class="res-tag">Géologie</span><span class="res-tag">Avancé</span></div>
+          <span class="res-link">Voir Planet-Terre →</span>
+        </a>
+
+      </div>
+
+      <p class="section-label reveal">Biologie & Sciences du vivant</p>
+      <div class="ressources-grid reveal">
+
+        <a href="https://www.ncbi.nlm.nih.gov/books/NBK26866/" target="_blank" rel="noopener" class="res-card">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">NCBI — NIH</p>
+              <h3 class="res-title">Molecular Biology of the Cell</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">Le manuel de référence mondiale en biologie cellulaire, accessible gratuitement en ligne. Pour les terminales qui veulent aller très loin.</p>
+          <div class="res-tags"><span class="res-tag">Biologie</span><span class="res-tag">Terminale+</span></div>
+          <span class="res-link">Accéder →</span>
+        </a>
+
+        <a href="https://www.inrae.fr/actualites" target="_blank" rel="noopener" class="res-card amber">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">INRAE</p>
+              <h3 class="res-title">Actualités scientifiques</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">L'Institut national de recherche en agronomie et environnement. Actualités scientifiques accessibles sur la biodiversité, l'écologie et l'alimentation.</p>
+          <div class="res-tags"><span class="res-tag">Écologie</span><span class="res-tag">Actualité</span></div>
+          <span class="res-link">Voir INRAE →</span>
+        </a>
+
+        <a href="https://www.futura-sciences.com/sciences/biologie/" target="_blank" rel="noopener" class="res-card deep">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">futura-sciences.com</p>
+              <h3 class="res-title">Futura Sciences — Biologie</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">Articles de vulgarisation scientifique sur la biologie, la génétique, l'évolution et l'environnement. Parfait pour enrichir ses connaissances.</p>
+          <div class="res-tags"><span class="res-tag">Vulgarisation</span><span class="res-tag">Tous niveaux</span></div>
+          <span class="res-link">Voir Futura →</span>
+        </a>
+
+      </div>
+
+      <p class="section-label reveal">Simulateurs & outils interactifs</p>
+      <div class="ressources-grid reveal">
+
+        <a href="https://phet.colorado.edu/fr/simulations/filter?subjects=biology" target="_blank" rel="noopener" class="res-card">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">Université du Colorado</p>
+              <h3 class="res-title">PhET Simulations</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">Simulations interactives de biologie et sciences de la Terre. Visualise la sélection naturelle, l'évolution, les écosystèmes en temps réel.</p>
+          <div class="res-tags"><span class="res-tag">Simulation</span><span class="res-tag">Interactif</span></div>
+          <span class="res-link">Voir PhET →</span>
+        </a>
+
+        <a href="https://www.google.com/intl/fr/earth/" target="_blank" rel="noopener" class="res-card amber">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">Google</p>
+              <h3 class="res-title">Google Earth</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">Outil incontournable pour la géologie et la géographie. Explore les reliefs, les failles, les volcans et les plaques tectoniques en 3D.</p>
+          <div class="res-tags"><span class="res-tag">Géologie</span><span class="res-tag">3D</span></div>
+          <span class="res-link">Ouvrir Google Earth →</span>
+        </a>
+
+        <a href="https://www.cellsalive.com" target="_blank" rel="noopener" class="res-card deep">
+          <div class="res-card-top">
+            <div>
+              <p class="res-site">cellsalive.com</p>
+              <h3 class="res-title">Cells Alive</h3>
+            </div>
+            <span class="res-badge badge-free">Gratuit</span>
+          </div>
+          <p class="res-desc">Animations interactives sur la biologie cellulaire : mitose, méiose, cycle cellulaire, immunité. Idéal pour visualiser ce qui se passe dans une cellule.</p>
+          <div class="res-tags"><span class="res-tag">Cellule</span><span class="res-tag">Animation</span></div>
+          <span class="res-link">Voir Cells Alive →</span>
+        </a>
+
+      </div>
+    </div>
+
+  </div><!-- .main -->
+
+  <script>
+  function activateTab(name){
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+    const btn=document.querySelector(`.tab-btn[data-tab="${name}"]`);
+    const panel=document.getElementById("tab-"+name);
+    if(btn&&panel){ btn.classList.add("active"); panel.classList.add("active"); }
+  }
+
+  document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      activateTab(btn.dataset.tab);
+      window.scrollTo({top:document.querySelector(".tabs-nav").offsetTop-80,behavior:"smooth"});
+    });
+  });
+
+  const urlTab=new URLSearchParams(location.search).get("tab");
+  if(urlTab) activateTab(urlTab);
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+  </script>
+</body>
+</html>

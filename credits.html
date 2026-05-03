@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mon espace — Cours de SVT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green-deep:#1a3a2a;--green-mid:#2d6a4f;--green-light:#52b788;
+      --cream:#f5f0e8;--cream-dark:#e8e0d0;--amber:#c9881c;--amber-light:#e8b84b;
+      --text-dark:#1c1c1c;--text-mid:#4a4a4a;--white:#ffffff;
+      --red:#c0392b;--red-light:#fdf0ee;
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--cream);color:var(--text-dark);min-height:100vh}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(45,106,79,0.15)}
+    .nav-logo{font-family:var(--serif);font-size:1.4rem;color:var(--green-deep);text-decoration:none}
+    .nav-logo span{color:var(--amber)}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--green-mid)}
+    .nav-cta{background:var(--green-deep);color:var(--cream)!important;padding:0.5rem 1.2rem}
+    @media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}}
+
+    /* PAGE */
+    .page{max-width:860px;margin:0 auto;padding:8rem 2rem 5rem}
+
+    /* HERO LOGIN */
+    .login-hero{text-align:center;margin-bottom:3rem}
+    .login-eyebrow{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--amber);margin-bottom:1rem}
+    .login-title{font-family:var(--serif);font-size:clamp(2.2rem,4vw,3.5rem);color:var(--green-deep);line-height:1.15;margin-bottom:1rem}
+    .login-title em{font-style:italic;color:var(--green-mid)}
+    .login-sub{font-size:0.95rem;color:var(--text-mid);font-weight:300;line-height:1.7}
+
+    /* CARD LOGIN */
+    .login-card{background:var(--white);border:1px solid var(--cream-dark);padding:2.5rem;max-width:480px;margin:0 auto}
+    .login-label{font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);display:block;margin-bottom:0.5rem}
+    .login-input{width:100%;border:1px solid var(--cream-dark);background:var(--cream);padding:1rem 1.2rem;font-family:var(--sans);font-size:1rem;color:var(--text-dark);outline:none;transition:border-color 0.2s;letter-spacing:0.05em;text-transform:uppercase}
+    .login-input:focus{border-color:var(--green-mid);background:var(--white)}
+    .login-input::placeholder{text-transform:none;letter-spacing:0;color:rgba(74,74,74,0.4)}
+    .login-btn{width:100%;margin-top:1rem;background:var(--green-deep);color:var(--cream);border:2px solid var(--green-deep);padding:1rem;font-family:var(--sans);font-size:0.88rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+    .login-btn:hover:not(:disabled){background:transparent;color:var(--green-deep)}
+    .login-btn:disabled{opacity:0.6;cursor:wait}
+    .login-hint{margin-top:1rem;font-size:0.8rem;color:var(--text-mid);text-align:center;line-height:1.6}
+    .login-hint a{color:var(--green-mid);text-decoration:none}
+    .login-hint a:hover{text-decoration:underline}
+
+    /* MESSAGES */
+    .msg{padding:0.8rem 1.1rem;font-size:0.85rem;margin-top:1rem;display:none}
+    .msg.show{display:block}
+    .msg-error{background:var(--red-light);color:var(--red);border-left:3px solid var(--red)}
+
+    /* ══ DASHBOARD ÉLÈVE ══ */
+    #dashboard{display:none}
+
+    /* Header dashboard */
+    .dash-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem}
+    .dash-greeting{font-family:var(--serif);font-size:2rem;color:var(--green-deep);line-height:1.2}
+    .dash-greeting em{font-style:italic;color:var(--amber)}
+    .dash-meta{font-size:0.82rem;color:var(--text-mid);margin-top:0.4rem}
+    .btn-logout{background:none;border:1px solid var(--cream-dark);padding:0.5rem 1rem;font-family:var(--sans);font-size:0.8rem;color:var(--text-mid);cursor:pointer;transition:all 0.2s}
+    .btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+    /* Jauge crédits */
+    .credits-card{background:var(--green-deep);color:var(--cream);padding:2.5rem;margin-bottom:2rem;position:relative;overflow:hidden}
+    .credits-card::before{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(82,183,136,0.15)}
+    .credits-label{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.55);margin-bottom:0.8rem}
+    .credits-number{font-family:var(--serif);font-size:4rem;color:var(--cream);line-height:1;margin-bottom:0.3rem}
+    .credits-number span{font-size:1.5rem;color:rgba(245,240,232,0.55)}
+    .credits-formule{font-size:0.85rem;color:var(--amber-light);margin-bottom:2rem}
+
+    /* Barre de progression */
+    .progress-wrap{margin-bottom:0.6rem}
+    .progress-labels{display:flex;justify-content:space-between;font-size:0.75rem;color:rgba(245,240,232,0.55);margin-bottom:0.5rem}
+    .progress-bar-bg{width:100%;height:6px;background:rgba(255,255,255,0.15)}
+    .progress-bar-fill{height:6px;background:var(--green-light);transition:width 1s ease}
+
+    /* Stats grille */
+    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+    .stat-card{background:var(--white);border:1px solid var(--cream-dark);padding:1.5rem}
+    .stat-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);margin-bottom:0.5rem}
+    .stat-value{font-family:var(--serif);font-size:1.8rem;color:var(--green-deep)}
+    .stat-sub{font-size:0.75rem;color:var(--text-mid);margin-top:0.2rem}
+
+    /* Historique */
+    .section-title{font-family:var(--serif);font-size:1.4rem;color:var(--green-deep);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem}
+    .section-title::after{content:'';flex:1;height:1px;background:var(--cream-dark)}
+    .history-list{display:flex;flex-direction:column;gap:0.8rem;margin-bottom:2.5rem}
+    .history-item{background:var(--white);border:1px solid var(--cream-dark);padding:1rem 1.4rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .history-date{font-size:0.8rem;color:var(--text-mid);min-width:100px}
+    .history-desc{font-size:0.88rem;color:var(--text-dark);flex:1}
+    .history-badge{font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;padding:0.25rem 0.7rem;font-weight:500}
+    .badge-used{background:rgba(192,57,43,0.08);color:var(--red)}
+    .badge-added{background:rgba(82,183,136,0.1);color:var(--green-mid)}
+    .history-h{font-family:var(--serif);font-size:1.1rem;color:var(--green-deep);min-width:50px;text-align:right}
+
+    /* CTA réservation */
+    .cta-reserve{background:var(--amber);color:var(--white);padding:2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+    .cta-reserve-text{}
+    .cta-reserve-title{font-family:var(--serif);font-size:1.4rem;margin-bottom:0.3rem}
+    .cta-reserve-sub{font-size:0.85rem;opacity:0.85}
+    .btn-reserve{background:var(--white);color:var(--amber);padding:0.8rem 1.8rem;font-family:var(--sans);font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;font-weight:500;border:none;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+    .btn-reserve:hover{background:var(--green-deep);color:var(--white)}
+
+    /* Alerte solde bas */
+    .alert-low{background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.2);border-left:4px solid var(--red);padding:1rem 1.4rem;margin-bottom:1.5rem;font-size:0.88rem;color:var(--red);line-height:1.6}
+
+    /* Animation */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .fade-in{animation:fadeUp 0.5s ease forwards}
+
+    @media(max-width:600px){
+      .stats-grid{grid-template-columns:1fr 1fr}
+      .cta-reserve{flex-direction:column;text-align:center}
+      .history-item{flex-wrap:wrap}
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">SVT<span>.</span>Cours</a>
+    <ul class="nav-links">
+      <li><a href="cours.html">Cours</a></li>
+      <li><a href="fiches.html">Fiches</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+
+    <!-- ══ ÉCRAN DE CONNEXION ══ -->
+    <div id="loginScreen">
+      <div class="login-hero">
+        <p class="login-eyebrow">Espace personnel</p>
+        <h1 class="login-title">Mon espace <em>élève</em></h1>
+        <p class="login-sub">Consultez votre solde d'heures, votre historique<br/>et réservez votre prochain cours.</p>
+      </div>
+
+      <div class="login-card">
+        <label class="login-label" for="codeInput">Votre code élève</label>
+        <input class="login-input" type="text" id="codeInput" placeholder="ex : SVT-2025-001" autocomplete="off" autocapitalize="characters"/>
+        <div id="loginError" class="msg msg-error">Code introuvable. Vérifiez votre email de confirmation ou contactez-moi.</div>
+        <button class="login-btn" id="loginBtn" onclick="login()">
+          <span id="loginTxt">Accéder à mon espace →</span>
+        </button>
+        <p class="login-hint">
+          Votre code vous a été envoyé par email après votre achat.<br/>
+          Pas de code ? <a href="contact.html">Contactez-moi</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- ══ DASHBOARD ══ -->
+    <div id="dashboard">
+
+      <div class="dash-header fade-in">
+        <div>
+          <h2 class="dash-greeting">Bonjour, <em id="dashNom"></em> 👋</h2>
+          <p class="dash-meta">Formule : <strong id="dashFormule"></strong> · Achat le <strong id="dashDate"></strong></p>
+        </div>
+        <button class="btn-logout" onclick="logout()">← Déconnexion</button>
+      </div>
+
+      <!-- Alerte solde bas (visible si ≤ 1h) -->
+      <div class="alert-low fade-in" id="alertLow" style="display:none">
+        ⚠️ Il vous reste peu d'heures ! Pensez à renouveler votre pack pour continuer votre progression.
+        <a href="reservation.html" style="color:var(--red);font-weight:500;margin-left:0.5rem">Renouveler →</a>
+      </div>
+
+      <!-- Jauge crédits -->
+      <div class="credits-card fade-in">
+        <p class="credits-label">Solde d'heures disponibles</p>
+        <div class="credits-number"><span id="dashRestantes">0</span> <span>h restantes</span></div>
+        <p class="credits-formule" id="dashFormulaTag"></p>
+        <div class="progress-wrap">
+          <div class="progress-labels">
+            <span>Heures utilisées</span>
+            <span id="dashProgressLabel"></span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid fade-in">
+        <div class="stat-card">
+          <p class="stat-label">Pack acheté</p>
+          <p class="stat-value" id="dashTotal">0h</p>
+          <p class="stat-sub">heures au total</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Heures utilisées</p>
+          <p class="stat-value" id="dashUtilisees">0h</p>
+          <p class="stat-sub">cours effectués</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Heures restantes</p>
+          <p class="stat-value" id="dashRestantes2">0h</p>
+          <p class="stat-sub">disponibles</p>
+        </div>
+      </div>
+
+      <!-- Historique -->
+      <h3 class="section-title">Historique des cours</h3>
+      <div class="history-list" id="historyList"></div>
+
+      <!-- CTA réservation -->
+      <div class="cta-reserve fade-in" id="ctaReserve">
+        <div class="cta-reserve-text">
+          <p class="cta-reserve-title">Réserver votre prochain cours</p>
+          <p class="cta-reserve-sub">Choisissez un créneau directement dans le calendrier</p>
+        </div>
+        <a href="reservation.html" class="btn-reserve">📅 Réserver →</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+  // ══════════════════════════════════════════
+  // CONFIGURATION AIRTABLE
+  // ══════════════════════════════════════════
+  // 1. Crée un compte sur airtable.com
+  // 2. Crée une base "Cours SVT" avec une table "Eleves"
+  // 3. Remplace ces 3 valeurs :
+  const AIRTABLE_TOKEN   = "TON_AIRTABLE_TOKEN"; // Personal Access Token — à remplir
+  const AIRTABLE_BASE_ID = "TON_BASE_ID";         // ID de ta base — à remplir
+  const AIRTABLE_TABLE   = "Eleves";                 // Nom de ta table
+
+  // ══ MODE DEMO (tant qu'Airtable n'est pas configuré) ══
+  // Supprime ou commente ce bloc quand Airtable est prêt
+  const DEMO_DATA = {
+    "SVT-2025-DEMO": {
+      nom: "Marie Dupont",
+      formule: "Pack 6 heures",
+      heures_total: 6,
+      heures_utilisees: 2,
+      date_achat: "2025-06-01",
+      historique: [
+        { date: "2025-06-15", desc: "Cours génétique moléculaire", type: "used", h: -1 },
+        { date: "2025-06-08", desc: "Cours biologie cellulaire",   type: "used", h: -1 },
+        { date: "2025-06-01", desc: "Achat Pack 6 heures",         type: "added", h: +6 },
+      ]
+    }
+  };
+
+  // ══════════════════════════════════════════
+  // LOGIN
+  // ══════════════════════════════════════════
+  async function login() {
+    const code = document.getElementById("codeInput").value.trim().toUpperCase();
+    if (!code) return;
+
+    const btn = document.getElementById("loginBtn");
+    const txt = document.getElementById("loginTxt");
+    btn.disabled = true;
+    txt.textContent = "Vérification…";
+    document.getElementById("loginError").classList.remove("show");
+
+    // Mode démo
+    if (AIRTABLE_TOKEN === "VOTRE_TOKEN_AIRTABLE") {
+      await new Promise(r => setTimeout(r, 800));
+      const data = DEMO_DATA[code];
+      if (data) {
+        sessionStorage.setItem("svt_eleve", JSON.stringify({...data, code}));
+        showDashboard(data);
+      } else {
+        showError();
+      }
+      btn.disabled = false;
+      txt.textContent = "Accéder à mon espace →";
+      return;
+    }
+
+    // Mode réel — Airtable
+    try {
+      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}?filterByFormula={code}="${code}"`;
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` }
+      });
+      const json = await res.json();
+
+      if (json.records && json.records.length > 0) {
+        const r = json.records[0].fields;
+        const data = {
+          code,
+          nom:              r.nom || "Élève",
+          formule:          r.formule || "Pack",
+          heures_total:     r.heures_total || 0,
+          heures_utilisees: r.heures_utilisees || 0,
+          date_achat:       r.date_achat || "",
+          notes:            r.notes || "",
+          historique: []
+        };
+        sessionStorage.setItem("svt_eleve", JSON.stringify(data));
+        showDashboard(data);
+      } else {
+        showError();
+      }
+    } catch(e) {
+      console.error(e);
+      showError();
+    }
+    btn.disabled = false;
+    txt.textContent = "Accéder à mon espace →";
+  }
+
+  function showError() {
+    document.getElementById("loginError").classList.add("show");
+  }
+
+  // Connexion sur Entrée
+  document.getElementById("codeInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") login();
+  });
+
+  // ══════════════════════════════════════════
+  // AFFICHAGE DASHBOARD
+  // ══════════════════════════════════════════
+  function showDashboard(data) {
+    document.getElementById("loginScreen").style.display = "none";
+    const dash = document.getElementById("dashboard");
+    dash.style.display = "block";
+
+    const restantes = data.heures_total - data.heures_utilisees;
+    const pct = data.heures_total > 0 ? Math.round((data.heures_utilisees / data.heures_total) * 100) : 0;
+
+    // Header
+    document.getElementById("dashNom").textContent = data.nom.split(" ")[0];
+    document.getElementById("dashFormule").textContent = data.formule;
+    document.getElementById("dashDate").textContent = formatDate(data.date_achat);
+
+    // Alerte solde bas
+    if (restantes <= 1) document.getElementById("alertLow").style.display = "block";
+
+    // Jauge
+    document.getElementById("dashRestantes").textContent = restantes;
+    document.getElementById("dashFormulaTag").textContent = data.formule + " · " + data.heures_total + "h achetées";
+    document.getElementById("dashProgressLabel").textContent = data.heures_utilisees + "h / " + data.heures_total + "h";
+    setTimeout(() => {
+      document.getElementById("progressFill").style.width = pct + "%";
+    }, 300);
+
+    // Stats
+    document.getElementById("dashTotal").textContent     = data.heures_total + "h";
+    document.getElementById("dashUtilisees").textContent = data.heures_utilisees + "h";
+    document.getElementById("dashRestantes2").textContent = restantes + "h";
+
+    // CTA désactivé si plus d'heures
+    if (restantes <= 0) {
+      const cta = document.getElementById("ctaReserve");
+      cta.style.background = "var(--cream-dark)";
+      cta.innerHTML = `
+        <div class="cta-reserve-text">
+          <p class="cta-reserve-title" style="color:var(--text-dark)">Plus d'heures disponibles</p>
+          <p class="cta-reserve-sub" style="color:var(--text-mid)">Renouvelez votre pack pour continuer</p>
+        </div>
+        <a href="reservation.html" class="btn-reserve" style="background:var(--green-deep);color:var(--cream)">Acheter un pack →</a>`;
+    }
+
+    // Historique
+    renderHistory(data.historique || []);
+  }
+
+  function renderHistory(items) {
+    const list = document.getElementById("historyList");
+    if (!items.length) {
+      list.innerHTML = `<p style="font-size:0.88rem;color:var(--text-mid);padding:1rem 0">Aucun cours enregistré pour le moment.</p>`;
+      return;
+    }
+    list.innerHTML = items.map(item => `
+      <div class="history-item">
+        <span class="history-date">${formatDate(item.date)}</span>
+        <span class="history-desc">${item.desc}</span>
+        <span class="history-badge ${item.type === 'used' ? 'badge-used' : 'badge-added'}">
+          ${item.type === 'used' ? 'Cours' : 'Achat'}
+        </span>
+        <span class="history-h" style="color:${item.h < 0 ? 'var(--red)' : 'var(--green-mid)'}">
+          ${item.h > 0 ? '+' : ''}${item.h}h
+        </span>
+      </div>`).join("");
+  }
+
+  function logout() {
+    sessionStorage.removeItem("svt_eleve");
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("loginScreen").style.display = "block";
+    document.getElementById("codeInput").value = "";
+  }
+
+  function formatDate(str) {
+    if (!str) return "—";
+    const d = new Date(str);
+    if (isNaN(d)) return str;
+    return d.toLocaleDateString("fr-FR", { day:"numeric", month:"long", year:"numeric" });
+  }
+
+  // ══ Auto-login si session active ══
+  const saved = sessionStorage.getItem("svt_eleve");
+  if (saved) {
+    try { showDashboard(JSON.parse(saved)); } catch(e) {}
+  }
+  </script>
+</body>
+</html>

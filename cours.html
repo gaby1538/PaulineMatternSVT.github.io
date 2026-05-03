@@ -399,16 +399,21 @@
   function nextQ(){qs.i++;qs.done=false;renderQ();}
   function restartQ(){qs.i=0;qs.done=false;renderQ();}
 
-  document.querySelectorAll(".filter-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      const f=btn.dataset.filter;
-      document.querySelectorAll(".cours-card").forEach(card=>{
-        card.style.display=(f==="all"||card.dataset.tags.includes(f))?"block":"none";
-      });
+  function applyFilter(f){
+    document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+    const active=document.querySelector(`.filter-btn[data-filter="${f}"]`);
+    if(active) active.classList.add("active");
+    document.querySelectorAll(".cours-card").forEach(card=>{
+      card.style.display=(f==="all"||card.dataset.tags.includes(f))?"block":"none";
     });
+  }
+
+  document.querySelectorAll(".filter-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>applyFilter(btn.dataset.filter));
   });
+
+  const urlFilter=new URLSearchParams(location.search).get("filter");
+  if(urlFilter) applyFilter(urlFilter);
 
   const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}});},{threshold:0.1});
   document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
