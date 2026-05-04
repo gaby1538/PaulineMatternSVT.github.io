@@ -116,6 +116,7 @@
     <ul class="nav-links">
       <li><a href="cours.html" class="active">Cours</a></li>
       <li><a href="fiches.html">Fiches</a></li>
+      <li><a href="index.html#ressources">Ressources</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
     </ul>
@@ -156,21 +157,21 @@
         <div class="cours-card" data-tags="college biologie">
           <div class="cours-card-top amber"></div>
           <div class="cours-card-body">
-            <p class="cours-niveau">Biologie <span class="niveau-badge">4ème</span></p>
-            <h3 class="cours-title">La reproduction humaine</h3>
-            <p class="cours-desc">Système reproducteur, puberté, fécondation et développement embryonnaire.</p>
+            <p class="cours-niveau">Biologie <span class="niveau-badge">5ème</span></p>
+            <h3 class="cours-title">Organisation de la matière vivante</h3>
+            <p class="cours-desc">La cellule, tissus et organes, organisation du corps humain.</p>
             <div class="cours-meta"><span>📖 Résumé</span><span>🎯 Quiz</span><span>📄 PDF</span></div>
-            <div class="cours-actions"><button class="btn-sm" onclick="openModal('reproduction')">Voir le cours →</button></div>
+            <div class="cours-actions"><button class="btn-sm" onclick="openModal('organisation')">Voir le cours →</button></div>
           </div>
         </div>
-        <div class="cours-card" data-tags="college terre">
+        <div class="cours-card" data-tags="college biologie">
           <div class="cours-card-top deep"></div>
           <div class="cours-card-body">
-            <p class="cours-niveau">Géologie <span class="niveau-badge">3ème</span></p>
-            <h3 class="cours-title">Tectonique des plaques</h3>
-            <p class="cours-desc">Déplacement des plaques, séismes, volcans et formation des reliefs.</p>
+            <p class="cours-niveau">Santé <span class="niveau-badge">4ème</span></p>
+            <h3 class="cours-title">L'appareil digestif</h3>
+            <p class="cours-desc">Digestion, absorption des nutriments, transit digestif et hygiène alimentaire.</p>
             <div class="cours-meta"><span>📖 Résumé</span><span>🎯 Quiz</span><span>📄 PDF</span></div>
-            <div class="cours-actions"><button class="btn-sm" onclick="openModal('tectonique')">Voir le cours →</button></div>
+            <div class="cours-actions"><button class="btn-sm" onclick="openModal('digestion')">Voir le cours →</button></div>
           </div>
         </div>
       </div>
@@ -207,6 +208,16 @@
             <p class="cours-desc">Composition, évolution, effet de serre, changements climatiques.</p>
             <div class="cours-meta"><span>📖 Résumé</span><span>🎯 Quiz</span><span>📄 PDF</span></div>
             <div class="cours-actions"><button class="btn-sm" onclick="openModal('atmosphere')">Voir le cours →</button></div>
+          </div>
+        </div>
+        <div class="cours-card" data-tags="lycee biologie">
+          <div class="cours-card-top"></div>
+          <div class="cours-card-body">
+            <p class="cours-niveau">Biologie <span class="niveau-badge">2nde</span></p>
+            <h3 class="cours-title">Métabolisme et énergie</h3>
+            <p class="cours-desc">Photosynthèse, respiration cellulaire, production d'ATP, cycles biogéochimiques.</p>
+            <div class="cours-meta"><span>📖 Résumé</span><span>🎯 Quiz</span><span>📄 PDF</span></div>
+            <div class="cours-actions"><button class="btn-sm" onclick="openModal('metabolisme')">Voir le cours →</button></div>
           </div>
         </div>
       </div>
@@ -304,6 +315,46 @@
       ],
       pdfs:[{n:"Résumé — Écosystèmes.pdf",t:"220 Ko"}]
     },
+    organisation:{titre:"Organisation de la matière vivante",niveau:"Biologie · 5ème",
+      resume:`<p>Le corps est organisé selon une hiérarchie :</p><ul>
+      <li><strong>Cellule</strong> : unité de base du vivant, contient l'ADN</li>
+      <li><strong>Tissus</strong> : ensemble de cellules similaires remplissant une fonction (épithélium, muscle, nerveux, conjonctif)</li>
+      <li><strong>Organes</strong> : assemblage de tissus (cœur, cerveau, foie)</li>
+      <li><strong>Systèmes</strong> : ensemble d'organes coopérant (système cardiovasculaire, nerveux, digestif)</li>
+      <li><strong>Organisme</strong> : entité vivante complète</li></ul>
+      <p>Chez les végétaux : épiderme, derme, phloème, xylème, moelle.</p>`,
+      quiz:[
+        {q:"Quelle est l'unité de base du vivant ?",opts:["Tissu","Cellule","Organe","Organisme"],c:1,exp:"La cellule est l'unité de base du vivant et contient le matériel génétique."},
+        {q:"Qu'est-ce qu'un tissu ?",opts:["Un organe","Un ensemble de cellules similaires","Un système","Une molécule"],c:1,exp:"Un tissu est un ensemble de cellules de même type remplissant la même fonction."}
+      ],
+      pdfs:[{n:"Résumé — Organisation.pdf",t:"200 Ko"},{n:"Hiérarchie vivant.pdf",t:"280 Ko"}]
+    },
+    digestion:{titre:"L'appareil digestif",niveau:"Biologie · 4ème",
+      resume:`<p><strong>Trajet de la digestion</strong> : Bouche → Œsophage → Estomac → Intestin grêle → Gros intestin → Rectum.</p>
+      <p><strong>Transformations chimiques</strong> : <strong>enzymes digestives</strong> dégradent les macromolécules :</p><ul>
+      <li>Protéases → protéines en acides aminés</li>
+      <li>Lipases → lipides en glycérol et acides gras</li>
+      <li>Amylase → glucides en glucose</li></ul>
+      <p><strong>Absorption</strong> : dans l'intestin grêle (surface augmentée par villosités intestinales). Les nutriments passent dans le sang.</p>
+      <p><strong>Selles</strong> : résidus indigestibles évacués par le rectum.</p>`,
+      quiz:[
+        {q:"Où les nutriments sont-ils principalement absorbés ?",opts:["Estomac","Intestin grêle","Gros intestin","Œsophage"],c:1,exp:"L'intestin grêle est le siège de l'absorption des nutriments grâce à ses villosités intestinales."},
+        {q:"Quel est le rôle des enzymes digestives ?",opts:["Protéger l'estomac","Créer de l'énergie","Dégrader les macromolécules en molécules simples","Absorber l'eau"],c:2,exp:"Les enzymes catalysent les réactions de dégradation des nutriments."}
+      ],
+      pdfs:[{n:"Résumé — Appareil digestif.pdf",t:"250 Ko"},{n:"Schéma digestion.pdf",t:"310 Ko"}]
+    },
+    metabolisme:{titre:"Métabolisme et énergie",niveau:"Biologie · 2nde",
+      resume:`<p><strong>Photosynthèse</strong> (chez les végétaux, algues, cyanobactéries) : 6CO₂ + 6H₂O + lumière → C₆H₁₂O₆ + O₂. Produit du glucose, libère O₂.</p>
+      <p><strong>Respiration cellulaire</strong> (dans tous les êtres vivants) : C₆H₁₂O₆ + O₂ → CO₂ + H₂O + énergie (ATP). Les mitochondries en sont le siège.</p>
+      <p><strong>Fermentation</strong> : respiration anaérobie, moins efficace. Ex: levures, muscles pendant effort intense.</p>
+      <p><strong>Cycles biogéochimiques</strong> : carbone, azote, phosphore, eau. L'énergie vient du Soleil ; la matière recycle.</p>`,
+      quiz:[
+        {q:"Où se déroule la respiration cellulaire ?",opts:["Noyau","Mitochondries","Ribosomes","Vacuole"],c:1,exp:"Les mitochondries sont le siège de la respiration cellulaire aérobie et produisent l'ATP."},
+        {q:"Que produit la photosynthèse ?",opts:["CO₂ et H₂O","Glucose et oxygène","ATP seulement","Protéines"],c:1,exp:"La photosynthèse produit du glucose (sucre) et libère de l'oxygène comme sous-produit."},
+        {q:"Quelle est la source d'énergie ultime pour la vie sur Terre ?",opts:["Les minéraux","Le Soleil","La Lune","La géothermie"],c:1,exp:"Le Soleil est la source d'énergie primaire de tous les écosystèmes terrestres."}
+      ],
+      pdfs:[{n:"Résumé — Métabolisme.pdf",t:"290 Ko"},{n:"Cycles biogéochimiques.pdf",t:"350 Ko"}]
+    },
     immunite:{titre:"Le système immunitaire",niveau:"Biologie · 1ère",
       resume:`<p><strong>Immunité innée</strong> (rapide, non spécifique) : barrières physiques (peau), phagocytose, inflammation.</p>
       <p><strong>Immunité adaptative</strong> (lente, spécifique) :</p><ul>
@@ -331,24 +382,67 @@
       pdfs:[{n:"Résumé — Évolution.pdf",t:"275 Ko"}]
     },
     reproduction:{titre:"La reproduction humaine",niveau:"Biologie · 4ème",
-      resume:`<p>Cours bientôt disponible. Contactez-moi pour un cours particulier sur ce thème !</p>`,
-      quiz:[{q:"Quel organe produit les ovules ?",opts:["Utérus","Ovaire","Trompes","Col utérin"],c:1,exp:"Les ovaires sont les gonades féminines produisant les ovules et les hormones sexuelles."}],
-      pdfs:[{n:"Résumé — Reproduction.pdf",t:"200 Ko"}]
+      resume:`<p><strong>Système reproducteur féminin</strong> :</p><ul>
+      <li><strong>Ovaires</strong> : produisent les ovules et les hormones (estrogènes, progestérone)</li>
+      <li><strong>Trompes de Fallope</strong> : transport de l'ovule</li>
+      <li><strong>Utérus</strong> : accueille l'embryon</li>
+      <li><strong>Vagin</strong> : voie d'accès</li></ul>
+      <p><strong>Système reproducteur masculin</strong> :</p><ul>
+      <li><strong>Testicules</strong> : produisent les spermatozoïdes et la testostérone</li>
+      <li><strong>Épididyme</strong> : stockage et maturation des spermatozoïdes</li>
+      <li><strong>Pénis</strong> : organe d'accouplement</li></ul>
+      <p><strong>Cycles reproductifs</strong> : cycle menstruel (28j) et spermatogenèse continue. <strong>Fécondation</strong> = fusion d'un spermatozoïde et d'un ovule. <strong>Grossesse</strong> = 9 mois.</p>`,
+      quiz:[
+        {q:"Quel organe produit les ovules ?",opts:["Utérus","Ovaire","Trompes","Col utérin"],c:1,exp:"Les ovaires sont les gonades féminines produisant les ovules et les hormones sexuelles."},
+        {q:"Combien de temps dure un cycle menstruel moyen ?",opts:["14 jours","21 jours","28 jours","35 jours"],c:2,exp:"Le cycle menstruel dure en moyenne 28 jours, bien que des variations entre 21 et 35 jours soient normales."},
+        {q:"Où l'ovule est-t-il fécondé ?",opts:["Dans l'utérus","Dans les trompes de Fallope","Dans les ovaires","Dans le vagin"],c:1,exp:"La fécondation a généralement lieu dans les trompes de Fallope, puis l'embryon migre vers l'utérus."}
+      ],
+      pdfs:[{n:"Résumé — Reproduction.pdf",t:"240 Ko"},{n:"Schémas anatomie.pdf",t:"380 Ko"}]
     },
     tectonique:{titre:"Tectonique des plaques",niveau:"Géologie · 3ème",
-      resume:`<p>Cours bientôt disponible. Contactez-moi pour un cours particulier sur ce thème !</p>`,
-      quiz:[{q:"Combien de grandes plaques lithosphériques existe-t-il ?",opts:["3","7","12","20"],c:2,exp:"On compte environ 12 grandes plaques lithosphériques, dont la plaque eurasiatique et la plaque pacifique."}],
-      pdfs:[{n:"Résumé — Tectonique.pdf",t:"230 Ko"}]
+      resume:`<p>La <strong>lithosphère</strong> (croûte + partie supérieure du manteau) est divisée en <strong>plaques tectoniques</strong> rigides.</p>
+      <p><strong>Types de limites de plaques</strong> :</p><ul>
+      <li><strong>Limites divergentes</strong> : plaques s'écartent, formation de dorsales océaniques, magmatisme</li>
+      <li><strong>Limites convergentes</strong> : plaques se heurtent, subduction ou collision, chaînes de montagnes, séismes</li>
+      <li><strong>Limites de coulissage</strong> : plaques glissent latéralement l'une contre l'autre (failles)</li></ul>
+      <p><strong>Conséquences</strong> : volcans, tremblements de terre, formation des reliefs. Les plaques se déplacent de quelques cm/an.</p>`,
+      quiz:[
+        {q:"Qu'est-ce qui fait bouger les plaques tectoniques ?",opts:["Le vent","Les courants de convection du manteau","L'attraction lunaire","Les animaux"],c:1,exp:"Les courants de convection du manteau chaud poussent les plaques lithosphériques à la surface."},
+        {q:"Quel phénomène provoque la subduction ?",opts:["L'érosion","La collision de deux plaques continentales","Une plaque océanique dense s'enfonçant sous une plaque moins dense","Le refroidissement de l'eau"],c:2,exp:"La subduction se produit quand une plaque océanique dense plonge sous une plaque moins dense, créant des volcans."},
+        {q:"À quelle vitesse moyenne se déplacent les plaques ?",opts:["1 mm/an","Quelques cm/an","1 m/an","10 m/an"],c:1,exp:"Les plaques tectoniques se déplacent généralement de 2 à 10 cm par an."}
+      ],
+      pdfs:[{n:"Résumé — Tectonique.pdf",t:"270 Ko"},{n:"Schéma limites de plaques.pdf",t:"320 Ko"}]
     },
     atmosphere:{titre:"L'atmosphère terrestre",niveau:"Géologie · 1ère",
-      resume:`<p>Cours bientôt disponible. Contactez-moi pour un cours particulier sur ce thème !</p>`,
-      quiz:[{q:"Quel gaz est responsable de l'effet de serre anthropique ?",opts:["O₂","N₂","CO₂","H₂"],c:2,exp:"Le CO₂ émis par les énergies fossiles est le principal gaz à effet de serre d'origine humaine."}],
-      pdfs:[{n:"Résumé — Atmosphère.pdf",t:"210 Ko"}]
+      resume:`<p><strong>Composition de l'atmosphère</strong> :</p><ul>
+      <li><strong>N₂</strong> : 78% (azote)</li>
+      <li><strong>O₂</strong> : 21% (oxygène)</li>
+      <li><strong>Gaz rares + CO₂</strong> : 1%</li></ul>
+      <p><strong>Couches atmosphériques</strong> (du bas vers le haut) : Troposphère (météo), Stratosphère (ozone), Mésosphère, Thermosphère.</p>
+      <p><strong>Effet de serre naturel</strong> : les GES (CO₂, CH₄, N₂O, H₂O) piègent la chaleur. Depuis 1850, concentration en CO₂ a augmenté de 50% (énergies fossiles). <strong>Réchauffement climatique</strong> : +1,2°C depuis l'ère pré-industrielle, fonte des glaces, montée des océans.</p>`,
+      quiz:[
+        {q:"Quel est le gaz le plus abondant dans l'atmosphère ?",opts:["Oxygène","Dioxyde de carbone","Azote","Hydrogène"],c:2,exp:"L'azote (N₂) représente 78% de l'atmosphère."},
+        {q:"Quel est le principal gaz à effet de serre d'origine humaine ?",opts:["Méthane","Dioxyde de carbone","Protoxyde d'azote","Vapeur d'eau"],c:1,exp:"Le CO₂ émis par la combustion des énergies fossiles est le principal responsable du réchauffement climatique anthropique."},
+        {q:"De combien la température globale a-t-elle augmenté depuis 1850 ?",opts:["0,5°C","1,2°C","3°C","5°C"],c:1,exp:"Le réchauffement climatique observé est d'environ +1,2°C depuis l'ère pré-industrielle."}
+      ],
+      pdfs:[{n:"Résumé — Atmosphère.pdf",t:"260 Ko"},{n:"Graphiques changement climatique.pdf",t:"340 Ko"}]
     },
     geologie:{titre:"Géologie et temps profonds",niveau:"Géologie · Terminale",
-      resume:`<p>Cours bientôt disponible. Contactez-moi pour un cours particulier sur ce thème !</p>`,
-      quiz:[{q:"Quel est l'âge de la Terre ?",opts:["1 milliard","2,5 milliards","4,5 milliards","10 milliards"],c:2,exp:"La Terre est âgée d'environ 4,5 milliards d'années, estimé par datation radiométrique."}],
-      pdfs:[{n:"Résumé — Temps profonds.pdf",t:"260 Ko"}]
+      resume:`<p><strong>Datation absolue</strong> : méthodes radiométriques. Désintégration radioactive permet de calculer l'âge des roches (demi-vie).</p>
+      <p><strong>Datation relative</strong> : principe de superposition (strates les plus anciennes au fond), fossiles stratigraphiques.</p>
+      <p><strong>Stratigraphie</strong> : étude des couches géologiques (strates). <strong>Paléontologie</strong> : fossiles révèlent les espèces du passé.</p>
+      <p><strong>Histoire de la Terre</strong> :</p><ul>
+      <li><strong>Hadéen</strong> (-4,5 à -4 Ga) : formation Terre</li>
+      <li><strong>Archéen</strong> (-4 à -2,5 Ga) : apparition vie procaryote</li>
+      <li><strong>Protérozoïque</strong> (-2,5 à -0,541 Ga) : oxygénation atmosphère</li>
+      <li><strong>Phanérozoïque</strong> (-541 Ma à présent) : faune, flore complexes</li></ul>
+      <p>Cinq grandes <strong>extinctions de masse</strong> documentées.</p>`,
+      quiz:[
+        {q:"Quelle méthode de datation se base sur la désintégration d'éléments radioactifs ?",opts:["Stratigraphie","Datation absolue radiométrique","Fossiles","Magnétostratigraphie"],c:1,exp:"La datation radiométrique mesure le rapport entre l'isotope parent et le produit de désintégration pour calculer l'âge."},
+        {q:"Quel est l'âge approximatif de la Terre ?",opts:["1 milliard","2,5 milliards","4,5 milliards","10 milliards"],c:2,exp:"La Terre s'est formée il y a environ 4,5 milliards d'années."},
+        {q:"Quel est le principe de superposition en stratigraphie ?",opts:["Les fossiles remontent à la surface","Les strates les plus anciennes sont au fond","Toutes les roches ont le même âge","L'érosion remet les anciennes couches au-dessus"],c:1,exp:"Le principe de superposition affirme que dans une série de strates non dérangées, les plus anciennes se trouvent à la base."}
+      ],
+      pdfs:[{n:"Résumé — Géologie temps profonds.pdf",t:"310 Ko"},{n:"Frise chronologique Terre.pdf",t:"400 Ko"}]
     }
   };
 

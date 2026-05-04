@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tous les cours SVT — Collège & Lycée</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gd:#1a3a2a;--gm:#2d6a4f;--gl:#52b788;
+  --cr:#f5f0e8;--cd:#e8e0d0;--am:#c9881c;--al:#e8b84b;
+  --td:#1c1c1c;--tm:#4a4a4a;--wh:#ffffff;
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--cr);color:var(--td)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(45,106,79,0.15)}
+.nl{font-family:var(--serif);font-size:1.3rem;color:var(--gd);text-decoration:none}.nl span{color:var(--am)}
+.nv{display:flex;gap:1.5rem;list-style:none}
+.nv a{font-size:0.82rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--tm);text-decoration:none;transition:color 0.2s}
+.nv a:hover,.nv a.active{color:var(--gm)}
+.nc{background:var(--gd);color:var(--cr)!important;padding:0.45rem 1rem}
+@media(max-width:768px){nav{padding:0.8rem 1rem}.nv{display:none}}
+
+.hero{background:var(--gd);color:var(--cr);padding:8rem 4rem 4rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 40%,rgba(82,183,136,0.2),transparent 60%)}
+.he{max-width:580px;position:relative;z-index:2}
+.hew{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--al);margin-bottom:0.8rem}
+.ht{font-family:var(--serif);font-size:clamp(2.5rem,4.5vw,4rem);line-height:1.1;margin-bottom:1rem}
+.ht em{font-style:italic;color:var(--gl)}
+.hs{font-size:0.95rem;font-weight:300;line-height:1.7;color:rgba(245,240,232,0.8)}
+@media(max-width:768px){.hero{padding:6rem 1.5rem 3rem}}
+
+.tabs{background:var(--wh);border-bottom:1px solid var(--cd);padding:0 3rem;display:flex;gap:0;position:sticky;top:62px;z-index:50;overflow-x:auto}
+.tb{padding:1rem 1.5rem;font-family:var(--sans);font-size:0.8rem;letter-spacing:0.07em;text-transform:uppercase;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;color:var(--tm);white-space:nowrap;transition:all 0.2s}
+.tb:hover{color:var(--gm)}.tb.active{color:var(--gd);border-bottom-color:var(--am);font-weight:500}
+@media(max-width:768px){.tabs{padding:0 0.5rem}}
+
+.main{max-width:1100px;margin:0 auto;padding:3rem 2rem}
+.tp{display:none}.tp.active{display:block;animation:fu 0.4s ease}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.theme-section{margin-bottom:3rem}
+.ts-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem}
+.ts-dot{width:10px;height:10px;border-radius:50%}
+.ts-title{font-family:var(--serif);font-size:1.2rem;color:var(--gd)}
+.ts-count{font-size:0.72rem;color:var(--tm);background:var(--cd);padding:0.15rem 0.6rem}
+
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:900px){.cg{grid-template-columns:1fr 1fr}}
+@media(max-width:580px){.cg{grid-template-columns:1fr}}
+
+.cc{background:var(--wh);border:1px solid var(--cd);padding:1.4rem;cursor:pointer;transition:transform 0.25s,box-shadow 0.25s;position:relative;overflow:hidden}
+.cc::after{content:'';position:absolute;top:0;left:0;width:100%;height:4px}
+.cc.bio::after{background:var(--gl)}.cc.geo::after{background:var(--am)}.cc.sante::after{background:#e74c3c}
+.cc:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(26,58,42,0.1)}
+.cc-niv{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--tm);margin-bottom:0.4rem}
+.cc-title{font-family:var(--serif);font-size:1.1rem;color:var(--gd);margin-bottom:0.5rem;line-height:1.25}
+.cc-desc{font-size:0.8rem;color:var(--tm);line-height:1.55;font-weight:300;margin-bottom:0.8rem}
+.cc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:0.7rem;border-top:1px solid var(--cd)}
+.cc-cat{font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.12rem 0.5rem;border:1px solid}
+.cat-bio{color:var(--gm);border-color:var(--gl);background:rgba(82,183,136,0.08)}
+.cat-geo{color:var(--am);border-color:var(--am);background:rgba(201,136,28,0.08)}
+.cat-sante{color:#c0392b;border-color:#e74c3c;background:rgba(231,76,60,0.08)}
+.cc-open{font-size:0.72rem;color:var(--gm);letter-spacing:0.05em}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(26,58,42,0.75);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:2rem;backdrop-filter:blur(4px);overflow-y:auto}
+.mo.open{display:flex}
+.mw{background:var(--cr);max-width:800px;width:100%;margin:auto;animation:mi 0.3s ease}
+@keyframes mi{from{opacity:0;transform:scale(0.96) translateY(16px)}to{opacity:1;transform:none}}
+.mh{background:var(--gd);color:var(--cr);padding:2rem 2.5rem;display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.mh-level{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.5);margin-bottom:0.4rem}
+.mh-title{font-family:var(--serif);font-size:1.8rem;line-height:1.2}
+.mc{font-size:1.5rem;background:none;border:none;color:rgba(245,240,232,0.6);cursor:pointer;line-height:1;padding:0;transition:color 0.2s;flex-shrink:0}
+.mc:hover{color:var(--cr)}
+.mb{padding:2rem 2.5rem}
+.ms{margin-bottom:1.8rem}
+.mst{font-family:var(--serif);font-size:1.1rem;color:var(--gd);margin-bottom:0.8rem;padding-bottom:0.5rem;border-bottom:1px solid var(--cd)}
+.mt{font-size:0.88rem;line-height:1.8;color:var(--tm);font-weight:300}
+.mt p{margin-bottom:0.7rem}.mt ul,.mt ol{padding-left:1.3rem;margin-bottom:0.7rem}.mt li{margin-bottom:0.3rem}
+.mt strong{color:var(--gd);font-weight:500}
+.kp{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+@media(max-width:580px){.kp{grid-template-columns:1fr}}
+.ki{background:var(--cr);border-left:3px solid var(--gl);padding:0.6rem 0.8rem;font-size:0.82rem;color:var(--td);line-height:1.5}
+
+/* QUIZ */
+.qbox{background:var(--gd);color:var(--cr);padding:1.5rem}
+.qt{font-family:var(--serif);font-size:1.1rem;margin-bottom:0.3rem}
+.qp{font-size:0.7rem;opacity:0.5;margin-bottom:1rem}
+.qq{font-size:0.9rem;line-height:1.6;margin-bottom:0.8rem;font-weight:300}
+.qo{display:flex;flex-direction:column;gap:0.5rem}
+.qob{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);padding:0.7rem 1rem;cursor:pointer;font-size:0.85rem;color:rgba(245,240,232,0.9);text-align:left;font-family:var(--sans);transition:all 0.2s}
+.qob:hover:not(:disabled){background:rgba(255,255,255,0.15)}
+.qob.ok{background:rgba(82,183,136,0.3);border-color:var(--gl)}
+.qob.ko{background:rgba(192,57,43,0.3);border-color:#e74c3c}
+.qf{margin-top:0.8rem;padding:0.7rem;font-size:0.82rem;line-height:1.5;display:none}
+.qf.show{display:block}.qf.fok{background:rgba(82,183,136,0.2);color:var(--gl)}.qf.fko{background:rgba(192,57,43,0.2);color:#e74c3c}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.qnb{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:var(--cr);padding:0.45rem 0.9rem;font-size:0.75rem;cursor:pointer;font-family:var(--sans);display:none;transition:background 0.2s}
+.qnb:hover{background:rgba(255,255,255,0.22)}
+
+/* DL BTN */
+.dl-bar{display:flex;gap:0.8rem;margin-top:1.5rem;flex-wrap:wrap}
+.btn-dl{display:inline-flex;align-items:center;gap:0.5rem;padding:0.7rem 1.3rem;font-family:var(--sans);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;border:none;transition:all 0.25s;text-decoration:none}
+.btn-dl.primary{background:var(--gd);color:var(--cr)}.btn-dl.primary:hover{background:var(--gm)}
+.btn-dl.sec{background:transparent;color:var(--gd);border:1px solid var(--gd)}.btn-dl.sec:hover{background:var(--gd);color:var(--cr)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nl">SVT<span>.</span>Cours</a>
+  <ul class="nv">
+    <li><a href="cours.html" class="active">Cours</a></li>
+    <li><a href="fiches.html">Fiches</a></li>
+    <li><a href="ressources.html">Ressources</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="reservation.html" class="nc">Réserver</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="he">
+    <p class="hew">Programme officiel — Éducation Nationale</p>
+    <h1 class="ht">45 cours SVT<br/><em>complets & gratuits</em></h1>
+    <p class="hs">Du collège à la Terminale — résumés, points clés et quiz de révision pour chaque chapitre du programme officiel.</p>
+  </div>
+</section>
+
+<div class="tabs">
+  <button class="tb active" data-tab="college">Collège</button>
+  <button class="tb" data-tab="seconde">2nde</button>
+  <button class="tb" data-tab="premiere">1ère</button>
+  <button class="tb" data-tab="terminale">Terminale</button>
+</div>
+
+<div class="main">
+
+  <!-- COLLÈGE -->
+  <div class="tp active" id="tab-college">
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:var(--gl)"></div><span class="ts-title">6ème — Diversité du vivant</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc bio" onclick="open_('c1')"><p class="cc-niv">Biologie · 6ème</p><h3 class="cc-title">La diversité du vivant et classification</h3><p class="cc-desc">Classification des êtres vivants, caractères communs, groupes emboîtés.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('c2')"><p class="cc-niv">Biologie · 6ème</p><h3 class="cc-title">Les écosystèmes et chaînes alimentaires</h3><p class="cc-desc">Producteurs, consommateurs, décomposeurs et flux d'énergie.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('c3')"><p class="cc-niv">Biologie · 6ème</p><h3 class="cc-title">Le sol, un milieu vivant</h3><p class="cc-desc">Composition du sol, organismes décomposeurs, rôle dans les cycles.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:var(--am)"></div><span class="ts-title">5ème — Reproduction & Géologie</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc bio" onclick="open_('c4')"><p class="cc-niv">Biologie · 5ème</p><h3 class="cc-title">Reproduction des êtres vivants</h3><p class="cc-desc">Reproduction sexuée, asexuée, cycle de vie, avantages de chaque mode.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc geo" onclick="open_('c5')"><p class="cc-niv">Géologie · 5ème</p><h3 class="cc-title">Volcans et séismes</h3><p class="cc-desc">Structure interne de la Terre, plaques, magma, ondes sismiques.</p><div class="cc-foot"><span class="cc-cat cat-geo">Géologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('c6')"><p class="cc-niv">Biologie · 5ème</p><h3 class="cc-title">Relations au sein des écosystèmes</h3><p class="cc-desc">Compétition, prédation, parasitisme, symbiose, régulation des populations.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:#e74c3c"></div><span class="ts-title">4ème — Corps humain & Impact humain</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc sante" onclick="open_('c7')"><p class="cc-niv">Biologie · 4ème</p><h3 class="cc-title">Le système nerveux</h3><p class="cc-desc">Neurones, arc réflexe, cerveau, organes des sens, comportements.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc sante" onclick="open_('c8')"><p class="cc-niv">Biologie · 4ème</p><h3 class="cc-title">Reproduction humaine & puberté</h3><p class="cc-desc">Organes reproducteurs, puberté, fécondation, développement embryonnaire.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('c9')"><p class="cc-niv">Biologie · 4ème</p><h3 class="cc-title">Impact des activités humaines</h3><p class="cc-desc">Déforestation, pollution, espèces invasives, développement durable.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:var(--gd)"></div><span class="ts-title">3ème — Génétique & Tectonique</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc bio" onclick="open_('c10')"><p class="cc-niv">Biologie · 3ème</p><h3 class="cc-title">Génétique et hérédité</h3><p class="cc-desc">Chromosomes, gènes, allèles, dominance, maladies génétiques, caryotype.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('c11')"><p class="cc-niv">Biologie · 3ème</p><h3 class="cc-title">Évolution des espèces</h3><p class="cc-desc">Sélection naturelle, Darwin, fossiles, parenté des espèces.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc geo" onclick="open_('c12')"><p class="cc-niv">Géologie · 3ème</p><h3 class="cc-title">Tectonique des plaques</h3><p class="cc-desc">Plaques lithosphériques, dorsales, subduction, Pangée, rift.</p><div class="cc-foot"><span class="cc-cat cat-geo">Géologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECONDE -->
+  <div class="tp" id="tab-seconde">
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:var(--gl)"></div><span class="ts-title">Thème 1 — La Terre, la vie et l'évolution</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc bio" onclick="open_('s1')"><p class="cc-niv">Biologie · 2nde</p><h3 class="cc-title">La cellule, unité du vivant</h3><p class="cc-desc">Procaryotes, eucaryotes, organites, membrane plasmique, microscopie.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('s2')"><p class="cc-niv">Biologie · 2nde</p><h3 class="cc-title">Biodiversité et évolution</h3><p class="cc-desc">Biodiversité génétique, spécifique, écosystémique, évolution et sélection.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('s3')"><p class="cc-niv">Biologie · 2nde</p><h3 class="cc-title">La photosynthèse</h3><p class="cc-desc">Chloroplaste, réactions lumineuses, cycle de Calvin, bilan de la photosynthèse.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:var(--am)"></div><span class="ts-title">Thème 2 — Enjeux contemporains de la planète</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc geo" onclick="open_('s4')"><p class="cc-niv">Géologie · 2nde</p><h3 class="cc-title">Géologie et ressources naturelles</h3><p class="cc-desc">Roches sédimentaires, combustibles fossiles, ressources minérales.</p><div class="cc-foot"><span class="cc-cat cat-geo">Géologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc geo" onclick="open_('s5')"><p class="cc-niv">Géologie · 2nde</p><h3 class="cc-title">Changement climatique</h3><p class="cc-desc">Effet de serre, CO₂, rétroactions climatiques, impact sur les écosystèmes.</p><div class="cc-foot"><span class="cc-cat cat-geo">Géologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc geo" onclick="open_('s6')"><p class="cc-niv">Géologie · 2nde</p><h3 class="cc-title">Risques naturels</h3><p class="cc-desc">Séismes, éruptions volcaniques, prévention, aléa et risque.</p><div class="cc-foot"><span class="cc-cat cat-geo">Géologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:#e74c3c"></div><span class="ts-title">Thème 3 — Corps humain et santé</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc sante" onclick="open_('s7')"><p class="cc-niv">Biologie · 2nde</p><h3 class="cc-title">Alimentation et digestion</h3><p class="cc-desc">Digestion enzymatique, absorption, microbiote intestinal, équilibre alimentaire.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc sante" onclick="open_('s8')"><p class="cc-niv">Biologie · 2nde</p><h3 class="cc-title">Microbiote et santé</h3><p class="cc-desc">Flore intestinale, probiotiques, rôle immunitaire, dysbiose.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc sante" onclick="open_('s9')"><p class="cc-niv">Biologie · 2nde</p><h3 class="cc-title">Comportements à risque et prévention</h3><p class="cc-desc">Addiction, IST, vaccination, système immunitaire de base.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREMIÈRE -->
+  <div class="tp" id="tab-premiere">
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:var(--gl)"></div><span class="ts-title">Thème 1 — Génétique et expression du vivant</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc bio" onclick="open_('p1')"><p class="cc-niv">Biologie · 1ère</p><h3 class="cc-title">ADN et information génétique</h3><p class="cc-desc">Structure de l'ADN, gènes, allèles, mutations, polymorphisme.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('p2')"><p class="cc-niv">Biologie · 1ère</p><h3 class="cc-title">Expression des gènes : ADN → protéines</h3><p class="cc-desc">Transcription, traduction, code génétique, ribosomes, protéines.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('p3')"><p class="cc-niv">Biologie · 1ère</p><h3 class="cc-title">Brassage génétique et méiose</h3><p class="cc-desc">Méiose, brassage inter et intra-chromosomique, fécondation, diversité génétique.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:var(--am)"></div><span class="ts-title">Thème 2 — Évolution et diversification du vivant</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc bio" onclick="open_('p4')"><p class="cc-niv">Biologie · 1ère</p><h3 class="cc-title">Mécanismes de l'évolution</h3><p class="cc-desc">Sélection naturelle, dérive génétique, mutation, flux génique, Hardy-Weinberg.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('p5')"><p class="cc-niv">Biologie · 1ère</p><h3 class="cc-title">Diversification et spéciation</h3><p class="cc-desc">Spéciation allopatrique, isolement reproducteur, phylogénèse, arbre du vivant.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('p6')"><p class="cc-niv">Biologie · 1ère</p><h3 class="cc-title">Cycles géochimiques</h3><p class="cc-desc">Cycle du carbone, azote, photosynthèse, respiration, enjeux climatiques.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:#e74c3c"></div><span class="ts-title">Thème 3 — Corps humain, santé & Géologie</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc sante" onclick="open_('p7')"><p class="cc-niv">Biologie · 1ère</p><h3 class="cc-title">Le système immunitaire</h3><p class="cc-desc">Immunité innée, adaptative, lymphocytes B et T, anticorps, vaccination.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc sante" onclick="open_('p8')"><p class="cc-niv">Biologie · 1ère</p><h3 class="cc-title">Neurones et transmission synaptique</h3><p class="cc-desc">Potentiel d'action, synapse, neurotransmetteurs, plasticité synaptique.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc geo" onclick="open_('p9')"><p class="cc-niv">Géologie · 1ère</p><h3 class="cc-title">Géodynamique interne</h3><p class="cc-desc">Lithosphère, asthénosphère, convection mantellique, dorsales, subduction.</p><div class="cc-foot"><span class="cc-cat cat-geo">Géologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TERMINALE -->
+  <div class="tp" id="tab-terminale">
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:var(--gl)"></div><span class="ts-title">Thème 1 — La Terre, la vie et l'évolution du vivant</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc bio" onclick="open_('t1')"><p class="cc-niv">Biologie · Terminale</p><h3 class="cc-title">Génétique moléculaire</h3><p class="cc-desc">Réplication, transcription, traduction, mutations, régulation génique.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('t2')"><p class="cc-niv">Biologie · Terminale</p><h3 class="cc-title">Évolution et phylogénèse</h3><p class="cc-desc">Sélection naturelle, dérive, cladogrammes, convergence, coévolution.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc geo" onclick="open_('t3')"><p class="cc-niv">Géologie · Terminale</p><h3 class="cc-title">Temps profonds et datation</h3><p class="cc-desc">Datation radiométrique, stratigraphie, fossiles, échelle des temps géologiques.</p><div class="cc-foot"><span class="cc-cat cat-geo">Géologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:var(--am)"></div><span class="ts-title">Thème 2 — Enjeux contemporains de la planète</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc bio" onclick="open_('t4')"><p class="cc-niv">Biologie · Terminale</p><h3 class="cc-title">Biodiversité et gestion durable</h3><p class="cc-desc">Services écosystémiques, conservation, corridors écologiques, extinction.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc geo" onclick="open_('t5')"><p class="cc-niv">Géologie · Terminale</p><h3 class="cc-title">Ressources et risques géologiques</h3><p class="cc-desc">Ressources minérales, énergétiques, aléas, prévention, développement durable.</p><div class="cc-foot"><span class="cc-cat cat-geo">Géologie</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc bio" onclick="open_('t6')"><p class="cc-niv">Biologie · Terminale</p><h3 class="cc-title">De la plante sauvage à la plante domestiquée</h3><p class="cc-desc">Sélection artificielle, OGM, biotechnologies végétales, enjeux éthiques.</p><div class="cc-foot"><span class="cc-cat cat-bio">Biologie</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+    <div class="theme-section">
+      <div class="ts-header"><div class="ts-dot" style="background:#e74c3c"></div><span class="ts-title">Thème 3 — Corps humain et santé</span><span class="ts-count">3 cours</span></div>
+      <div class="cg">
+        <div class="cc sante" onclick="open_('t7')"><p class="cc-niv">Biologie · Terminale</p><h3 class="cc-title">Neurosciences et comportement</h3><p class="cc-desc">Plasticité synaptique, mémoire, apprentissage, addictions, troubles neuro.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc sante" onclick="open_('t8')"><p class="cc-niv">Biologie · Terminale</p><h3 class="cc-title">Immunologie avancée</h3><p class="cc-desc">Réponse immunitaire adaptative, mémoire immunitaire, auto-immunité, allergies.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+        <div class="cc sante" onclick="open_('t9')"><p class="cc-niv">Biologie · Terminale</p><h3 class="cc-title">Reproduction et régulation hormonale</h3><p class="cc-desc">Axe hypothalamo-hypophysaire, cycle menstruel, hormones sexuelles, contraception.</p><div class="cc-foot"><span class="cc-cat cat-sante">Santé</span><span class="cc-open">Voir le cours →</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="mo" id="modal" onclick="closeOut(event)">
+  <div class="mw">
+    <div class="mh">
+      <div><p class="mh-level" id="mLvl"></p><h2 class="mh-title" id="mTitle"></h2></div>
+      <button class="mc" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mb" id="mBody"></div>
+  </div>
+</div>
+
+<script>
+const COURS = {
+  c1:{lvl:"Biologie · 6ème",title:"La diversité du vivant et classification",
+    resume:`<p>La <strong>classification du vivant</strong> organise les êtres vivants en groupes selon leurs caractères communs. On utilise la méthode des <strong>groupes emboîtés</strong> : chaque groupe contient tous les êtres vivants qui partagent au moins un caractère commun.</p>
+    <p>Les <strong>caractères de classification</strong> sont des attributs observables : présence d'une colonne vertébrale, de poils, de plumes, d'une fleur... On distingue les caractères <strong>ancestraux</strong> (partagés par de nombreux groupes) et les caractères <strong>dérivés</strong> (propres à un groupe).</p>
+    <p>La <strong>biodiversité</strong> désigne la variété des espèces vivantes. On estime qu'il existe entre 8 et 10 millions d'espèces sur Terre, dont seulement 1,8 million ont été décrites par les scientifiques.</p>`,
+    keys:["Groupes emboîtés : chaque groupe est inclus dans un plus grand","Caractère partagé = point commun entre espèces","Vertébrés : poissons, amphibiens, reptiles, oiseaux, mammifères","Invertébrés : insectes, mollusques, vers, crustacés","~8 millions d'espèces estimées sur Terre","La classification évolue avec les découvertes génétiques"],
+    quiz:[
+      {q:"Que signifie la notion de 'groupes emboîtés' ?",opts:["Les animaux sont rangés par taille","Chaque groupe est inclus dans un groupe plus large","Les plantes sont séparées des animaux","Les groupes sont classés par ordre alphabétique"],c:1,exp:"Les groupes emboîtés signifient que chaque groupe contient tous les êtres vivants qui partagent au moins un caractère commun, et est lui-même inclus dans un groupe plus large."},
+      {q:"Quel caractère distingue les vertébrés des invertébrés ?",opts:["La présence d'ailes","La présence d'une colonne vertébrale","La taille du corps","La couleur"],c:1,exp:"Les vertébrés possèdent une colonne vertébrale (squelette interne), contrairement aux invertébrés qui en sont dépourvus."},
+      {q:"Combien d'espèces sont estimées sur Terre ?",opts:["100 000","1 million","8 à 10 millions","1 milliard"],c:2,exp:"On estime qu'il existe entre 8 et 10 millions d'espèces sur Terre, mais seulement 1,8 million ont été officiellement décrites et nommées."}
+    ]},
+  c2:{lvl:"Biologie · 6ème",title:"Les écosystèmes et chaînes alimentaires",
+    resume:`<p>Un <strong>écosystème</strong> est un ensemble formé par une communauté d'êtres vivants (la <strong>biocénose</strong>) et son milieu de vie physique (le <strong>biotope</strong>). Ces deux composantes interagissent en permanence.</p>
+    <p>Les <strong>chaînes alimentaires</strong> représentent les transferts de matière et d'énergie entre êtres vivants. Elles comprennent : les <strong>producteurs</strong> (végétaux, photosynthèse), les <strong>consommateurs primaires</strong> (herbivores), les <strong>consommateurs secondaires</strong> (carnivores) et les <strong>décomposeurs</strong> (bactéries, champignons).</p>
+    <p>Un <strong>réseau trophique</strong> est l'ensemble des chaînes alimentaires d'un écosystème. À chaque maillon, environ 90% de l'énergie est perdue sous forme de chaleur : seuls 10% passent au maillon suivant.</p>`,
+    keys:["Biocénose = ensemble des êtres vivants","Biotope = milieu physique (sol, eau, air, température)","Producteurs → Consommateurs primaires → Secondaires → Décomposeurs","90% de l'énergie perdue à chaque maillon","Réseau trophique = plusieurs chaînes alimentaires liées","Les décomposeurs recyclent la matière organique"],
+    quiz:[
+      {q:"Qu'est-ce qu'un producteur dans une chaîne alimentaire ?",opts:["Un animal qui chasse","Un végétal qui fabrique sa matière organique","Un champignon décomposeur","Un insecte herbivore"],c:1,exp:"Les producteurs sont les végétaux (et certaines bactéries) capables de fabriquer leur matière organique par photosynthèse en utilisant l'énergie lumineuse."},
+      {q:"Quel pourcentage d'énergie passe d'un maillon au suivant ?",opts:["50%","25%","10%","90%"],c:2,exp:"À chaque maillon d'une chaîne alimentaire, environ 90% de l'énergie est perdue (chaleur, mouvement, déchets) et seulement 10% est transférée au maillon suivant."},
+      {q:"Comment appelle-t-on le milieu physique d'un écosystème ?",opts:["Biocénose","Biotope","Biome","Biosystème"],c:1,exp:"Le biotope désigne le milieu physique d'un écosystème : le sol, l'eau, la température, la lumière, etc. La biocénose désigne les êtres vivants."}
+    ]},
+  c3:{lvl:"Biologie · 6ème",title:"Le sol, un milieu vivant",
+    resume:`<p>Le <strong>sol</strong> est un milieu complexe composé de matière minérale (argile, sable, limons), de matière organique (humus), d'eau, d'air et d'une multitude d'êtres vivants.</p>
+    <p>Les <strong>organismes du sol</strong> sont très variés : vers de terre, insectes, bactéries, champignons. Ils jouent un rôle essentiel dans la <strong>décomposition</strong> de la matière organique (feuilles mortes, cadavres) et sa transformation en <strong>humus</strong>.</p>
+    <p>L'<strong>humus</strong> est une matière organique très riche qui améliore la fertilité du sol et retient l'eau. La formation du sol est un processus très lent : il faut environ 10 000 ans pour former 1 mètre de sol. C'est pourquoi le sol est une ressource précieuse à préserver.</p>`,
+    keys:["Sol = matière minérale + matière organique + eau + air + êtres vivants","1 gramme de sol = 1 milliard de bactéries","Vers de terre : aèrent et mélangent le sol","Humus : matière organique décomposée, très fertile","10 000 ans pour former 1 m de sol","Déforestation et agriculture intensive appauvrissent le sol"],
+    quiz:[
+      {q:"Qu'est-ce que l'humus ?",opts:["De l'argile compressée","De la matière organique décomposée dans le sol","Des minéraux dissous dans l'eau","Des racines fossilisées"],c:1,exp:"L'humus est de la matière organique décomposée par les organismes du sol. Il enrichit le sol en nutriments et améliore sa structure et sa capacité à retenir l'eau."},
+      {q:"Quel est le rôle principal des vers de terre ?",opts:["Produire de l'oxygène","Creuser des galeries pour aérer et mélanger le sol","Filtrer l'eau de pluie","Protéger les racines"],c:1,exp:"Les vers de terre creusent des galeries qui aèrent le sol et permettent à l'eau de s'infiltrer. Ils mélangent aussi les couches du sol, favorisant la fertilité."},
+      {q:"Combien de temps faut-il pour former 1 mètre de sol ?",opts:["100 ans","1 000 ans","10 000 ans","100 000 ans"],c:2,exp:"La formation du sol est un processus géologique très lent : il faut environ 10 000 ans pour former 1 mètre de sol fertile. C'est pourquoi le sol est considéré comme une ressource non renouvelable."}
+    ]},
+  c4:{lvl:"Biologie · 5ème",title:"Reproduction des êtres vivants",
+    resume:`<p>Il existe deux grands modes de reproduction chez les êtres vivants : la <strong>reproduction sexuée</strong> et la <strong>reproduction asexuée</strong>.</p>
+    <p>La <strong>reproduction sexuée</strong> implique la fusion de deux cellules reproductrices (gamètes) : un gamète mâle et un gamète femelle, formant un <strong>zygote</strong>. Elle produit une grande variété génétique mais nécessite deux individus. Elle est universelle chez les animaux complexes.</p>
+    <p>La <strong>reproduction asexuée</strong> se fait à partir d'un seul individu (bouturage, bourgeonnement, stolons). Elle produit des individus génétiquement identiques (<strong>clones</strong>). Elle est rapide et ne nécessite pas de partenaire, mais n'apporte aucune diversité génétique.</p>`,
+    keys:["Reproduction sexuée = fusion de deux gamètes → zygote","Gamètes : ovule (femelle) + spermatozoïde (mâle)","Grande diversité génétique avec la reproduction sexuée","Reproduction asexuée = clones génétiquement identiques","Exemples asexuée : bouturage, stolons de fraisiers, bourgeonnement","Les deux modes peuvent exister chez une même espèce"],
+    quiz:[
+      {q:"Qu'est-ce qu'un zygote ?",opts:["Un gamète mâle","La cellule résultant de la fusion des gamètes","Un organe reproducteur","Un type de bourgeon"],c:1,exp:"Le zygote est la cellule-œuf résultant de la fusion du gamète mâle (spermatozoïde) et du gamète femelle (ovule). C'est la première cellule du nouvel organisme."},
+      {q:"Quel est l'avantage principal de la reproduction sexuée ?",opts:["Elle est plus rapide","Elle ne nécessite pas de partenaire","Elle produit une grande diversité génétique","Elle produit des clones"],c:2,exp:"La reproduction sexuée produit une grande diversité génétique car chaque individu reçoit un mélange unique de gènes de ses deux parents, ce qui favorise l'adaptation à l'environnement."},
+      {q:"Le bouturage est un exemple de reproduction…",opts:["Sexuée","Asexuée","Mixte","Parthenogenèse"],c:1,exp:"Le bouturage est une reproduction asexuée : on prélève une partie d'une plante (tige, feuille) et on la fait enraciner. Les individus obtenus sont génétiquement identiques à la plante mère."}
+    ]},
+  c5:{lvl:"Géologie · 5ème",title:"Volcans et séismes",
+    resume:`<p>La <strong>structure interne de la Terre</strong> comprend, de l'extérieur vers l'intérieur : la <strong>croûte terrestre</strong> (fine, 5-70 km), le <strong>manteau</strong> (2900 km), le <strong>noyau externe</strong> (liquide) et le <strong>noyau interne</strong> (solide). La croûte et la partie supérieure du manteau forment la <strong>lithosphère</strong>.</p>
+    <p>Les <strong>séismes</strong> sont des vibrations de la Terre dues à la rupture de roches en profondeur (foyer ou hypocentre). Ils se propagent via des <strong>ondes sismiques</strong> et sont mesurés par des sismographes. L'épicentre est le point de surface au-dessus du foyer.</p>
+    <p>Les <strong>volcans</strong> sont des zones de remontée de <strong>magma</strong> (roche en fusion) depuis le manteau. On distingue les volcans <strong>effusifs</strong> (coulées de lave fluide, ex : Piton de la Fournaise) et <strong>explosifs</strong> (éruptions violentes, ex : Vésuve).</p>`,
+    keys:["Croûte terrestre : 5 km (océanique) à 70 km (continentale)","Foyer sismique = point de rupture en profondeur","Épicentre = point en surface au-dessus du foyer","Magma = roche en fusion dans le manteau","Volcan effusif : lave fluide (basalte), peu dangereux","Volcan explosif : lave visqueuse, très dangereux"],
+    quiz:[
+      {q:"Où se situe le foyer d'un séisme ?",opts:["À la surface de la Terre","Dans l'atmosphère","En profondeur dans la croûte ou le manteau","Dans l'océan uniquement"],c:2,exp:"Le foyer (ou hypocentre) est le point en profondeur où se produit la rupture des roches à l'origine du séisme. L'épicentre est le point de surface directement au-dessus du foyer."},
+      {q:"Quelle est la différence entre un volcan effusif et explosif ?",opts:["La taille du volcan","La viscosité de la lave et le type d'éruption","La profondeur du magma","La couleur de la lave"],c:1,exp:"Un volcan effusif émet une lave fluide (basalte) en coulées. Un volcan explosif émet une lave très visqueuse qui bloque les gaz, provoquant des explosions violentes et des nuées ardentes."},
+      {q:"Comment s'appelle la roche en fusion dans le manteau ?",opts:["Basalte","Granite","Magma","Obsidienne"],c:2,exp:"Le magma est la roche en fusion présente dans le manteau terrestre. Lorsqu'il remonte et sort à la surface via un volcan, il prend le nom de lave."}
+    ]},
+  c6:{lvl:"Biologie · 5ème",title:"Relations au sein des écosystèmes",
+    resume:`<p>Les êtres vivants d'un écosystème entretiennent de nombreuses <strong>relations</strong> entre eux. Ces interactions peuvent être bénéfiques, neutres ou néfastes pour chacun des partenaires.</p>
+    <p>La <strong>compétition</strong> oppose des individus qui se disputent les mêmes ressources (nourriture, territoire, partenaires). La <strong>prédation</strong> implique qu'un prédateur tue et consomme une proie. Le <strong>parasitisme</strong> est une relation où le parasite bénéficie au détriment de l'hôte sans le tuer immédiatement.</p>
+    <p>La <strong>symbiose</strong> est une relation mutuellement bénéfique : lichens (algue + champignon), nodules racinaires (légumineuses + bactéries fixatrices d'azote), pollinisation. Ces relations régulent les <strong>populations</strong> au sein de l'écosystème.</p>`,
+    keys:["Compétition : deux espèces disputent les mêmes ressources","Prédation : prédateur (+) / proie (-)","Parasitisme : parasite (+) / hôte (-) sans mort immédiate","Symbiose (mutualisme) : les deux partenaires bénéficient (+/+)","Commensalisme : l'un bénéficie, l'autre est neutre (+/0)","Les relations régulent la taille des populations"],
+    quiz:[
+      {q:"Comment qualifie-t-on une relation où les deux partenaires bénéficient ?",opts:["Parasitisme","Prédation","Mutualisme/Symbiose","Compétition"],c:2,exp:"Le mutualisme (ou symbiose) est une relation entre deux espèces où chacune retire un avantage. Exemple : l'abeille butine les fleurs (pollen pour elle) et les pollinise (reproduction pour la plante)."},
+      {q:"Quelle relation unit un lion et un zèbre ?",opts:["Symbiose","Compétition","Parasitisme","Prédation"],c:3,exp:"Le lion est un prédateur et le zèbre est sa proie : c'est une relation de prédation. Le prédateur (+) tue et consomme sa proie (-)."},
+      {q:"Le gui qui pousse sur un chêne est un exemple de…",opts:["Mutualisme","Prédation","Parasitisme","Commensalisme"],c:2,exp:"Le gui est un parasite : il s'installe sur le chêne (hôte), prélève eau et nutriments à son profit (+) au détriment du chêne (-), sans le tuer immédiatement."}
+    ]},
+  c7:{lvl:"Biologie · 4ème",title:"Le système nerveux",
+    resume:`<p>Le <strong>système nerveux</strong> contrôle et coordonne toutes les activités de l'organisme. Il comprend le <strong>système nerveux central</strong> (encéphale + moelle épinière) et le <strong>système nerveux périphérique</strong> (nerfs).</p>
+    <p>Le <strong>neurone</strong> est la cellule de base du système nerveux. Il transmet des messages nerveux sous forme de <strong>potentiels d'action</strong> (signaux électriques). La transmission entre neurones se fait au niveau des <strong>synapses</strong> via des neurotransmetteurs chimiques.</p>
+    <p>Le <strong>réflexe</strong> est une réponse automatique et rapide à un stimulus : stimulus → récepteur → nerf sensitif → moelle épinière → nerf moteur → effecteur. Il court-circuite le cerveau pour aller plus vite. Les comportements appris, eux, impliquent le cerveau.</p>`,
+    keys:["Encéphale : cerveau, cervelet, tronc cérébral","Moelle épinière : centre des réflexes","Neurone : corps cellulaire + axone + dendrites","Arc réflexe : récepteur → nerf sensitif → moelle → nerf moteur → muscle","Synapse : jonction entre deux neurones (transmission chimique)","Neurotransmetteurs : dopamine, sérotonine, acétylcholine"],
+    quiz:[
+      {q:"Quel est l'élément de base du système nerveux ?",opts:["L'axone","Le neurone","La synapse","La myéline"],c:1,exp:"Le neurone est la cellule de base du système nerveux. Il est spécialisé dans la transmission des messages nerveux sous forme d'impulsions électriques."},
+      {q:"Qu'est-ce qu'un réflexe ?",opts:["Une réponse consciente et lente à un stimulus","Une réponse automatique et rapide impliquant la moelle épinière","Un message envoyé par le cerveau","Un mouvement volontaire"],c:1,exp:"Un réflexe est une réponse automatique et rapide à un stimulus, intégrée au niveau de la moelle épinière (pas du cerveau). Exemple : retirer la main d'une source de chaleur."},
+      {q:"Comment les neurones communiquent-ils entre eux ?",opts:["Par des signaux radio","Via des synapses et des neurotransmetteurs","Par contact direct","Via le sang"],c:1,exp:"Les neurones communiquent au niveau des synapses : le signal électrique déclenche la libération de neurotransmetteurs (molécules chimiques) qui traversent l'espace synaptique et activent le neurone suivant."}
+    ]},
+  c8:{lvl:"Biologie · 4ème",title:"Reproduction humaine & puberté",
+    resume:`<p>La <strong>puberté</strong> est la période de transformation physique et hormonale qui marque le passage à la maturité sexuelle. Elle est déclenchée par la sécrétion d'hormones sexuelles : <strong>testostérone</strong> chez le garçon, <strong>œstrogènes et progestérone</strong> chez la fille.</p>
+    <p>La <strong>fécondation</strong> est la fusion d'un spermatozoïde et d'un ovule qui forment un <strong>zygote</strong>. Elle a lieu dans les trompes de Fallope. Le zygote se divise et s'implante dans l'utérus : c'est la <strong>nidation</strong>. Le développement embryonnaire dure 9 mois.</p>
+    <p>Le <strong>cycle menstruel</strong> (28 jours en moyenne) prépare l'utérus à recevoir un éventuel embryon. Il comprend la menstruation, la maturation d'un follicule, l'ovulation (libération de l'ovule) et la phase lutéale.</p>`,
+    keys:["Puberté garçon : testostérone, développement organes génitaux","Puberté fille : œstrogènes, cycles menstruels","Ovulation : libération d'un ovule vers J14 du cycle","Fécondation dans les trompes de Fallope","Nidation : implantation du zygote dans l'utérus","Grossesse : environ 280 jours (40 semaines)"],
+    quiz:[
+      {q:"Quelle hormone déclenche la puberté chez le garçon ?",opts:["Œstrogènes","Progestérone","Testostérone","Insuline"],c:2,exp:"La testostérone, produite par les testicules sous contrôle de l'hypophyse, déclenche les transformations de la puberté chez le garçon : développement des organes génitaux, mue de la voix, pilosité."},
+      {q:"Où a lieu la fécondation ?",opts:["Dans l'utérus","Dans les trompes de Fallope","Dans les ovaires","Dans le vagin"],c:1,exp:"La fécondation a lieu dans les trompes de Fallope. Le spermatozoïde remonte pour rencontrer l'ovule et forme le zygote, qui migre ensuite vers l'utérus où il s'implante (nidation)."},
+      {q:"Combien de jours dure en moyenne le cycle menstruel ?",opts:["14 jours","21 jours","28 jours","35 jours"],c:2,exp:"Le cycle menstruel dure en moyenne 28 jours. Il commence le premier jour des règles et se termine la veille des règles suivantes. L'ovulation a lieu approximativement à J14."}
+    ]},
+  c9:{lvl:"Biologie · 4ème",title:"Impact des activités humaines",
+    resume:`<p>Les activités humaines ont un impact majeur sur la <strong>biodiversité</strong> et les écosystèmes. Les principales causes de la perte de biodiversité sont résumées sous l'acronyme <strong>HIPPO</strong> : Habitat (destruction), Invasives (espèces), Pollution, Population humaine, Over-hunting (surexploitation).</p>
+    <p>La <strong>déforestation</strong> détruit les habitats naturels et libère le CO₂ stocké dans les arbres. La <strong>pollution</strong> (plastiques, pesticides, rejets chimiques) affecte les écosystèmes aquatiques et terrestres. Le <strong>changement climatique</strong> modifie les conditions de vie de nombreuses espèces.</p>
+    <p>Le <strong>développement durable</strong> vise à répondre aux besoins actuels sans compromettre la capacité des générations futures à satisfaire les leurs. Il repose sur trois piliers : économique, social et environnemental.</p>`,
+    keys:["HIPPO : Habitat, Invasives, Pollution, Population, Over-hunting","6e extinction de masse en cours (activités humaines)","Déforestation : 15 milliards d'arbres abattus/an","Plastiques : 8 millions de tonnes dans les océans/an","Espèces invasives : menace pour les espèces locales","Solutions : aires protégées, corridors écologiques, éco-gestes"],
+    quiz:[
+      {q:"Que signifie l'acronyme HIPPO pour la perte de biodiversité ?",opts:["Un animal emblématique des zones humides","Habitat, Invasives, Pollution, Population, Over-hunting","Une méthode d'évaluation scientifique","Un programme de conservation"],c:1,exp:"HIPPO résume les 5 principales causes de perte de biodiversité : destruction des Habitats, espèces Invasives, Pollution, croissance de la Population humaine, Over-hunting (surexploitation)."},
+      {q:"Quel est le principal gaz émis par la déforestation ?",opts:["L'oxygène","L'azote","Le CO₂","Le méthane"],c:2,exp:"Les arbres stockent du CO₂. Quand ils sont abattus et brûlés, ce carbone est libéré dans l'atmosphère sous forme de CO₂, contribuant au changement climatique."},
+      {q:"Sur combien de piliers repose le développement durable ?",opts:["1","2","3","4"],c:2,exp:"Le développement durable repose sur 3 piliers indissociables : la viabilité économique, l'équité sociale et la durabilité environnementale. Ces trois dimensions doivent être équilibrées."}
+    ]},
+  c10:{lvl:"Biologie · 3ème",title:"Génétique et hérédité",
+    resume:`<p>L'<strong>hérédité</strong> est la transmission des caractères des parents aux enfants via les <strong>chromosomes</strong>. Chaque cellule humaine contient 46 chromosomes (23 paires). Les chromosomes portent les <strong>gènes</strong>, segments d'ADN codant pour des caractères.</p>
+    <p>Un même gène peut exister sous différentes formes appelées <strong>allèles</strong>. Chaque individu possède deux allèles pour chaque gène (un de chaque parent). L'allèle <strong>dominant</strong> s'exprime même en présence d'un allèle récessif. L'allèle <strong>récessif</strong> ne s'exprime qu'en double dose.</p>
+    <p>Le <strong>caryotype</strong> est la photo ordonnée des chromosomes d'une cellule. Il permet de détecter des anomalies chromosomiques (ex : trisomie 21 = 3 chromosomes 21). Les maladies génétiques peuvent être héritées ou résulter de mutations.</p>`,
+    keys:["46 chromosomes = 23 paires chez l'humain","Gène = segment d'ADN codant un caractère","Allèle = version d'un gène","Dominant : s'exprime toujours ; récessif : s'exprime en double dose","Caryotype : représentation ordonnée des chromosomes","Trisomie 21 : 3 chromosomes 21 au lieu de 2"],
+    quiz:[
+      {q:"Combien de chromosomes contient chaque cellule humaine ?",opts:["23","44","46","48"],c:2,exp:"Les cellules humaines (sauf les gamètes) contiennent 46 chromosomes organisés en 23 paires. Les gamètes (ovule, spermatozoïde) n'en contiennent que 23 (1 de chaque paire)."},
+      {q:"Qu'est-ce qu'un allèle dominant ?",opts:["Un allèle qui ne s'exprime jamais","Un allèle qui s'exprime même en présence d'un allèle récessif","Un allèle unique","Un allèle muté"],c:1,exp:"Un allèle dominant s'exprime toujours dans le phénotype, même si l'individu ne possède qu'un seul exemplaire (hétérozygote). L'allèle récessif ne s'exprime que si l'individu en possède deux (homozygote)."},
+      {q:"Qu'est-ce que la trisomie 21 ?",opts:["L'absence du chromosome 21","La présence de 3 chromosomes 21 au lieu de 2","Une mutation du gène 21","Un chromosome 21 anormal"],c:1,exp:"La trisomie 21 (syndrome de Down) est due à la présence de 3 chromosomes 21 au lieu de 2. Cette anomalie chromosomique est visible sur le caryotype et provoque des caractéristiques physiques et cognitives particulières."}
+    ]},
+  c11:{lvl:"Biologie · 3ème",title:"Évolution des espèces",
+    resume:`<p>La théorie de l'<strong>évolution</strong> a été proposée par <strong>Charles Darwin</strong> en 1859. Elle affirme que les espèces actuelles descendent d'ancêtres communs et se sont transformées progressivement au fil du temps.</p>
+    <p>La <strong>sélection naturelle</strong> est le mécanisme principal de l'évolution : les individus les mieux adaptés à leur environnement survivent mieux et se reproduisent davantage, transmettant leurs caractères avantageux. Sur des milliers de générations, cela modifie les populations.</p>
+    <p>Les <strong>fossiles</strong> témoignent de la vie passée et apportent des preuves de l'évolution. On peut reconstituer les <strong>arbres phylogénétiques</strong> (arbres de l'évolution) en comparant les caractères des espèces actuelles et fossiles. Toutes les espèces sont reliées par des ancêtres communs.</p>`,
+    keys:["Darwin : 'De l'Origine des Espèces' (1859)","Sélection naturelle : survie différentielle + reproduction","Variation génétique : matière première de l'évolution","Fossiles : preuves paléontologiques de l'évolution","Ancêtres communs : toutes les espèces sont liées","Évolution ≠ progrès : adaptation à l'environnement actuel"],
+    quiz:[
+      {q:"Qui a proposé la théorie de la sélection naturelle ?",opts:["Lamarck","Mendel","Darwin","Pasteur"],c:2,exp:"Charles Darwin a publié 'De l'Origine des Espèces' en 1859, proposant la théorie de la sélection naturelle pour expliquer l'évolution des espèces. Alfred Wallace a développé une théorie similaire simultanément."},
+      {q:"Quel est le mécanisme principal de l'évolution selon Darwin ?",opts:["L'hérédité directe des caractères acquis","La mutation spontanée","La sélection naturelle","La dérive génétique"],c:2,exp:"La sélection naturelle est le mécanisme clé : les individus mieux adaptés à leur environnement survivent mieux et se reproduisent plus, transmettant leurs caractères avantageux à leur descendance."},
+      {q:"Que nous apprennent les fossiles sur l'évolution ?",opts:["Rien de scientifique","L'existence d'espèces disparues et les liens de parenté","Seulement l'âge des roches","La composition chimique de la Terre"],c:1,exp:"Les fossiles témoignent de l'existence d'espèces disparues et permettent de reconstituer l'histoire de la vie sur Terre. Ils montrent des formes intermédiaires et apportent des preuves tangibles de l'évolution."}
+    ]},
+  c12:{lvl:"Géologie · 3ème",title:"Tectonique des plaques",
+    resume:`<p>La <strong>tectonique des plaques</strong> est la théorie qui explique les grands mouvements de la lithosphère terrestre. La lithosphère est découpée en une douzaine de <strong>plaques</strong> rigides qui se déplacent lentement (quelques cm par an) sur l'asthénosphère.</p>
+    <p>Il existe trois types de <strong>frontières entre plaques</strong> : les <strong>dorsales océaniques</strong> (plaques qui s'écartent, création de croûte océanique), les <strong>zones de subduction</strong> (une plaque plonge sous l'autre, volcanisme explosif) et les <strong>failles transformantes</strong> (plaques qui glissent latéralement).</p>
+    <p>Il y a environ 250 millions d'années, tous les continents étaient réunis en un super-continent appelé la <strong>Pangée</strong>. La dérive des continents a progressivement séparé les terres, formant la configuration actuelle des océans et continents.</p>`,
+    keys:["12 grandes plaques lithosphériques","Déplacement : 1 à 10 cm par an (comme la croissance des ongles)","Dorsale : divergence → création de croûte océanique (basalte)","Subduction : convergence → destruction de croûte, volcanisme","Pangée : super-continent il y a 250 millions d'années","Preuves : magnétisme des fonds océaniques, GPS, fossiles similaires"],
+    quiz:[
+      {q:"Combien de grandes plaques lithosphériques y a-t-il ?",opts:["5","8","12","20"],c:2,exp:"On compte environ 12 grandes plaques lithosphériques (plaque eurasiatique, africaine, pacifique, nord-américaine...) plus plusieurs petites plaques. Elles se déplacent de quelques centimètres par an."},
+      {q:"Que se passe-t-il au niveau d'une dorsale océanique ?",opts:["Une plaque plonge sous une autre","Deux plaques glissent l'une contre l'autre","Deux plaques s'écartent et de la croûte océanique se forme","Les plaques s'affrontent de face"],c:2,exp:"Au niveau d'une dorsale, deux plaques divergent. Le magma remonte et se solidifie pour former de la nouvelle croûte océanique (basalte). C'est un processus d'accrétion."},
+      {q:"Comment s'appelle le super-continent qui existait il y a 250 millions d'années ?",opts:["Gondwana","Laurasia","Pangée","Rodinia"],c:2,exp:"La Pangée est le super-continent qui regroupait toutes les terres émergées il y a environ 250 millions d'années. Il s'est progressivement fragmenté par la dérive des continents pour donner la configuration actuelle."}
+    ]},
+  s1:{lvl:"Biologie · 2nde",title:"La cellule, unité du vivant",
+    resume:`<p>La <strong>cellule</strong> est l'unité structurale et fonctionnelle de tout être vivant. Tous les êtres vivants sont composés d'une ou plusieurs cellules. On distingue deux grands types : les <strong>cellules procaryotes</strong> (bactéries, sans noyau délimité) et les <strong>cellules eucaryotes</strong> (avec noyau membranaire).</p>
+    <p>La <strong>cellule eucaryote animale</strong> possède : un <strong>noyau</strong> (contient l'ADN), des <strong>mitochondries</strong> (production d'énergie), un <strong>réticulum endoplasmique</strong> (synthèse des protéines et lipides), un <strong>appareil de Golgi</strong> (tri et transport), des <strong>lysosomes</strong> (digestion cellulaire).</p>
+    <p>La <strong>cellule végétale</strong> possède en plus : une <strong>paroi cellulaire</strong> en cellulose (rigidité), des <strong>chloroplastes</strong> (photosynthèse) et une grande <strong>vacuole centrale</strong> (stockage d'eau). La <strong>membrane plasmique</strong> contrôle les échanges avec l'extérieur chez toutes les cellules.</p>`,
+    keys:["Procaryote : pas de noyau délimité, ADN libre (ex : bactérie)","Eucaryote : noyau entouré d'une membrane (animaux, végétaux)","Mitochondries : production d'ATP par respiration cellulaire","Chloroplastes : photosynthèse (uniquement cellule végétale)","Membrane plasmique : bicouche phospholipidique","Microscopie électronique : permet de voir les organites"],
+    quiz:[
+      {q:"Quelle est la principale différence entre cellule procaryote et eucaryote ?",opts:["La taille","La présence ou absence d'un noyau délimité","La couleur","La présence de mitochondries"],c:1,exp:"La cellule eucaryote possède un noyau entouré d'une enveloppe nucléaire, contrairement à la cellule procaryote (bactérie) où l'ADN est libre dans le cytoplasme."},
+      {q:"Quel organite produit l'énergie (ATP) dans la cellule ?",opts:["Le noyau","L'appareil de Golgi","Les mitochondries","Les ribosomes"],c:2,exp:"Les mitochondries sont le siège de la respiration cellulaire. Elles transforment l'énergie des nutriments en ATP, la molécule énergétique utilisable par la cellule."},
+      {q:"Quel organite est exclusif à la cellule végétale ?",opts:["La mitochondrie","Le ribosome","Le chloroplaste","La membrane plasmique"],c:2,exp:"Le chloroplaste est spécifique aux cellules végétales (et algues). Il contient de la chlorophylle et est le siège de la photosynthèse. Les mitochondries, ribosomes et membrane sont présents chez toutes les cellules."}
+    ]},
+  s2:{lvl:"Biologie · 2nde",title:"Biodiversité et évolution",
+    resume:`<p>La <strong>biodiversité</strong> se décline à trois niveaux : la <strong>diversité génétique</strong> (variations au sein d'une espèce), la <strong>diversité spécifique</strong> (nombre d'espèces différentes) et la <strong>diversité écosystémique</strong> (variété des milieux de vie).</p>
+    <p>La biodiversité est le résultat de l'<strong>évolution</strong> sur des millions d'années. Les <strong>mutations</strong> (modifications de l'ADN) créent de nouvelles variations. La <strong>sélection naturelle</strong> favorise les variants les mieux adaptés à l'environnement.</p>
+    <p>Aujourd'hui, la biodiversité est menacée par les activités humaines. On parle de <strong>6e extinction de masse</strong> : le taux d'extinction actuel est 100 à 1000 fois supérieur au taux naturel. La conservation de la biodiversité est un enjeu crucial pour les écosystèmes et pour l'humanité (médicaments, nourriture, services écologiques).</p>`,
+    keys:["3 niveaux : génétique, spécifique, écosystémique","Environ 8 millions d'espèces estimées, 1,8 millions décrites","Mutations : source de variation génétique","Sélection naturelle : filtre les variants adaptés","6e extinction : 100-1000x plus rapide que le taux naturel","Services écosystémiques : pollinisation, purification de l'eau..."],
+    quiz:[
+      {q:"Combien de niveaux distingue-t-on dans la biodiversité ?",opts:["1","2","3","4"],c:2,exp:"La biodiversité s'organise à 3 niveaux : la diversité génétique (gènes au sein d'une espèce), la diversité spécifique (nombre d'espèces) et la diversité écosystémique (variété des milieux)."},
+      {q:"Quelle est la source première de variation génétique ?",opts:["La sélection naturelle","Les mutations","La reproduction sexuée","L'environnement"],c:1,exp:"Les mutations sont des modifications de la séquence d'ADN. Elles sont la source première de variation génétique. La reproduction sexuée brasse ensuite ces variations mais ne les crée pas."},
+      {q:"Qu'appelle-t-on la '6e extinction de masse' ?",opts:["L'extinction des dinosaures","L'extinction actuelle causée par les activités humaines","Une extinction prévue pour le futur","L'extinction des mammouths"],c:1,exp:"La 6e extinction de masse désigne l'extinction accélérée des espèces en cours, causée par les activités humaines. Elle est 100 à 1000 fois plus rapide que le taux naturel d'extinction."}
+    ]},
+  s3:{lvl:"Biologie · 2nde",title:"La photosynthèse",
+    resume:`<p>La <strong>photosynthèse</strong> est le processus par lequel les végétaux (et certaines bactéries) convertissent l'énergie lumineuse en énergie chimique stockée dans des molécules organiques. Elle se déroule dans les <strong>chloroplastes</strong>.</p>
+    <p>L'équation globale de la photosynthèse est : <strong>6 CO₂ + 6 H₂O + énergie lumineuse → C₆H₁₂O₆ (glucose) + 6 O₂</strong>. Elle comprend deux phases : les <strong>réactions lumineuses</strong> (thylacodes, production d'ATP et NADPH, libération d'O₂) et le <strong>cycle de Calvin</strong> (stroma, fixation du CO₂, production de glucose).</p>
+    <p>La photosynthèse est fondamentale pour la vie sur Terre : elle produit l'<strong>oxygène</strong> de l'atmosphère et est à la base de toutes les chaînes alimentaires (les végétaux produisent la matière organique que consomment les autres êtres vivants).</p>`,
+    keys:["Équation : CO₂ + H₂O + lumière → glucose + O₂","Se déroule dans les chloroplastes (membranes des thylacoïdes + stroma)","Chlorophylle : pigment qui absorbe la lumière (rouge et bleu)","Réactions lumineuses : ATP + NADPH + O₂ produits","Cycle de Calvin : CO₂ fixé → glucose synthétisé","La photosynthèse = base de toutes les chaînes alimentaires"],
+    quiz:[
+      {q:"Où se déroule la photosynthèse dans la cellule végétale ?",opts:["Dans les mitochondries","Dans le noyau","Dans les chloroplastes","Dans la vacuole"],c:2,exp:"La photosynthèse se déroule dans les chloroplastes. Plus précisément, les réactions lumineuses ont lieu dans les membranes des thylacoïdes et le cycle de Calvin dans le stroma."},
+      {q:"Quel gaz est libéré lors de la photosynthèse ?",opts:["CO₂","Azote","Oxygène","Méthane"],c:2,exp:"La photosynthèse libère de l'oxygène (O₂) comme sous-produit de la photolyse de l'eau. C'est la photosynthèse qui a enrichi l'atmosphère terrestre en oxygène, permettant l'apparition d'organismes aérobies."},
+      {q:"De quoi la plante a-t-elle besoin pour photosynthétiser ?",opts:["CO₂ seulement","H₂O et lumière seulement","CO₂, H₂O et lumière","O₂ et lumière"],c:2,exp:"La photosynthèse nécessite du CO₂ (absorbé par les stomates), de l'H₂O (absorbée par les racines) et de l'énergie lumineuse (captée par la chlorophylle). Elle produit du glucose et de l'O₂."}
+    ]},
+  s4:{lvl:"Géologie · 2nde",title:"Géologie et ressources naturelles",
+    resume:`<p>La Terre recèle de nombreuses <strong>ressources naturelles</strong> utilisées par l'humanité. On distingue les ressources <strong>renouvelables</strong> (se reconstituent naturellement : bois, eau, vent) et les ressources <strong>non renouvelables</strong> (s'épuisent : pétrole, charbon, minéraux).</p>
+    <p>Les <strong>combustibles fossiles</strong> (pétrole, gaz naturel, charbon) se sont formés sur des millions d'années par la décomposition de matière organique enfouie. Ils représentent 80% de l'énergie mondiale mais libèrent du CO₂ lors de leur combustion.</p>
+    <p>Les <strong>roches sédimentaires</strong> contiennent des archives de l'histoire de la Terre : fossiles, strates géologiques. L'exploitation minière extrait des métaux (fer, cuivre, lithium pour les batteries) dont la demande mondiale ne cesse d'augmenter avec la transition énergétique.</p>`,
+    keys:["Ressources renouvelables vs non renouvelables","Pétrole : 50-100 millions d'années de formation","Charbon : carbonifère (-300 Ma), forêts enfouies","Minéraux critiques : lithium, cobalt, terres rares","Roches sédimentaires : archives géologiques et fossiles","Transition énergétique : nouveaux besoins en minéraux"],
+    quiz:[
+      {q:"Qu'est-ce qu'une ressource non renouvelable ?",opts:["Une ressource qui se reconstitue en quelques années","Une ressource qui met des millions d'années à se former","Une ressource inépuisable","Une ressource végétale"],c:1,exp:"Une ressource non renouvelable met des millions d'années à se former (pétrole, charbon, minéraux). À l'échelle humaine, elle est considérée comme non renouvelable car son exploitation est bien plus rapide que sa formation."},
+      {q:"D'où provient le pétrole ?",opts:["De la fusion de roches volcaniques","De la décomposition de matière organique enfouie","De l'eau de mer solidifiée","Des météorites"],c:1,exp:"Le pétrole s'est formé à partir de matière organique (plancton, algues) enfouie sous des sédiments il y a 50 à 100 millions d'années. La pression et la chaleur ont transformé cette matière en hydrocarbures."},
+      {q:"Pourquoi la demande en lithium augmente-t-elle ?",opts:["Pour l'alimentation humaine","Pour la construction","Pour les batteries des véhicules électriques","Pour la médecine"],c:2,exp:"Le lithium est indispensable à la fabrication des batteries lithium-ion utilisées dans les véhicules électriques et le stockage d'énergie. La transition énergétique a fortement augmenté la demande mondiale en lithium."}
+    ]},
+  s5:{lvl:"Géologie · 2nde",title:"Changement climatique",
+    resume:`<p>L'<strong>effet de serre naturel</strong> maintient la température moyenne de la Terre à +15°C (sans lui : -18°C). Il est dû aux <strong>gaz à effet de serre</strong> (GES) : vapeur d'eau, CO₂, méthane, N₂O qui absorbent le rayonnement infrarouge terrestre et le réémettent vers la surface.</p>
+    <p>Depuis l'industrialisation, les activités humaines ont augmenté la concentration en CO₂ de 280 ppm à 420 ppm. Cela amplifie l'effet de serre et entraîne un <strong>réchauffement climatique</strong> : +1,1°C en moyenne depuis 1850, avec une accélération depuis 1980.</p>
+    <p>Les conséquences : fonte des glaces (montée du niveau des mers), événements climatiques extrêmes, perturbation des écosystèmes, déplacement des espèces. Des <strong>rétroactions</strong> amplifient le changement : la fonte du permafrost libère du méthane, la réduction des glaces diminue l'albédo.</p>`,
+    keys:["GES naturels : vapeur d'eau, CO₂, CH₄, N₂O","CO₂ : de 280 ppm (préindustriel) à 420 ppm (2024)","Réchauffement : +1,1°C depuis 1850, accélération depuis 1980","Rétroaction positive : amplifie le changement (méthane, albédo)","Conséquences : montée des eaux, événements extrêmes","Objectif Paris 2015 : limiter à +2°C (idéalement +1,5°C)"],
+    quiz:[
+      {q:"Quel serait la température moyenne de la Terre sans effet de serre ?",opts:["-18°C","+5°C","+15°C","+30°C"],c:0,exp:"Sans l'effet de serre naturel, la température moyenne de la Terre serait de -18°C, contre +15°C actuellement. L'effet de serre est donc indispensable à la vie sur Terre. Le problème est son amplification par les activités humaines."},
+      {q:"De quelle valeur a augmenté la concentration en CO₂ depuis l'industrialisation ?",opts:["De 100 à 200 ppm","De 280 à 420 ppm","De 400 à 500 ppm","De 50 à 100 ppm"],c:1,exp:"La concentration en CO₂ est passée de 280 ppm (parties par million) avant l'industrialisation à environ 420 ppm aujourd'hui, soit une augmentation de 50%. Cette hausse est directement liée aux émissions de combustibles fossiles."},
+      {q:"Qu'est-ce qu'une rétroaction positive dans le contexte du changement climatique ?",opts:["Un phénomène qui réduit le réchauffement","Un phénomène qui amplifie le réchauffement","Une politique climatique positive","Une tendance au refroidissement"],c:1,exp:"Une rétroaction positive amplifie le changement initial. Par exemple : le réchauffement fait fondre le permafrost → libération de méthane → réchauffement supplémentaire. Ou : réchauffement → moins de glace → moins de réflexion de la lumière → réchauffement."}
+    ]},
+  s6:{lvl:"Géologie · 2nde",title:"Risques naturels",
+    resume:`<p>Un <strong>risque naturel</strong> est la conjonction d'un <strong>aléa</strong> (phénomène naturel potentiellement dangereux : séisme, éruption, inondation) et d'une <strong>vulnérabilité</strong> (présence d'enjeux humains et matériels). Risque = Aléa × Vulnérabilité.</p>
+    <p>Les <strong>séismes</strong> sont prévisibles en zone à risque mais leur date exacte ne peut être prédite. Les mesures de prévention incluent les <strong>constructions parasismiques</strong>, les systèmes d'alerte et les plans d'évacuation. Le Japon est le pays le plus avancé dans ce domaine.</p>
+    <p>Les <strong>éruptions volcaniques</strong> peuvent être anticipées grâce à la surveillance (déformation du sol, sismicité, émission de gaz). La prévention passe par la cartographie des zones à risque, les plans d'évacuation et la surveillance continue. Les zones de subduction concentrent les volcans les plus dangereux.</p>`,
+    keys:["Aléa = phénomène naturel potentiellement dangereux","Vulnérabilité = exposition et fragilité des populations","Risque = Aléa × Vulnérabilité × Exposition","Constructions parasismiques : réduisent la vulnérabilité","Surveillance volcanique : sismomètres, GPS, capteurs de gaz","Tsunamis : causés par séismes sous-marins ou glissements"],
+    quiz:[
+      {q:"Comment calcule-t-on le risque naturel ?",opts:["Risque = Aléa uniquement","Risque = Aléa × Vulnérabilité","Risque = Vulnérabilité / Aléa","Risque = Population × Intensité"],c:1,exp:"Le risque naturel est le produit de l'aléa (intensité et probabilité du phénomène naturel) et de la vulnérabilité (exposition et fragilité des enjeux humains, matériels, économiques). On peut réduire le risque en agissant sur la vulnérabilité."},
+      {q:"Peut-on prédire exactement la date d'un séisme ?",opts:["Oui, avec des sismographes","Oui, grâce au GPS","Non, pas encore avec la science actuelle","Oui, grâce aux satellites"],c:2,exp:"La prédiction précise de la date d'un séisme n'est pas encore possible avec la science actuelle. On peut identifier les zones à risque et les failles actives, mais pas prévoir quand exactement le séisme se produira."},
+      {q:"Quel outil permet d'anticiper une éruption volcanique ?",opts:["Rien ne permet de l'anticiper","La surveillance sismique, GPS et gaz volcaniques","L'observation des nuages","La mesure de la température de l'air"],c:1,exp:"La surveillance volcanique combine plusieurs outils : sismomètres (microsismicité), GPS (déformation du sol), capteurs de gaz (SO₂), mesure de la chaleur. Ces données permettent de détecter les signes précurseurs d'une éruption."}
+    ]},
+  s7:{lvl:"Biologie · 2nde",title:"Alimentation et digestion",
+    resume:`<p>La <strong>digestion</strong> est l'ensemble des processus qui transforment les aliments en molécules assimilables par l'organisme. Elle comprend une <strong>digestion mécanique</strong> (mastication, brassage) et une <strong>digestion chimique</strong> (enzymes).</p>
+    <p>Le trajet des aliments : bouche (mastication, salivation, amylase salivaire) → œsophage → estomac (pepsine, HCl, pH très acide) → intestin grêle (lipase pancréatique, protéase, amylase) → côlon (absorption eau) → rectum. L'<strong>absorption</strong> des nutriments se fait principalement dans l'intestin grêle via les villosités.</p>
+    <p>Les <strong>nutriments</strong> absorbés sont : glucides (glucose), protéines (acides aminés), lipides (acides gras + glycérol), vitamines et minéraux. Un équilibre alimentaire varié est indispensable à la santé.</p>`,
+    keys:["Digestion mécanique : mastication, brassage gastrique","Digestion chimique : enzymes (amylase, pepsine, lipase)","Estomac : pH 1,5-2 (acide) → dénaturation des protéines","Intestin grêle : absorption via les villosités (surface ×600)","Microbiote intestinal : 100 000 milliards de bactéries","Glucides → glucose ; Protéines → acides aminés ; Lipides → AG + glycérol"],
+    quiz:[
+      {q:"Où s'effectue principalement l'absorption des nutriments ?",opts:["Dans l'estomac","Dans l'intestin grêle","Dans le côlon","Dans la bouche"],c:1,exp:"L'absorption des nutriments (glucose, acides aminés, acides gras) se fait principalement dans l'intestin grêle, grâce aux villosités intestinales qui multiplient par 600 la surface d'absorption."},
+      {q:"Quel est le pH de l'estomac ?",opts:["7 (neutre)","10 (basique)","1,5-2 (très acide)","5 (légèrement acide)"],c:2,exp:"L'estomac a un pH très acide (1,5-2) grâce à l'acide chlorhydrique (HCl) sécrété par les cellules gastriques. Ce pH acide active la pepsine (enzyme qui digère les protéines) et détruit de nombreux micro-organismes."},
+      {q:"En quoi sont dégradées les protéines lors de la digestion ?",opts:["En glucose","En acides aminés","En acides gras","En vitamines"],c:1,exp:"Les protéines sont dégradées en acides aminés par des enzymes protéolytiques (pepsine dans l'estomac, protéases pancréatiques dans l'intestin). Ces acides aminés sont ensuite absorbés et utilisés pour synthétiser les protéines de l'organisme."}
+    ]},
+  s8:{lvl:"Biologie · 2nde",title:"Microbiote et santé",
+    resume:`<p>Le <strong>microbiote</strong> (ou flore intestinale) est l'ensemble des micro-organismes (bactéries, virus, champignons) vivant dans notre tube digestif. Il compte environ 100 000 milliards de micro-organismes, soit 10 fois plus que nos propres cellules.</p>
+    <p>Le microbiote joue des rôles essentiels : <strong>digestion</strong> des fibres alimentaires, production de vitamines (K, B12), <strong>protection</strong> contre les agents pathogènes (effet barrière) et développement et régulation du <strong>système immunitaire</strong>.</p>
+    <p>La <strong>dysbiose</strong> (déséquilibre du microbiote) est associée à de nombreuses maladies : obésité, diabète, maladies inflammatoires, allergies, troubles neuropsychiatriques (axe intestin-cerveau). Les <strong>probiotiques</strong> et <strong>prébiotiques</strong> peuvent aider à maintenir l'équilibre du microbiote.</p>`,
+    keys:["100 000 milliards de micro-organismes dans l'intestin","3 types de flore : dominante, sous-dominante, résiduelle","Rôles : digestion des fibres, vitamines, immunité, protection","Axe intestin-cerveau : communication bidirectionnelle","Dysbiose : associée à obésité, diabète, allergies","Probiotiques : bactéries vivantes bénéfiques (yaourts, kéfir)"],
+    quiz:[
+      {q:"Combien de micro-organismes contient le microbiote intestinal ?",opts:["1 million","1 milliard","100 milliards","100 000 milliards"],c:3,exp:"Le microbiote intestinal contient environ 100 000 milliards de micro-organismes (majoritairement des bactéries). C'est 10 fois plus que le nombre de cellules de notre propre corps."},
+      {q:"Qu'est-ce que la dysbiose ?",opts:["Un excès de bonnes bactéries","Un déséquilibre du microbiote intestinal","Une maladie virale","Une carence en vitamines"],c:1,exp:"La dysbiose est un déséquilibre de la composition du microbiote intestinal. Elle est associée à de nombreuses pathologies : obésité, diabète de type 2, maladies inflammatoires chroniques, allergies et même certains troubles neuropsychiatriques."},
+      {q:"Quel est le rôle principal du microbiote vis-à-vis du système immunitaire ?",opts:["Il le remplace complètement","Il l'affaiblit","Il contribue à son développement et à sa régulation","Il n'a aucun lien avec l'immunité"],c:2,exp:"Le microbiote joue un rôle crucial dans le développement et la régulation du système immunitaire. Il 'entraîne' les cellules immunitaires à distinguer le soi du non-soi et à tolérer les antigènes alimentaires."}
+    ]},
+  s9:{lvl:"Biologie · 2nde",title:"Comportements à risque et prévention",
+    resume:`<p>Les <strong>comportements à risque</strong> pour la santé incluent la consommation de substances psychoactives (alcool, tabac, drogues), les rapports sexuels non protégés et les pratiques exposant aux <strong>IST</strong> (Infections Sexuellement Transmissibles).</p>
+    <p>L'<strong>addiction</strong> est une dépendance physique et/ou psychologique à une substance ou un comportement. Elle implique le système de récompense du cerveau (libération de dopamine). Le tabac est responsable de 75 000 morts/an en France, l'alcool de 45 000.</p>
+    <p>La <strong>vaccination</strong> est l'un des outils de prévention les plus efficaces. Elle stimule le système immunitaire pour qu'il produise des anticorps sans déclencher la maladie. Le vaccin introduit un antigène (protéine, virus atténué) qui crée une mémoire immunitaire durable.</p>`,
+    keys:["IST : VIH, hépatites, HSV, Chlamydia → préservatif comme protection","Addiction : dépendance physique + psychologique","Dopamine : neurotransmetteur du circuit de récompense","Tabac : 75 000 morts/an en France (1er facteur de cancer)","Alcool : tératogène (grossesse), cancérigène, neurotoxique","Vaccination : mémoire immunitaire sans déclencher la maladie"],
+    quiz:[
+      {q:"Quel neurotransmetteur est impliqué dans l'addiction ?",opts:["La sérotonine","La mélatonine","La dopamine","L'histamine"],c:2,exp:"La dopamine est le neurotransmetteur clé du circuit de récompense. Les substances addictives (alcool, drogues, nicotine) provoquent une libération massive et artificielle de dopamine, créant une sensation de plaisir intense et renforçant le comportement."},
+      {q:"Comment fonctionne la vaccination ?",opts:["En tuant tous les agents pathogènes","En stimulant le système immunitaire pour créer une mémoire","En remplaçant les cellules immunitaires","En bloquant les récepteurs des virus"],c:1,exp:"La vaccination introduit un antigène (virus atténué, protéine virale) qui stimule le système immunitaire. Celui-ci produit des anticorps et des cellules mémoires. En cas d'infection réelle, la réponse est rapide et efficace."},
+      {q:"Quel est le moyen de prévention efficace contre les IST ?",opts:["L'abstinence uniquement","Le préservatif","Les antibiotiques en préventif","Les vitamines"],c:1,exp:"Le préservatif (masculin ou féminin) est le moyen de prévention le plus efficace contre les IST (VIH, hépatites, herpès, Chlamydia). Il est la seule méthode contraceptive qui protège simultanément contre les IST et les grossesses non désirées."}
+    ]},
+  p1:{lvl:"Biologie · 1ère",title:"ADN et information génétique",
+    resume:`<p>L'<strong>ADN</strong> (Acide DésoxyriboNucléique) est la molécule qui porte l'information génétique dans toutes les cellules vivantes. Il est formé de deux brins enroulés en <strong>double hélice</strong>, composés de nucléotides (base azotée + désoxyribose + phosphate).</p>
+    <p>Les 4 bases azotées (A, T, G, C) s'associent par complémentarité : <strong>A-T</strong> et <strong>G-C</strong>. Un <strong>gène</strong> est une séquence d'ADN codant pour une protéine. Les <strong>allèles</strong> sont des versions différentes d'un même gène. La plupart de l'ADN (98% chez l'humain) ne code pas pour des protéines.</p>
+    <p>Les <strong>mutations</strong> sont des modifications de la séquence d'ADN. Elles peuvent être neutres, bénéfiques ou délétères. Le <strong>polymorphisme</strong> génétique (SNP) est la variation naturelle entre individus d'une même espèce.</p>`,
+    keys:["ADN = double hélice antiparallèle de nucléotides","Bases : A-T (2 liaisons H) et G-C (3 liaisons H)","Génome humain : 3 milliards de paires de bases, ~25 000 gènes","Gène : séquence codante pour une ou plusieurs protéines","Mutations : substitution, délétion, insertion de bases","SNP : variations d'une seule base entre individus"],
+    quiz:[
+      {q:"Quelles bases azotées sont complémentaires dans l'ADN ?",opts:["A-G et T-C","A-T et G-C","A-C et G-T","A-U et G-C"],c:1,exp:"Dans l'ADN, les bases s'associent par complémentarité : Adénine (A) avec Thymine (T) via 2 liaisons hydrogène, et Guanine (G) avec Cytosine (C) via 3 liaisons hydrogène. (A-U existe dans l'ARN)."},
+      {q:"Qu'est-ce qu'un allèle ?",opts:["Un chromosome entier","Une version différente d'un même gène","Un type de mutation","Une protéine spécifique"],c:1,exp:"Un allèle est une version différente d'un même gène, résultant de mutations. Par exemple, le gène de la couleur des yeux peut avoir plusieurs allèles (brun, bleu, vert). Chaque individu possède 2 allèles pour chaque gène (un par chromosome)."},
+      {q:"Qu'est-ce qu'une mutation ponctuelle par substitution ?",opts:["La suppression d'un gène entier","Le remplacement d'une base par une autre","L'ajout d'un chromosome","La fusion de deux gènes"],c:1,exp:"Une mutation par substitution est le remplacement d'une base azotée par une autre dans la séquence d'ADN. Selon la position, elle peut être silencieuse (même acide aminé), faux-sens (acide aminé différent) ou non-sens (codon stop prématuré)."}
+    ]},
+  p2:{lvl:"Biologie · 1ère",title:"Expression des gènes : ADN → protéines",
+    resume:`<p>L'expression des gènes suit le <strong>dogme central de la biologie moléculaire</strong> : ADN → ARN → Protéine. Ce flux d'information se déroule en deux grandes étapes.</p>
+    <p>La <strong>transcription</strong> a lieu dans le noyau : l'ARN polymérase lit le brin matrice d'ADN et synthétise un ARNm complémentaire. L'ARNm est ensuite épissé (suppression des introns) et sort du noyau.</p>
+    <p>La <strong>traduction</strong> a lieu dans le cytoplasme sur les ribosomes : les ARNt apportent les acides aminés correspondant à chaque codon (triplet de 3 bases) de l'ARNm. La chaîne polypeptidique formée se replie en protéine fonctionnelle. Le code génétique est universel et composé de 64 codons pour 20 acides aminés.</p>`,
+    keys:["Transcription : ADN → ARNm (dans le noyau)","ARN polymérase lit le brin matrice 3'→5'","Traduction : ARNm → protéine (sur les ribosomes)","Codon : triplet de 3 bases de l'ARNm = 1 acide aminé","Code génétique : 64 codons, 20 acides aminés, universel","Codon START : AUG (méthionine) ; codons STOP : UAA, UAG, UGA"],
+    quiz:[
+      {q:"Où se déroule la transcription ?",opts:["Dans le cytoplasme","Dans les mitochondries","Dans le noyau","Sur les ribosomes"],c:2,exp:"La transcription se déroule dans le noyau cellulaire, où l'ARN polymérase utilise un brin d'ADN comme matrice pour synthétiser un ARNm complémentaire."},
+      {q:"Combien de bases forment un codon ?",opts:["1","2","3","4"],c:2,exp:"Un codon est un triplet de 3 bases consécutives sur l'ARNm. Chaque codon correspond à un acide aminé spécifique (ou un signal d'arrêt). Il existe 64 codons possibles pour 20 acides aminés."},
+      {q:"Quel est le codon d'initiation de la traduction ?",opts:["UAA","UGA","AUG","GGG"],c:2,exp:"AUG est le codon START qui initie la traduction. Il code pour la méthionine. Les codons STOP (UAA, UAG, UGA) ne codent pour aucun acide aminé et signalent la fin de la synthèse de la protéine."}
+    ]},
+  p3:{lvl:"Biologie · 1ère",title:"Brassage génétique et méiose",
+    resume:`<p>La <strong>méiose</strong> est la division cellulaire qui produit les gamètes (ovules et spermatozoïdes). À partir d'une cellule diploïde (2n=46), elle produit 4 cellules haploïdes (n=23). Elle comprend deux divisions successives : méiose I et méiose II.</p>
+    <p>Le <strong>brassage intrachromosomique</strong> (crossing-over) se produit lors de la prophase I : des segments de chromosomes homologues sont échangés, créant de nouvelles combinaisons d'allèles sur un même chromosome.</p>
+    <p>Le <strong>brassage interchromosomique</strong> résulte de la ségrégation aléatoire des chromosomes homologues lors de la méiose I. La <strong>fécondation</strong> ajoute un troisième niveau de brassage. Ces trois mécanismes expliquent la diversité génétique des individus issus de la reproduction sexuée.</p>`,
+    keys:["Méiose : 2n → n (diploïde → haploïde)","Prophase I : enjambement (crossing-over) = brassage intrachromosomique","Métaphase I : disposition aléatoire des paires = brassage interchromosomique","4 cellules haploïdes produites par méiose","Fécondation : 3e niveau de brassage (2 gamètes haploïdes → zygote 2n)","2²³ = 8 millions de combinaisons possibles par méiose"],
+    quiz:[
+      {q:"Quel est le résultat de la méiose ?",opts:["2 cellules diploïdes","4 cellules haploïdes","2 cellules haploïdes","4 cellules diploïdes"],c:1,exp:"La méiose produit 4 cellules haploïdes (n chromosomes) à partir d'une cellule diploïde (2n chromosomes). Ces cellules sont les gamètes (spermatozoïdes chez le mâle, ovules chez la femelle)."},
+      {q:"Qu'est-ce qu'un crossing-over ?",opts:["La fusion de deux gamètes","L'échange de segments entre chromosomes homologues","La séparation des chromatides","La duplication de l'ADN"],c:1,exp:"Un crossing-over (enjambement) est l'échange de segments entre deux chromosomes homologues lors de la prophase I de la méiose. Il crée de nouvelles combinaisons d'allèles sur un même chromosome = brassage intrachromosomique."},
+      {q:"Combien de niveaux de brassage génétique existe-t-il lors de la reproduction sexuée ?",opts:["1","2","3","4"],c:2,exp:"Il existe 3 niveaux de brassage : le brassage intrachromosomique (crossing-over lors de la méiose I), le brassage interchromosomique (ségrégation aléatoire des chromosomes) et la fécondation (rencontre aléatoire de deux gamètes)."}
+    ]},
+  p4:{lvl:"Biologie · 1ère",title:"Mécanismes de l'évolution",
+    resume:`<p>L'évolution des populations est gouvernée par plusieurs <strong>mécanismes</strong>. En l'absence de forces évolutives, le modèle de <strong>Hardy-Weinberg</strong> prédit la stabilité des fréquences alléliques (population infinie, panmixie, pas de mutation ni sélection).</p>
+    <p>La <strong>sélection naturelle</strong> modifie les fréquences alléliques en favorisant les individus les mieux adaptés. Elle peut être directionnelle (favorise un extrême), stabilisante (favorise la moyenne) ou disruptive (favorise les extrêmes).</p>
+    <p>La <strong>dérive génétique</strong> est une variation aléatoire des fréquences alléliques, particulièrement importante dans les petites populations (effet fondateur, goulot d'étranglement). Le <strong>flux génique</strong> (migration) et les <strong>mutations</strong> sont également des forces évolutives importantes.</p>`,
+    keys:["Hardy-Weinberg : équilibre si pas de forces évolutives","Sélection naturelle : directionnelle, stabilisante, disruptive","Dérive génétique : aléatoire, forte dans les petites populations","Effet fondateur : petit groupe isole → fixation d'allèles rares","Flux génique : migrations introduisent de nouveaux allèles","4 forces évolutives : mutations, sélection, dérive, flux génique"],
+    quiz:[
+      {q:"Quelles conditions sont nécessaires à l'équilibre de Hardy-Weinberg ?",opts:["Petite population isolée","Grande population, panmixie, sans sélection ni mutation","Population avec sélection forte","Uniquement dans les populations végétales"],c:1,exp:"L'équilibre de Hardy-Weinberg suppose : une population infinie, la panmixie (reproduction aléatoire), l'absence de mutation, de sélection, et de flux génique. Ces conditions idéales sont rarement réunies dans la nature."},
+      {q:"Qu'est-ce que l'effet fondateur ?",opts:["La fondation d'une nouvelle espèce","L'établissement d'une petite population qui fixe aléatoirement certains allèles","La découverte d'un nouveau mécanisme évolutif","La dominance d'un allèle fondateur"],c:1,exp:"L'effet fondateur se produit quand un petit groupe d'individus s'isole pour coloniser un nouveau territoire. La diversité génétique est réduite et certains allèles rares peuvent se fixer aléatoirement, modifiant les fréquences alléliques."},
+      {q:"La dérive génétique est particulièrement importante dans...",opts:["Les grandes populations","Les populations isolées et de petite taille","Les populations à fort taux de reproduction","Les espèces végétales"],c:1,exp:"La dérive génétique est un phénomène aléatoire qui modifie les fréquences alléliques. Son effet est d'autant plus important que la population est petite, car les variations aléatoires ont un plus grand impact relatif."}
+    ]},
+  p5:{lvl:"Biologie · 1ère",title:"Diversification et spéciation",
+    resume:`<p>La <strong>spéciation</strong> est le processus par lequel deux populations de la même espèce divergent pour former deux espèces distinctes. Elle nécessite un <strong>isolement reproducteur</strong> qui empêche les échanges génétiques entre populations.</p>
+    <p>La <strong>spéciation allopatrique</strong> se produit quand deux populations sont séparées géographiquement (montagne, mer, désert). Chaque population évolue indépendamment sous des pressions de sélection différentes, jusqu'à ne plus pouvoir se reproduire ensemble.</p>
+    <p>La <strong>phylogénèse</strong> retrace l'histoire évolutive des espèces. Les <strong>arbres phylogénétiques</strong> (cladogrammes) représentent les relations de parenté entre espèces basées sur leurs caractères communs dérivés. Toutes les espèces partagent un <strong>ancêtre commun universel</strong>.</p>`,
+    keys:["Spéciation = formation de nouvelles espèces","Isolement reproducteur : géographique, comportemental, temporel","Spéciation allopatrique : séparation géographique","Spéciation sympatrique : au sein d'une même zone géographique","Cladogramme : arbre phylogénétique basé sur les caractères dérivés","Tous les êtres vivants partagent un ancêtre commun (LUCA)"],
+    quiz:[
+      {q:"Qu'est-ce que la spéciation allopatrique ?",opts:["Formation d'une espèce dans la même zone géographique","Formation d'une espèce après séparation géographique","La disparition d'une espèce","La fusion de deux espèces"],c:1,exp:"La spéciation allopatrique se produit quand deux populations sont séparées par une barrière géographique. Chaque population évolue alors indépendamment, accumulant des différences génétiques jusqu'à l'isolement reproducteur complet."},
+      {q:"Qu'est-ce qu'un cladogramme ?",opts:["Un graphique de population","Un arbre représentant les relations évolutives entre espèces","Une carte géographique de distribution","Un diagramme de croisements génétiques"],c:1,exp:"Un cladogramme est un arbre phylogénétique qui représente les relations de parenté entre espèces (ou groupes) basées sur leurs caractères partagés dérivés. Chaque nœud représente un ancêtre commun hypothétique."},
+      {q:"Que signifie LUCA en biologie évolutive ?",opts:["Last Universal Common Ancestor","Largest Unique Cellular Ancestor","Last Unified Classification Approach","Living Universal Cell Array"],c:0,exp:"LUCA (Last Universal Common Ancestor) désigne l'ancêtre commun universel de tous les êtres vivants actuels. Cet organisme primitif aurait vécu il y a environ 3,5 à 4 milliards d'années."}
+    ]},
+  p6:{lvl:"Biologie · 1ère",title:"Cycles géochimiques",
+    resume:`<p>Les <strong>cycles géochimiques</strong> décrivent la circulation des éléments chimiques entre les différents réservoirs de la planète (atmosphère, hydrosphère, lithosphère, biosphère). Les principaux sont le cycle du carbone et le cycle de l'azote.</p>
+    <p>Le <strong>cycle du carbone</strong> : la photosynthèse extrait le CO₂ de l'atmosphère pour former de la matière organique. La respiration des êtres vivants et la décomposition le restituent. La combustion des énergies fossiles libère le carbone stocké depuis des millions d'années, perturbant l'équilibre.</p>
+    <p>Le <strong>cycle de l'azote</strong> : l'azote atmosphérique (N₂) est fixé par des bactéries (Rhizobium dans les légumineuses) en ammoniaque (NH₃) assimilable par les plantes. La dénitrification le renvoie dans l'atmosphère. Ce cycle est essentiel à la production de protéines.</p>`,
+    keys:["Réservoirs du carbone : atmosphère, océans, roche, biosphère","Photosynthèse : stocke le CO₂ dans la matière organique","Respiration + décomposition : libèrent le CO₂","Combustibles fossiles : libèrent du carbone stocké depuis -300 Ma","Fixation de l'azote : N₂ → NH₃ (bactéries)","Azote = constituant essentiel des protéines et de l'ADN"],
+    quiz:[
+      {q:"Quel processus extrait le CO₂ de l'atmosphère pour former de la matière organique ?",opts:["La respiration","La décomposition","La photosynthèse","La combustion"],c:2,exp:"La photosynthèse est le seul processus qui fixe le CO₂ atmosphérique pour synthétiser de la matière organique (glucides). Elle est réalisée par les végétaux, algues et certaines bactéries."},
+      {q:"Comment les plantes accèdent-elles à l'azote du sol ?",opts:["Directement depuis l'atmosphère","Via des bactéries fixatrices d'azote qui transforment N₂ en NH₃","Par la photosynthèse","Via leurs feuilles"],c:1,exp:"Les plantes ne peuvent pas utiliser directement l'azote atmosphérique (N₂). Des bactéries fixatrices d'azote (comme Rhizobium dans les nodosités des légumineuses) transforment N₂ en ammoniaque (NH₃) assimilable par les plantes."},
+      {q:"Pourquoi la combustion des énergies fossiles perturbe-t-elle le cycle du carbone ?",opts:["Elle consomme de l'oxygène","Elle libère du carbone stocké depuis des millions d'années","Elle réduit la photosynthèse","Elle augmente la fixation d'azote"],c:1,exp:"La combustion des énergies fossiles libère du CO₂ issu de carbone organique stocké sur des millions d'années. Ce flux unidirectionnel massive de carbone vers l'atmosphère perturbe l'équilibre naturel du cycle du carbone."}
+    ]},
+  p7:{lvl:"Biologie · 1ère",title:"Le système immunitaire",
+    resume:`<p>Le système immunitaire protège l'organisme contre les <strong>agents pathogènes</strong> (bactéries, virus, parasites). Il comprend deux bras complémentaires : l'<strong>immunité innée</strong> (non spécifique, rapide) et l'<strong>immunité adaptative</strong> (spécifique, plus lente mais plus efficace).</p>
+    <p>L'<strong>immunité innée</strong> comprend les barrières physiques (peau, muqueuses), la phagocytose (macrophages, neutrophiles), l'inflammation et les cellules NK. Elle est immédiate mais non spécifique.</p>
+    <p>L'<strong>immunité adaptative</strong> implique les lymphocytes B (qui produisent des anticorps) et les lymphocytes T (cytotoxiques qui détruisent les cellules infectées, auxiliaires qui coordonnent la réponse). La <strong>mémoire immunitaire</strong> permet une réponse plus rapide et plus forte lors d'une 2e infection.</p>`,
+    keys:["Innée : rapide, non spécifique, pas de mémoire","Adaptative : spécifique à l'antigène, lente (7-14j), avec mémoire","Antigène : molécule reconnue comme étrangère par l'immunité","Anticorps : protéines produites par les lymphocytes B (plasmocytes)","Lymphocytes T cytotoxiques : tuent les cellules infectées","Vaccination : crée une mémoire immunitaire artificielle"],
+    quiz:[
+      {q:"Quelle cellule produit les anticorps ?",opts:["Les macrophages","Les neutrophiles","Les lymphocytes B (plasmocytes)","Les lymphocytes T cytotoxiques"],c:2,exp:"Les lymphocytes B, activés par la présentation d'un antigène, se différencient en plasmocytes qui sécrètent massivement des anticorps spécifiques à cet antigène."},
+      {q:"Qu'est-ce qu'un anticorps ?",opts:["Un type de globule rouge","Une protéine produite par les lymphocytes B qui reconnaît spécifiquement un antigène","Un virus atténué","Une cellule immunitaire"],c:1,exp:"Un anticorps est une protéine en forme de Y produite par les plasmocytes (lymphocytes B différenciés). Il reconnaît et se lie spécifiquement à un antigène, facilitant son élimination par d'autres cellules immunitaires."},
+      {q:"Pourquoi la deuxième infection est-elle mieux contrôlée que la première ?",opts:["Le pathogène est moins virulent","Le système immunitaire inné est plus rapide","La mémoire immunitaire permet une réponse plus rapide et plus forte","Les anticorps persistent toute la vie"],c:2,exp:"Lors de la première infection, des cellules mémoires (lymphocytes B et T mémoires) sont produites. Lors d'une 2e infection, ces cellules permettent une réponse immunitaire beaucoup plus rapide et intense, éliminant le pathogène avant l'apparition des symptômes."}
+    ]},
+  p8:{lvl:"Biologie · 1ère",title:"Neurones et transmission synaptique",
+    resume:`<p>Le <strong>neurone</strong> est la cellule spécialisée dans la transmission de l'information nerveuse. Il est composé d'un corps cellulaire, de <strong>dendrites</strong> (reçoivent les signaux entrants) et d'un <strong>axone</strong> (transmet le signal vers les cibles).</p>
+    <p>Quand le neurone est suffisamment stimulé, il génère un <strong>potentiel d'action</strong> : une inversion rapide et transitoire de la polarité membranaire due à l'ouverture des canaux ioniques Na⁺ puis K⁺. Ce signal électrique se propage le long de l'axone sans s'affaiblir (loi du tout ou rien).</p>
+    <p>La transmission entre deux neurones se fait au niveau de la <strong>synapse</strong> : l'influx électrique déclenche la libération de <strong>neurotransmetteurs</strong> (dopamine, sérotonine, glutamate) dans la fente synaptique. Ces molécules se lient aux récepteurs du neurone postsynaptique et le dépolarisent (synapse excitatrice) ou l'hyperpolarisent (synapse inhibitrice).</p>`,
+    keys:["Neurone : corps cellulaire + dendrites (entrants) + axone (sortant)","Potentiel d'action : dépolarisation → repolarisation → hyperpolarisation","Loi du tout ou rien : le PA est identique quelle que soit l'intensité du stimulus","Synapse : espace entre deux neurones","Neurotransmetteurs : ACh, dopamine, sérotonine, GABA, glutamate","Plasticité synaptique : renforcement/affaiblissement des synapses (apprentissage)"],
+    quiz:[
+      {q:"Quel ion entre dans le neurone lors de la dépolarisation ?",opts:["K⁺","Ca²⁺","Na⁺","Cl⁻"],c:2,exp:"Lors de la dépolarisation, les canaux Na⁺ voltage-dépendants s'ouvrent et le sodium entre massivement dans le neurone, inversant la polarité de la membrane (-70mV → +30mV). C'est le début du potentiel d'action."},
+      {q:"Que signifie la 'loi du tout ou rien' ?",opts:["Le neurone ne répond jamais","Le potentiel d'action est de même amplitude quelle que soit l'intensité du stimulus","Le neurone répond toujours à tous les stimuli","La synapse transmet toujours le signal"],c:1,exp:"La loi du tout ou rien signifie qu'un potentiel d'action a toujours la même amplitude (-70 à +30 mV) quelle que soit l'intensité du stimulus. Si le seuil de déclenchement est atteint, le PA se déclenche complètement ; sinon, rien ne se passe."},
+      {q:"Comment les neurones communiquent-ils entre eux ?",opts:["Par contact électrique direct","Via des neurotransmetteurs libérés dans la fente synaptique","Par des signaux hormonaux","Via des connexines"],c:1,exp:"La synapse chimique est le mode de communication entre neurones : l'arrivée d'un PA déclenche la libération de neurotransmetteurs dans la fente synaptique. Ces molécules se fixent aux récepteurs du neurone postsynaptique et modifient sa polarité."}
+    ]},
+  p9:{lvl:"Géologie · 1ère",title:"Géodynamique interne",
+    resume:`<p>La <strong>lithosphère</strong> est la couche externe rigide de la Terre (croûte + partie supérieure du manteau), d'une épaisseur de 70 à 150 km. Elle repose sur l'<strong>asthénosphère</strong>, une zone du manteau partiellement fondu et ductile.</p>
+    <p>La <strong>convection mantellique</strong> est le moteur de la tectonique des plaques : des courants de matière chaude montent depuis la base du manteau, refroidissent en surface et redescendent. Ce mouvement entraîne les plaques lithosphériques.</p>
+    <p>Aux <strong>dorsales océaniques</strong> (zones de divergence), la lithosphère s'amincit et du magma remonte pour créer de la nouvelle croûte océanique. Aux zones de <strong>subduction</strong>, la plaque océanique plonge sous une autre plaque, générant du volcanisme et des séismes.</p>`,
+    keys:["Lithosphère = croûte + manteau supérieur (rigide)","Asthénosphère = manteau partiellement fondu (ductile)","Convection mantellique : moteur de la tectonique","Dorsale : divergence, production de basalte","Subduction : plaque océanique plonge → arc volcanique","Âge de la croûte océanique : 0 (dorsale) → 200 Ma (fosse)"],
+    quiz:[
+      {q:"Qu'est-ce que l'asthénosphère ?",opts:["La croûte terrestre","La partie supérieure du manteau, partiellement fondue et ductile","Le noyau externe liquide","La couche d'ozone"],c:1,exp:"L'asthénosphère est une zone du manteau supérieur (entre 100 et 670 km de profondeur) où la roche est partiellement fondue et se comporte de façon ductile. C'est sur elle que glissent les plaques lithosphériques."},
+      {q:"Quel est le moteur de la tectonique des plaques ?",opts:["La rotation de la Terre","Les marées","La convection mantellique","Le champ magnétique"],c:2,exp:"La convection mantellique est le principal moteur de la tectonique des plaques. La chaleur interne de la Terre crée des courants de convection dans le manteau : la matière chaude monte, se refroidit, et redescend, entraînant les plaques lithosphériques."},
+      {q:"Quelle roche est produite aux dorsales océaniques ?",opts:["Granite","Calcaire","Basalte","Gneiss"],c:2,exp:"Le basalte est la roche volcanique produite aux dorsales océaniques. Le magma remonte depuis le manteau, refroidit au contact de l'eau océanique et se solidifie en basalte, formant la nouvelle croûte océanique."}
+    ]},
+  t1:{lvl:"Biologie · Terminale",title:"Génétique moléculaire",
+    resume:`<p>Le flux d'information génétique suit le <strong>dogme central</strong> : ADN → ARN → Protéine. Avant chaque division cellulaire, l'ADN est dupliqué par <strong>réplication semi-conservative</strong> : chaque brin sert de matrice pour synthétiser un brin complémentaire (ADN polymérase).</p>
+    <p>La <strong>régulation de l'expression des gènes</strong> permet à des cellules génétiquement identiques d'avoir des fonctions différentes. Elle se fait à différents niveaux : compaction de la chromatine (épigénétique), régulation de la transcription (facteurs de transcription), régulation de la traduction, modification post-traductionnelle.</p>
+    <p>Les <strong>mutations</strong> peuvent être silencieuses (pas de changement d'acide aminé), faux-sens (acide aminé différent) ou non-sens (codon stop prématuré). Certaines maladies génétiques résultent de mutations spécifiques (DNMT3B dans le syndrome ICF, TP53 dans les cancers).</p>`,
+    keys:["Réplication semi-conservative : chaque molécule fille conserve 1 brin parental","ADN polymérase : synthèse 5'→3', fidélité grâce aux mécanismes de correction","Régulation transcriptionnelle : facteurs de transcription + enhancers/silencers","Épigénétique : méthylation de l'ADN et modification des histones (héritable)","Mutation faux-sens : 1 acide aminé différent","Mutation non-sens : codon stop prématuré → protéine tronquée"],
+    quiz:[
+      {q:"Pourquoi dit-on que la réplication est 'semi-conservative' ?",opts:["Seule la moitié de l'ADN est répliquée","Chaque nouvelle molécule conserve un brin parental + un brin nouveau","Les deux brins sont entièrement nouveaux","La réplication s'arrête à mi-chemin"],c:1,exp:"La réplication est dite semi-conservative car chacune des deux molécules filles d'ADN est composée d'un brin parental (conservé intact) et d'un brin nouvellement synthétisé. L'expérience de Meselson et Stahl (1958) l'a démontré."},
+      {q:"Qu'est-ce que l'épigénétique ?",opts:["L'étude des gènes suppresseurs de tumeurs","Les modifications héritables de l'expression des gènes sans altération de la séquence d'ADN","La mutation de l'ADN mitochondrial","L'étude du génome complet"],c:1,exp:"L'épigénétique étudie les modifications héritables de l'expression des gènes qui ne modifient pas la séquence nucléotidique. Les principaux mécanismes sont la méthylation de l'ADN et la modification des histones (acétylation, méthylation)."},
+      {q:"Une mutation non-sens produit...",opts:["Un acide aminé différent","Une protéine plus longue","Un codon stop prématuré → protéine tronquée","Aucun changement de protéine"],c:2,exp:"Une mutation non-sens remplace un codon codant pour un acide aminé par un codon stop (UAA, UAG ou UGA). La traduction s'arrête prématurément, produisant une protéine tronquée généralement non fonctionnelle."}
+    ]},
+  t2:{lvl:"Biologie · Terminale",title:"Évolution et phylogénèse",
+    resume:`<p>L'évolution repose sur la variation génétique et la sélection. Le <strong>fitness</strong> (valeur sélective) d'un génotype est sa contribution relative à la génération suivante. Des traits peuvent évoluer vers leur optimum via la sélection directionnelle, ou être maintenus par la sélection stabilisante.</p>
+    <p>Les <strong>arbres phylogénétiques</strong> sont construits à partir de matrices de caractères (morphologiques, moléculaires). Le principe de <strong>parcimonie</strong> (minimum d'évolutions) ou les méthodes bayésiennes guident la reconstruction. Les séquences de l'ADN mitochondrial, de l'ARNr 16S permettent de comparer toutes les espèces.</p>
+    <p>La <strong>convergence évolutive</strong> produit des caractères similaires chez des espèces non apparentées (ailes des oiseaux et chauves-souris, forme du dauphin et du requin). La <strong>coévolution</strong> est l'évolution parallèle d'espèces en interaction (prédateur/proie, hôte/parasite, plante/pollinisateur).</p>`,
+    keys:["Fitness (valeur sélective) = contribution reproductive relative","Cladistique : arbres basés sur les synapomorphies (caractères dérivés partagés","ADNmt et ARNr 16S : marqueurs moléculaires universels","Convergence : ressemblance sans parenté (analogie ≠ homologie)","Coévolution : pollinisateurs, parasites, prédateurs","Radiation adaptative : diversification rapide d'un groupe (ex: pinsons de Darwin)"],
+    quiz:[
+      {q:"Qu'est-ce que la convergence évolutive ?",opts:["L'évolution simultanée de deux espèces apparentées","L'apparition de caractères similaires chez des espèces non apparentées","La fusion de deux espèces en une","L'extinction simultanée de deux espèces"],c:1,exp:"La convergence évolutive est l'apparition indépendante de caractères similaires chez des espèces non apparentées, sous la pression de pressions de sélection similaires. Exemple : les ailes des oiseaux et des chauves-souris sont analogues mais non homologues."},
+      {q:"Sur quels types de caractères s'appuie la cladistique ?",opts:["Les caractères ancestraux uniquement","Les caractères dérivés partagés (synapomorphies)","La morphologie uniquement","L'écologie des espèces"],c:1,exp:"La cladistique construit des arbres phylogénétiques basés sur les synapomorphies : les caractères dérivés partagés uniquement par les membres d'un même groupe. Les caractères ancestraux (plésiomorphies) ne permettent pas de définir des groupes monophylétiques."},
+      {q:"Qu'est-ce qu'une radiation adaptative ?",opts:["La résistance aux radiations UV","La diversification rapide d'un groupe en de nombreuses espèces adaptées à différentes niches","L'adaptation d'une espèce à un nouvel environnement","La convergence de plusieurs espèces"],c:1,exp:"Une radiation adaptative est la diversification rapide d'un groupe ancestral en de nombreuses espèces adaptées à différentes niches écologiques. L'exemple classique est les pinsons de Darwin aux Galápagos."}
+    ]},
+  t3:{lvl:"Géologie · Terminale",title:"Temps profonds et datation",
+    resume:`<p>La <strong>datation relative</strong> utilise les lois stratigraphiques (superposition, continuité, recoupement, identité paléontologique) pour établir un ordre chronologique sans date absolue. Les <strong>fossiles stratigraphiques</strong> sont des marqueurs de temps.</p>
+    <p>La <strong>datation absolue</strong> (radiométrique) utilise la désintégration radioactive à vitesse constante. La <strong>période radioactive</strong> est le temps nécessaire à la désintégration de la moitié des atomes. On utilise notamment ¹⁴C (carbone 14, fossiles < 50 000 ans), ⁸⁷Rb/⁸⁷Sr, ²³⁵U/²⁰⁷Pb (roches anciennes).</p>
+    <p>L'<strong>échelle des temps géologiques</strong> divise l'histoire de la Terre (4,5 Ga) en éons, ères, périodes et époques. Les <strong>crises biologiques</strong> (extinctions massives) marquent les limites entre les grandes périodes. La vie est apparue il y a ~3,5 Ga.</p>`,
+    keys:["Datation relative : stratigraphie + paléontologie","Datation absolue : désintégration radioactive (t1/2 = constante)","¹⁴C : 5 730 ans de demi-vie (matières organiques < 50 000 ans)","U/Pb : pour les roches très anciennes (milliards d'années)","Terre : 4,5 Ga ; vie : 3,5 Ga ; explosion cambrienne : 540 Ma","5 extinctions massives : Ordovicien, Dévonien, Permien, Trias, Crétacé"],
+    quiz:[
+      {q:"Qu'est-ce que la période radioactive (demi-vie) ?",opts:["Le temps que met un fossile à se former","Le temps nécessaire à la désintégration de la moitié des atomes radioactifs","La durée d'une période géologique","La durée de vie d'un élément chimique"],c:1,exp:"La demi-vie (ou période radioactive) est le temps au bout duquel la moitié des atomes radioactifs d'un échantillon se sont désintégrés. Elle est caractéristique de chaque isotope radioactif et est constante, quelle que soit la quantité initiale."},
+      {q:"Quel isotope utilise-t-on pour dater des matières organiques de moins de 50 000 ans ?",opts:["²³⁸U","⁸⁷Rb","¹⁴C","⁴⁰K"],c:2,exp:"Le carbone 14 (¹⁴C) a une demi-vie de 5 730 ans. Il est produit dans l'atmosphère et intégré dans les organismes vivants. Après leur mort, la quantité de ¹⁴C diminue, permettant de dater les matières organiques jusqu'à ~50 000 ans."},
+      {q:"Quel âge a la Terre ?",opts:["1 milliard d'années","2,5 milliards d'années","4,5 milliards d'années","10 milliards d'années"],c:2,exp:"La Terre est âgée de 4,5 milliards d'années (Ga), estimé par datation radiométrique des plus vieux zircons terrestres et des météorites chondritiques. Les plus vieux fossiles connus datent d'environ 3,5 Ga."}
+    ]},
+  t4:{lvl:"Biologie · Terminale",title:"Biodiversité et gestion durable",
+    resume:`<p>La <strong>biodiversité</strong> fournit des <strong>services écosystémiques</strong> essentiels : services d'approvisionnement (nourriture, eau, médicaments), services de régulation (climat, pollinisation, purification), services culturels (loisirs, esthétique) et services de soutien (formation des sols, cycles biogéochimiques).</p>
+    <p>La <strong>6e extinction de masse</strong> est en cours. Les causes principales sont : la destruction des habitats (première cause), les espèces invasives, la pollution, le changement climatique et la surexploitation. Le taux d'extinction actuel est 100 à 1000 fois supérieur au taux naturel.</p>
+    <p>Les outils de conservation incluent : les <strong>aires protégées</strong> (30% de la surface terrestre à protéger selon le plan Kunming-Montréal 2022), les <strong>corridors écologiques</strong>, la conservation ex situ (banques de graines, zoos), la restauration écologique et les approches de type "One Health".</p>`,
+    keys:["Services écosystémiques : approvisionnement, régulation, culturels, soutien","6e extinction : >1 million d'espèces menacées","Première cause d'extinction : destruction des habitats","Espèces clés de voûte : leur disparition déstabilise l'écosystème","Aires protégées : objectif 30% terrestre et marin (2030)","One Health : santé humaine, animale et environnementale sont liées"],
+    quiz:[
+      {q:"Quelle est la première cause d'extinction des espèces ?",opts:["Le changement climatique","La pollution","La destruction des habitats","Les espèces invasives"],c:2,exp:"La destruction et la fragmentation des habitats naturels (déforestation, urbanisation, agriculture intensive) est la première cause d'extinction des espèces dans le monde, loin devant le changement climatique, la pollution et les espèces invasives."},
+      {q:"Qu'est-ce qu'une espèce clé de voûte ?",opts:["L'espèce la plus abondante d'un écosystème","Une espèce dont la disparition entraînerait l'effondrement de l'écosystème","Une espèce invasive particulièrement dangereuse","Une espèce menacée d'extinction"],c:1,exp:"Une espèce clé de voûte est une espèce dont l'impact sur son écosystème est disproportionné par rapport à son abondance. Sa disparition entraînerait des modifications en cascade de l'écosystème. Ex : les loups dans le parc Yellowstone."},
+      {q:"Quel accord international fixe l'objectif de 30% d'aires protégées ?",opts:["Accord de Paris 2015","COP27 2022","Accord de Kunming-Montréal 2022","Protocole de Kyoto 1997"],c:2,exp:"L'accord de Kunming-Montréal (COP15 biodiversité, 2022) fixe l'objectif '30x30' : protéger au moins 30% des terres et 30% des océans d'ici 2030. Il vise à stopper et inverser la perte de biodiversité."}
+    ]},
+  t5:{lvl:"Géologie · Terminale",title:"Ressources et risques géologiques",
+    resume:`<p>Les <strong>ressources géologiques</strong> se forment sur des millions d'années. Les <strong>gisements métallifères</strong> résultent de processus magmatiques (chromite, platine), hydrothermaux (cuivre, or) ou sédimentaires (fer, manganèse). La demande mondiale augmente avec la transition énergétique.</p>
+    <p>Les <strong>risques géologiques</strong> majeurs sont les séismes, les éruptions volcaniques et les mouvements de terrain (glissements, coulées de boue, éboulements). Ils touchent les zones de frontières de plaques (ceinture de feu du Pacifique) et les zones de rift.</p>
+    <p>La <strong>gestion des risques</strong> comprend : la cartographie de l'aléa, l'évaluation de la vulnérabilité, la surveillance instrumentale, les plans d'évacuation (ORSEC) et la construction adaptée. Le développement de l'extraction minière soulève des enjeux environnementaux et éthiques (mines en zones protégées, conditions de travail).</p>`,
+    keys:["Gisements magmatiques : chromite (Bushveld), platine, nickel","Gisements hydrothermaux : or, argent, cuivre (fumeurs noirs)","Terres rares : essentielles aux nouvelles technologies (aimants, batteries)","Ceinture de feu : 90% des séismes et éruptions mondiales","Prévention : cartographie, surveillance, PLU (Plan Local d'Urbanisme)","Mine urbaine : recyclage des métaux pour réduire l'extraction"],
+    quiz:[
+      {q:"Comment se forment les gisements hydrothermaux ?",opts:["Par cristallisation du magma","Par dépôt sédimentaire","Par circulation d'eau chaude qui dissout et concentre les métaux","Par métamorphisme des roches"],c:2,exp:"Les gisements hydrothermaux se forment quand de l'eau chaude (>200°C) circule dans les roches, dissout des métaux et les concentre lors du refroidissement. C'est ainsi que se forment les filons d'or, d'argent, de cuivre et les fumeurs noirs des dorsales."},
+      {q:"Qu'est-ce que la 'ceinture de feu' du Pacifique ?",opts:["Une zone de production pétrolière","La zone avec le plus grand nombre de séismes et volcans","Une zone de subduction unique","La dorsale Pacifique"],c:1,exp:"La ceinture de feu du Pacifique est la zone en bordure de l'océan Pacifique concentrant plus de 90% des séismes et 75% des volcans actifs mondiaux. Elle correspond aux zones de subduction des plaques pacifique, nazca et philippines."},
+      {q:"Qu'est-ce que la 'mine urbaine' ?",opts:["Une mine en milieu urbain","Le recyclage des métaux contenus dans les déchets électroniques","Une mine souterraine sous une ville","L'extraction de ressources dans les eaux usées"],c:1,exp:"La 'mine urbaine' désigne le recyclage et la récupération des métaux (or, cobalt, indium, terres rares) contenus dans les déchets électroniques (DEEE : téléphones, ordinateurs). Elle permet de réduire la dépendance aux mines primaires."}
+    ]},
+  t6:{lvl:"Biologie · Terminale",title:"De la plante sauvage à la plante domestiquée",
+    resume:`<p>La <strong>domestication</strong> des plantes a débuté il y a ~10 000 ans avec la révolution néolithique. Elle a transformé des espèces sauvages en plantes cultivées par <strong>sélection artificielle</strong> : les agriculteurs ont sélectionné les individus aux caractères les plus avantageux (rendement, taille des graines, goût).</p>
+    <p>La <strong>sélection variétale</strong> moderne utilise des croisements contrôlés et la sélection massale. Les <strong>OGM</strong> (Organismes Génétiquement Modifiés) permettent d'insérer des gènes étrangers pour conférer de nouvelles propriétés (résistance aux insectes, tolérance aux herbicides, vitamines supplémentaires).</p>
+    <p>Les <strong>biotechnologies végétales</strong> nouvelles (CRISPR-Cas9, mutagenèse dirigée) permettent de modifier précisément le génome sans introduire de gènes étrangers. Elles soulèvent des débats éthiques sur la brevetabilité du vivant et les impacts sur la biodiversité cultivée.</p>`,
+    keys:["Domestication : sélection artificielle depuis ~10 000 ans","Syndrome de domestication : graines plus grosses, perte de la dormance","Hybridation : croisement de deux lignées pures → vigueur hybride","OGM : insertion de gènes étrangers (transgenèse)","CRISPR-Cas9 : cisgenèse ou intragenèse (modification précise)","Érosion génétique : réduction de la diversité des variétés cultivées"],
+    quiz:[
+      {q:"Qu'est-ce que le 'syndrome de domestication' ?",opts:["Une maladie des plantes cultivées","L'ensemble des caractères sélectionnés lors de la domestication","L'adaptation aux maladies","La résistance aux pesticides"],c:1,exp:"Le syndrome de domestication regroupe les caractères qui ont été sélectionnés par les agriculteurs : graines plus grosses, perte de la dispersion naturelle des graines, perte de la dormance, plantes plus compactes, meilleur rendement. Ces caractères sont avantageux pour l'agriculture mais défavorables en milieu naturel."},
+      {q:"Quelle est la différence entre un OGM et une plante modifiée par CRISPR ?",opts:["Il n'y a aucune différence","L'OGM insère des gènes étrangers, CRISPR modifie les gènes existants","CRISPR est plus dangereux que les OGM","Les OGM sont naturels, pas CRISPR"],c:1,exp:"Un OGM classique insère des gènes étrangers (transgenèse, ex : maïs Bt avec gène de Bacillus thuringiensis). CRISPR-Cas9 permet de modifier des gènes existants sans introduire de gène étranger (cisgenèse ou intragenèse), ce qui soulève moins d'inquiétudes mais reste débattu réglementairement."},
+      {q:"Qu'est-ce que l'érosion génétique dans le contexte agricole ?",opts:["L'augmentation des mutations dans les cultures","La réduction de la diversité génétique des variétés cultivées","La dégradation du sol cultivé","La résistance aux herbicides"],c:1,exp:"L'érosion génétique agricole est la réduction de la diversité génétique des espèces cultivées, due à la diffusion de quelques variétés performantes au détriment des variétés locales traditionnelles. Elle fragilise l'agriculture face aux nouvelles maladies et au changement climatique."}
+    ]},
+  t7:{lvl:"Biologie · Terminale",title:"Neurosciences et comportement",
+    resume:`<p>La <strong>plasticité synaptique</strong> est la capacité des synapses à se modifier en force et en nombre en réponse à l'activité. La <strong>potentialisation à long terme</strong> (LTP) renforce les synapses actives et est le mécanisme cellulaire de la mémoire et de l'apprentissage.</p>
+    <p>La <strong>mémoire</strong> existe sous plusieurs formes : mémoire implicite (procédurale : savoir-faire) et explicite (déclarative : faits, épisodes). L'hippocampe est crucial pour la formation de nouveaux souvenirs. La consolidation de la mémoire se déroule pendant le sommeil.</p>
+    <p>Les <strong>addictions</strong> résultent du détournement du circuit de récompense par des substances psychoactives. Ces substances provoquent une libération massive de dopamine dans le noyau accumbens, créant une sensation de plaisir intense et établissant une dépendance. La plasticité synaptique contribue à la persistance des comportements addictifs.</p>`,
+    keys:["LTP (Potentialisation à Long Terme) : base cellulaire de la mémoire","Hippocampe : siège de la mémoire épisodique et spatiale","Cortex préfrontal : mémoire de travail, contrôle exécutif","Circuit de récompense : voie dopaminergique méso-limbique","Addictions : substance → dopamine → renforcement du comportement","Neuroplasticité : le cerveau se remodèle tout au long de la vie"],
+    quiz:[
+      {q:"Quel mécanisme est à la base de la mémoire et de l'apprentissage au niveau cellulaire ?",opts:["La dépolarisation à long terme","La potentialisation à long terme (LTP)","La désinhibition synaptique","La potentialisation à court terme"],c:1,exp:"La LTP (Long-Term Potentiation) est le renforcement durable d'une synapse après une stimulation intense et répétée. Elle implique notamment les récepteurs AMPA et NMDA au glutamate et est considérée comme le mécanisme cellulaire de la mémoire et de l'apprentissage."},
+      {q:"Quelle structure cérébrale est cruciale pour la formation de nouveaux souvenirs ?",opts:["Le cervelet","L'amygdale","L'hippocampe","Le cortex moteur"],c:2,exp:"L'hippocampe est essentiel pour la formation et la consolidation des nouveaux souvenirs déclaratifs (faits, épisodes). Sa lésion (comme chez le patient H.M.) empêche la formation de nouveaux souvenirs tout en préservant la mémoire procédurale."},
+      {q:"Quel neurotransmetteur est principalement impliqué dans le circuit de récompense et les addictions ?",opts:["Sérotonine","GABA","Glutamate","Dopamine"],c:3,exp:"La dopamine est le neurotransmetteur clé du circuit de récompense. Les drogues et certains comportements addictifs provoquent une libération massive de dopamine dans le noyau accumbens, créant une sensation de plaisir intense et renforçant le comportement."}
+    ]},
+  t8:{lvl:"Biologie · Terminale",title:"Immunologie avancée",
+    resume:`<p>La <strong>réponse immunitaire adaptative</strong> est déclenchée par la présentation d'un antigène par les <strong>cellules présentatrices d'antigènes</strong> (CPA : macrophages, cellules dendritiques) via les molécules du CMH (Complexe Majeur d'Histocompatibilité).</p>
+    <p>La <strong>mémoire immunitaire</strong> est assurée par les cellules B et T mémoires qui persistent après la résolution de l'infection. Lors d'un 2e contact avec le même antigène, ces cellules permettent une réponse secondaire beaucoup plus rapide, intense et spécifique.</p>
+    <p>Les dérèglements immunitaires incluent : les <strong>allergies</strong> (réponse IgE excessive contre des antigènes inoffensifs), les <strong>maladies auto-immunes</strong> (réponse contre le soi : diabète de type 1, polyarthrite, SEP) et les <strong>immunodéficiences</strong> (SIDA : VIH détruit les lymphocytes T CD4+).</p>`,
+    keys:["CMH I : présente aux lymphocytes T cytotoxiques (CD8+)","CMH II : présente aux lymphocytes T auxiliaires (CD4+)","Sélection clonale : expansion du clone spécifique de l'antigène","IgE + mastocytes → allergies (histamine)","Maladies auto-immunes : perte de tolérance au soi","SIDA : VIH → destruction CD4+ → immunodéficience"],
+    quiz:[
+      {q:"Quel est le rôle du CMH dans la réponse immunitaire ?",opts:["Produire des anticorps","Présenter les peptides antigéniques aux lymphocytes T","Phagocyter les agents pathogènes","Déclencher l'inflammation"],c:1,exp:"Les molécules du CMH (Complexe Majeur d'Histocompatibilité) présentent des peptides antigéniques à la surface des cellules. CMH I présente des peptides aux lymphocytes T CD8+ (cytotoxiques) ; CMH II présente des peptides aux lymphocytes T CD4+ (auxiliaires)."},
+      {q:"Pourquoi les allergies se produisent-elles ?",opts:["Le système immunitaire est trop faible","Une réponse IgE excessive contre des antigènes inoffensifs","Un excès de lymphocytes T","Une infection virale chronique"],c:1,exp:"Les allergies résultent d'une réponse immunitaire inappropriée (IgE) contre des antigènes normalement inoffensifs (pollen, acariens, aliments). Les IgE se fixent sur les mastocytes et basophiles. Lors d'un 2e contact, l'allergène déclenche la dégranulation et la libération d'histamine."},
+      {q:"Comment le VIH affaiblit-il le système immunitaire ?",opts:["En détruisant les anticorps","En infectant et détruisant les lymphocytes T CD4+","En bloquant la production de phagocytes","En inhibant la production d'interférons"],c:1,exp:"Le VIH infecte préférentiellement les lymphocytes T CD4+ (T auxiliaires) en utilisant leur récepteur CD4 comme point d'entrée. Il se réplique dans ces cellules et les détruit progressivement. La chute des CD4+ sous 200/mm³ définit le stade SIDA, caractérisé par une immunodéficience sévère."}
+    ]},
+  t9:{lvl:"Biologie · Terminale",title:"Reproduction et régulation hormonale",
+    resume:`<p>La reproduction humaine est régulée par l'<strong>axe hypothalamo-hypophyso-gonadique</strong>. L'hypothalamus sécrète la GnRH (pulses) → l'hypophyse libère FSH et LH → les gonades produisent les hormones sexuelles (œstrogènes, progestérone, testostérone).</p>
+    <p>Le <strong>cycle menstruel</strong> (28j) est rythmé par les variations hormonales : phase folliculaire (FSH → maturation follicule, montée des œstrogènes → pic de LH → ovulation), phase lutéale (corps jaune → progestérone + œstrogènes → préparation endomètre). En l'absence de fécondation, le corps jaune dégénère, chute hormonale → règles.</p>
+    <p>La <strong>contraception</strong> hormonale (pilule) bloque l'ovulation par rétroaction négative sur l'axe hypothalamo-hypophysaire. La <strong>grossesse</strong> est maintenue par l'hCG (produite par le trophoblaste), qui prolonge le corps jaune, puis par le placenta (œstrogènes + progestérone).</p>`,
+    keys:["GnRH (hypothalamus) → FSH + LH (hypophyse) → gonades","Rétroaction négative : hormones gonadiques inhibent hypothalamus et hypophyse","Ovulation : pic de LH vers J14 du cycle","Progestérone : prépare l'endomètre, maintient la grossesse","hCG : hormone de grossesse (test urinaire)","Contraception hormonale : bloque la rétroaction pour inhiber l'ovulation"],
+    quiz:[
+      {q:"Quelle hormone déclenche l'ovulation ?",opts:["Progestérone","FSH","LH (pic)","GnRH"],c:2,exp:"L'ovulation est déclenchée par le pic de LH (hormone lutéinisante) sécrétée par l'hypophyse vers J14 du cycle. Ce pic résulte de la rétroaction positive des œstrogènes (quand leur taux est très élevé, ils stimulent brièvement la libération de LH)."},
+      {q:"Quel est le rôle de l'hCG pendant la grossesse ?",opts:["Déclencher l'ovulation","Maintenir le corps jaune au début de la grossesse","Préparer les glandes mammaires","Déclencher l'accouchement"],c:1,exp:"L'hCG (hormone chorionique gonadotrophine) est sécrétée par le trophoblaste dès l'implantation. Elle maintient le corps jaune fonctionnel, permettant la sécrétion de progestérone et d'œstrogènes nécessaires à la poursuite de la grossesse. C'est l'hormone détectée par les tests de grossesse."},
+      {q:"Comment la pilule contraceptive empêche-t-elle l'ovulation ?",opts:["Elle bloque les trompes de Fallope","Elle détruit les ovocytes","Elle maintient des taux élevés d'hormones qui bloquent par rétroaction négative la sécrétion de FSH et LH","Elle désensibilise les récepteurs à la GnRH"],c:2,exp:"La pilule combinée (œstrogènes + progestérone de synthèse) maintient des taux hormonaux élevés en permanence. Cette rétroaction négative inhibe la sécrétion de GnRH par l'hypothalamus et de FSH/LH par l'hypophyse, empêchant la maturation folliculaire et l'ovulation."}
+    ]}
+};
+
+let qs={id:null,i:0,done:false};
+
+function open_(id){
+  const c=COURS[id];if(!c)return;
+  qs={id,i:0,done:false};
+  document.getElementById('mLvl').textContent=c.lvl;
+  document.getElementById('mTitle').textContent=c.title;
+  const kpHtml=c.keys.map(k=>`<div class="ki">${k}</div>`).join('');
+  document.getElementById('mBody').innerHTML=`
+    <div class="ms"><h3 class="mst">Résumé du cours</h3><div class="mt">${c.resume}</div></div>
+    <div class="ms"><h3 class="mst">Points clés à retenir</h3><div class="kp">${kpHtml}</div></div>
+    <div class="ms"><h3 class="mst">Quiz de révision</h3><div id="qc"></div></div>`;
+  renderQ();
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
+function closeOut(e){if(e.target===document.getElementById('modal'))closeModal();}
+
+function renderQ(){
+  const c=COURS[qs.id],q=c.quiz[qs.i],tot=c.quiz.length;
+  const opts=q.opts.map((o,i)=>`<button class="qob" onclick="answer(${i})">${o}</button>`).join('');
+  document.getElementById('qc').innerHTML=`
+    <div class="qbox">
+      <p class="qt">Quiz de révision</p>
+      <p class="qp">Question ${qs.i+1} / ${tot}</p>
+      <p class="qq">${q.q}</p>
+      <div class="qo">${opts}</div>
+      <div class="qf" id="qf"></div>
+      <div class="qnav">
+        <span style="font-size:0.7rem;opacity:0.5">${qs.i+1}/${tot}</span>
+        <button class="qnb" id="qnb" onclick="${qs.i<tot-1?'nextQ()':'restartQ()'}">${qs.i<tot-1?'Suivant →':'Recommencer ↺'}</button>
+      </div>
+    </div>`;
+}
+
+function answer(i){
+  if(qs.done)return;qs.done=true;
+  const q=COURS[qs.id].quiz[qs.i];
+  document.querySelectorAll('.qob').forEach((b,j)=>{b.disabled=true;if(j===q.c)b.classList.add('ok');else if(j===i)b.classList.add('ko');});
+  const f=document.getElementById('qf');
+  f.className='qf show '+(i===q.c?'fok':'fko');
+  f.textContent=(i===q.c?'✅ Correct ! ':'❌ Pas tout à fait. ')+q.exp;
+  document.getElementById('qnb').style.display='inline-block';
+}
+function nextQ(){qs.i++;qs.done=false;renderQ();}
+function restartQ(){qs.i=0;qs.done=false;renderQ();}
+
+document.querySelectorAll('.tb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tb').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tp').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('tab-'+b.dataset.tab).classList.add('active');
+    window.scrollTo({top:document.querySelector('.tabs').offsetTop-62,behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
