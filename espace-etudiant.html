@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Espace Étudiant — SVT.Cours</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-deep: #1a3a2a; --green-mid: #2d6a4f; --green-light: #52b788;
+      --cream: #f5f0e8; --cream-dark: #e8e0d0; --amber: #c9881c; --amber-light: #e8b84b;
+      --text-dark: #1c1c1c; --text-mid: #4a4a4a; --white: #ffffff; --red: #c0392b;
+      --serif: 'Cormorant Garamond', Georgia, serif; --sans: 'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--cream); color: var(--text-dark); min-height: 100vh; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: rgba(245,240,232,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(45,106,79,0.15); }
+    .nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--green-deep); text-decoration: none; }
+    .nav-logo span { color: var(--amber); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.85rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--green-mid); }
+    .nav-cta { background: var(--green-deep); color: var(--cream) !important; padding: 0.5rem 1.2rem; }
+    @media(max-width: 768px) { nav { padding: 1rem 1.5rem; } .nav-links { display: none; } }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem 1.8rem; font-family: var(--sans); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; text-decoration: none; }
+    .btn-primary { background: var(--green-deep); color: var(--cream); border-color: var(--green-deep); }
+    .btn-primary:hover { background: transparent; color: var(--green-deep); }
+    .btn-secondary { background: transparent; color: var(--green-deep); border-color: var(--green-deep); }
+    .btn-secondary:hover { background: var(--green-deep); color: var(--cream); }
+    .btn-sm { padding: 0.5rem 1rem; font-size: 0.78rem; }
+    .btn-danger { background: transparent; color: var(--red); border-color: var(--red); font-size: 0.75rem; padding: 0.35rem 0.8rem; }
+    .btn-danger:hover { background: var(--red); color: var(--white); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+
+    /* ── LOGIN ── */
+    .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 6rem 2rem 3rem; }
+    .login-card { background: var(--white); border: 1px solid var(--cream-dark); padding: 3rem; max-width: 460px; width: 100%; }
+    .login-icon { font-size: 2.5rem; margin-bottom: 1.2rem; }
+    .login-title { font-family: var(--serif); font-size: 2.2rem; color: var(--green-deep); margin-bottom: 0.5rem; line-height: 1.1; }
+    .login-sub { font-size: 0.9rem; color: var(--text-mid); margin-bottom: 2rem; line-height: 1.6; font-weight: 300; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.2rem; }
+    .form-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); font-weight: 500; }
+    .form-input, .form-select { border: 1px solid var(--cream-dark); background: var(--cream); padding: 0.85rem 1rem; font-family: var(--sans); font-size: 0.92rem; color: var(--text-dark); outline: none; transition: border-color 0.2s; width: 100%; }
+    .form-input:focus, .form-select:focus { border-color: var(--green-mid); background: var(--white); }
+    .form-select { appearance: none; cursor: pointer; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-textarea { border: 1px solid var(--cream-dark); background: var(--cream); padding: 0.85rem 1rem; font-family: var(--sans); font-size: 0.88rem; color: var(--text-dark); outline: none; transition: border-color 0.2s; width: 100%; resize: vertical; min-height: 80px; }
+    .form-textarea:focus { border-color: var(--green-mid); background: var(--white); }
+    .login-note { font-size: 0.78rem; color: var(--text-mid); margin-top: 1.5rem; line-height: 1.6; padding: 1rem; background: var(--cream); border-left: 3px solid var(--green-light); }
+    .msg { padding: 0.8rem 1.2rem; font-size: 0.85rem; margin-top: 0.8rem; line-height: 1.5; }
+    .msg-success { background: rgba(82,183,136,0.1); color: var(--green-mid); border-left: 3px solid var(--green-light); }
+    .msg-error { background: rgba(192,57,43,0.08); color: var(--red); border-left: 3px solid var(--red); }
+    .msg-info { background: rgba(201,136,28,0.08); color: var(--amber); border-left: 3px solid var(--amber); }
+
+    /* ── DASHBOARD ── */
+    .dash-topbar { background: var(--green-deep); color: var(--cream); padding: 5.5rem 4rem 1.8rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .dash-greeting { font-family: var(--serif); font-size: 1.6rem; line-height: 1.2; }
+    .dash-greeting small { display: block; font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.5); margin-bottom: 0.3rem; }
+    .dash-topbar-right { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+    .btn-outline-cream { background: transparent; color: var(--cream); border: 1px solid rgba(245,240,232,0.35); padding: 0.55rem 1.1rem; font-size: 0.78rem; cursor: pointer; transition: all 0.2s; letter-spacing: 0.06em; text-transform: uppercase; font-family: var(--sans); font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; }
+    .btn-outline-cream:hover { background: rgba(245,240,232,0.1); border-color: rgba(245,240,232,0.6); }
+    .btn-cream { background: var(--cream); color: var(--green-deep); border: 2px solid var(--cream); padding: 0.6rem 1.3rem; font-size: 0.82rem; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; font-family: var(--sans); font-weight: 500; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; }
+    .btn-cream:hover { background: var(--green-mid); color: var(--white); border-color: var(--green-mid); }
+
+    .dash-wrapper { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+    .dash-grid { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; margin-bottom: 2rem; }
+    @media(max-width: 900px) { .dash-grid { grid-template-columns: 1fr; } .dash-topbar { padding: 5rem 1.5rem 1.5rem; } }
+
+    /* Credit card */
+    .credit-card { background: var(--green-deep); color: var(--cream); padding: 2.5rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+    .credit-card::before { content: ''; position: absolute; right: -3rem; top: -3rem; width: 220px; height: 220px; border-radius: 50%; background: rgba(82,183,136,0.12); }
+    .credit-card::after { content: ''; position: absolute; right: 4rem; bottom: -4rem; width: 160px; height: 160px; border-radius: 50%; background: rgba(201,136,28,0.08); }
+    .credit-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.8rem; position: relative; z-index: 2; }
+    .credit-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.5); }
+    .credit-badge { background: var(--amber); color: var(--white); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.7rem; font-family: var(--sans); font-weight: 500; }
+    .credit-number { font-family: var(--serif); font-size: 5.5rem; line-height: 1; color: var(--white); position: relative; z-index: 2; }
+    .credit-unit { font-family: var(--serif); font-style: italic; font-size: 1.3rem; color: var(--green-light); position: relative; z-index: 2; }
+    .credit-sub { font-size: 0.85rem; color: rgba(245,240,232,0.6); font-weight: 300; margin: 0.4rem 0 1.5rem; position: relative; z-index: 2; }
+    .credit-actions { display: flex; gap: 1rem; position: relative; z-index: 2; flex-wrap: wrap; }
+
+    /* Booking */
+    .booking-section { background: var(--white); border: 1px solid var(--cream-dark); padding: 2rem; margin-bottom: 2rem; animation: fadeIn 0.3s ease; }
+    .booking-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+    .booking-section-title { font-family: var(--serif); font-size: 1.4rem; color: var(--green-deep); margin-bottom: 0.2rem; }
+    .booking-section-sub { font-size: 0.83rem; color: var(--text-mid); }
+    .close-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-mid); padding: 0.2rem; transition: color 0.2s; }
+    .close-btn:hover { color: var(--green-deep); }
+    .mini-stepper { display: flex; align-items: center; gap: 0; margin-bottom: 1.8rem; }
+    .mini-step { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-mid); white-space: nowrap; }
+    .mini-step-num { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--cream-dark); background: var(--cream); display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-family: var(--serif); flex-shrink: 0; transition: all 0.3s; }
+    .mini-step.active .mini-step-num { background: var(--green-mid); color: var(--white); border-color: var(--green-mid); }
+    .mini-step.done .mini-step-num { background: var(--green-light); color: var(--white); border-color: var(--green-light); }
+    .mini-step.active { color: var(--green-deep); font-weight: 500; }
+    .mini-step.done { color: var(--green-light); }
+    .mini-step-line { width: 36px; height: 1px; background: var(--cream-dark); flex-shrink: 0; margin: 0 4px; }
+    .mini-step-line.done { background: var(--green-light); }
+    .booking-panel { display: none; }
+    .booking-panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+    .booking-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media(max-width: 650px) { .booking-row { grid-template-columns: 1fr; } }
+    .cal-card, .matiere-card { background: var(--cream); border: 1px solid var(--cream-dark); padding: 1.4rem; }
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .cal-month-title { font-family: var(--serif); font-size: 1.05rem; color: var(--green-deep); }
+    .cal-nav-btn { background: none; border: 1px solid var(--cream-dark); width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--green-deep); transition: all 0.2s; }
+    .cal-nav-btn:hover { background: var(--green-deep); color: var(--white); border-color: var(--green-deep); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .cal-day-name { text-align: center; font-size: 0.6rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-mid); padding: 0.3rem 0; }
+    .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; cursor: pointer; border-radius: 50%; border: 1px solid transparent; transition: all 0.18s; color: var(--text-dark); }
+    .cal-day:hover:not(.disabled):not(.empty) { border-color: var(--green-light); color: var(--green-mid); }
+    .cal-day.today { font-weight: 500; color: var(--amber); }
+    .cal-day.selected { background: var(--green-deep); color: var(--white) !important; border-color: var(--green-deep); }
+    .cal-day.disabled { color: var(--cream-dark); cursor: not-allowed; }
+    .cal-day.has-slots { position: relative; }
+    .cal-day.has-slots::after { content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 3px; height: 3px; border-radius: 50%; background: var(--green-light); }
+    .cal-day.selected::after { background: var(--amber-light); }
+    .cal-day.empty { cursor: default; }
+    .matiere-card h4 { font-family: var(--serif); font-size: 1.05rem; color: var(--green-deep); margin-bottom: 1rem; }
+
+    .slots-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin: 1rem 0; }
+    @media(max-width: 480px) { .slots-grid { grid-template-columns: repeat(3, 1fr); } }
+    .slot-btn { border: 1.5px solid var(--cream-dark); background: var(--white); padding: 0.7rem 0.5rem; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 0.88rem; color: var(--text-dark); font-family: var(--sans); display: block; width: 100%; }
+    .slot-btn:hover:not(.taken) { border-color: var(--green-light); color: var(--green-mid); }
+    .slot-btn.selected { border-color: var(--green-deep); background: var(--green-deep); color: var(--white); }
+    .slot-btn.taken { background: var(--cream-dark); color: rgba(0,0,0,0.25); cursor: not-allowed; text-decoration: line-through; }
+
+    .recap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .recap-item-box { background: var(--cream); padding: 1rem; border: 1px solid var(--cream-dark); }
+    .recap-item-label { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 0.3rem; }
+    .recap-item-value { font-family: var(--serif); font-size: 1.1rem; color: var(--green-deep); }
+    .credit-cost-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--amber); color: var(--white); padding: 0.45rem 1rem; font-size: 0.8rem; font-weight: 500; margin-bottom: 1.2rem; }
+
+    .booking-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--cream-dark); }
+
+    .booking-success { text-align: center; padding: 2rem 1rem; }
+    .booking-success-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--green-light); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 1.2rem; animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .booking-success-title { font-family: var(--serif); font-size: 2rem; color: var(--green-deep); margin-bottom: 0.5rem; }
+    .booking-success-sub { font-size: 0.9rem; color: var(--text-mid); line-height: 1.6; }
+
+    /* Section cards */
+    .section-card { background: var(--white); border: 1px solid var(--cream-dark); padding: 1.8rem; margin-bottom: 2rem; }
+    .section-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.3rem; }
+    .section-card-title { font-family: var(--serif); font-size: 1.3rem; color: var(--green-deep); display: flex; align-items: center; gap: 0.7rem; }
+    .count-pill { background: var(--green-light); color: var(--white); font-size: 0.68rem; padding: 0.15rem 0.55rem; border-radius: 99px; font-family: var(--sans); }
+
+    .sessions-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .sessions-table th { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); text-align: left; padding: 0.7rem 0.8rem; border-bottom: 2px solid var(--cream-dark); font-weight: 500; }
+    .sessions-table td { padding: 0.8rem; border-bottom: 1px solid var(--cream-dark); }
+    .sessions-table tr:last-child td { border-bottom: none; }
+    .sessions-table tr:hover td { background: var(--cream); }
+    .status-badge { display: inline-block; font-size: 0.63rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.15rem 0.5rem; border: 1px solid; }
+    .status-upcoming { color: var(--green-mid); border-color: var(--green-light); background: rgba(82,183,136,0.08); }
+    .status-completed { color: var(--text-mid); border-color: var(--cream-dark); background: var(--cream); }
+    .status-cancelled { color: var(--red); border-color: rgba(192,57,43,0.3); background: rgba(192,57,43,0.05); }
+    .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--text-mid); }
+    .empty-state-icon { font-size: 2rem; display: block; margin-bottom: 0.8rem; }
+
+    /* Sidebar */
+    .stat-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .stat-mini { background: var(--white); border: 1px solid var(--cream-dark); padding: 1.2rem; text-align: center; }
+    .stat-mini-n { font-family: var(--serif); font-size: 2.2rem; color: var(--green-deep); display: block; }
+    .stat-mini-l { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-mid); }
+
+    .transaction-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid var(--cream-dark); }
+    .transaction-row:last-child { border-bottom: none; }
+    .tx-desc { font-size: 0.83rem; color: var(--text-dark); }
+    .tx-date { font-size: 0.72rem; color: var(--text-mid); margin-top: 0.15rem; }
+    .tx-amount { font-family: var(--serif); font-size: 1.05rem; font-weight: 600; flex-shrink: 0; }
+    .tx-positive { color: var(--green-mid); }
+    .tx-negative { color: var(--red); }
+
+    .code-input-row { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
+    .code-input-row .form-input { flex: 1; font-size: 0.83rem; font-family: 'Courier New', monospace; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    /* Pack cards */
+    .packs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+    @media(max-width: 720px) { .packs-grid { grid-template-columns: 1fr; } }
+    .pack-card { border: 1px solid var(--cream-dark); padding: 2rem; background: var(--cream); position: relative; transition: transform 0.25s, box-shadow 0.25s; }
+    .pack-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(26,58,42,0.1); }
+    .pack-card.featured { border-color: var(--amber); background: var(--white); }
+    .pack-card-badge { position: absolute; top: -10px; left: 1.5rem; background: var(--amber); color: var(--white); font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.7rem; font-weight: 500; font-family: var(--sans); }
+    .pack-credits-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); font-weight: 500; margin-bottom: 0.2rem; }
+    .pack-credits-n { font-family: var(--serif); font-size: 3.5rem; color: var(--green-deep); line-height: 1; }
+    .pack-name { font-family: var(--serif); font-size: 1.2rem; color: var(--green-deep); margin: 0.4rem 0 0.2rem; }
+    .pack-price { font-size: 0.88rem; color: var(--text-mid); margin-bottom: 1.2rem; }
+    .pack-features { list-style: none; margin-bottom: 1.5rem; }
+    .pack-features li { font-size: 0.82rem; color: var(--text-mid); padding: 0.3rem 0 0.3rem 1.2rem; position: relative; border-bottom: 1px solid var(--cream-dark); }
+    .pack-features li:last-child { border-bottom: none; }
+    .pack-features li::before { content: '→'; position: absolute; left: 0; color: var(--green-light); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .section-sub { font-size: 0.85rem; color: var(--text-mid); margin-bottom: 1.5rem; line-height: 1.6; font-weight: 300; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">SVT<span>.</span>Cours</a>
+    <ul class="nav-links">
+      <li><a href="cours.html">Cours</a></li>
+      <li><a href="fiches.html">Fiches</a></li>
+      <li><a href="ressources.html">Ressources</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="espace-etudiant.html" class="active">Mon espace</a></li>
+      <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══ LOGIN ═══ -->
+  <div id="loginPage" class="login-page" style="display:none">
+    <div class="login-card">
+      <div class="login-icon">🎓</div>
+      <h1 class="login-title">Mon espace <em style="font-style:italic;color:var(--green-mid)">étudiant</em></h1>
+      <p class="login-sub">Accédez à vos crédits de cours et réservez vos séances à votre convenance.</p>
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email *</label>
+          <input class="form-input" type="email" id="loginEmail" placeholder="votre@email.com" required/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="loginFirst">Prénom *</label>
+            <input class="form-input" type="text" id="loginFirst" placeholder="Marie" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loginLast">Nom *</label>
+            <input class="form-input" type="text" id="loginLast" placeholder="Dupont" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="loginNiveau">Niveau scolaire *</label>
+          <select class="form-input form-select" id="loginNiveau" required>
+            <option value="">Sélectionner…</option>
+            <option>6ème</option><option>5ème</option><option>4ème</option><option>3ème</option>
+            <option>2nde</option><option>1ère</option><option>Terminale</option><option>Post-bac</option>
+          </select>
+        </div>
+        <div id="loginMsg"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem;justify-content:center">
+          Accéder à mon espace →
+        </button>
+      </form>
+      <div class="login-note">
+        💡 Votre espace est sauvegardé sur cet appareil. Si vous possédez un code de crédits de Pauline, vous pourrez l'activer après connexion.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div id="dashboardPage" style="display:none">
+
+    <div class="dash-topbar">
+      <div>
+        <div class="dash-greeting">
+          <small>Mon espace étudiant</small>
+          <span id="dashName"></span>
+        </div>
+        <div style="font-size:0.75rem;color:rgba(245,240,232,0.4);margin-top:0.3rem" id="dashNiveau"></div>
+      </div>
+      <div class="dash-topbar-right">
+        <a href="reservation.html" class="btn-cream">+ Acheter des crédits</a>
+        <button class="btn-outline-cream" onclick="logout()">Se déconnecter</button>
+      </div>
+    </div>
+
+    <div class="dash-wrapper">
+      <div class="dash-grid">
+
+        <!-- ── COLONNE PRINCIPALE ── -->
+        <div>
+
+          <!-- Carte crédits -->
+          <div class="credit-card">
+            <div class="credit-card-top">
+              <span class="credit-label">💳 Crédits disponibles</span>
+              <span class="credit-badge" id="creditBadge">—</span>
+            </div>
+            <div class="credit-number" id="creditNumber">0</div>
+            <div class="credit-unit">crédit<span id="creditPlural">s</span></div>
+            <p class="credit-sub" id="creditSub">disponibles pour réserver vos séances</p>
+            <div class="credit-actions">
+              <button class="btn-cream" id="bookingToggleBtn" onclick="toggleBooking()">📅 Réserver une séance</button>
+              <a href="reservation.html" class="btn-outline-cream">+ Acheter des crédits</a>
+            </div>
+          </div>
+
+          <!-- Section réservation (masquée par défaut) -->
+          <div class="booking-section" id="bookingSection" style="display:none">
+            <div class="booking-title-row">
+              <div>
+                <h3 class="booking-section-title">Réserver une séance</h3>
+                <p class="booking-section-sub">Sélectionnez une date, un créneau et votre besoin.</p>
+              </div>
+              <button class="close-btn" onclick="closeBooking()" title="Fermer">✕</button>
+            </div>
+
+            <div class="mini-stepper">
+              <div class="mini-step active" id="mstep-1"><span class="mini-step-num">1</span><span>Date</span></div>
+              <div class="mini-step-line" id="mline-1"></div>
+              <div class="mini-step" id="mstep-2"><span class="mini-step-num">2</span><span>Créneau</span></div>
+              <div class="mini-step-line" id="mline-2"></div>
+              <div class="mini-step" id="mstep-3"><span class="mini-step-num">3</span><span>Confirmation</span></div>
+            </div>
+
+            <!-- Panel 1 : Date + matière -->
+            <div class="booking-panel active" id="bpanel-1">
+              <div class="booking-row">
+                <div class="cal-card">
+                  <div class="cal-header">
+                    <button class="cal-nav-btn" id="bPrevMonth">&#8592;</button>
+                    <span class="cal-month-title" id="bCalMonthTitle"></span>
+                    <button class="cal-nav-btn" id="bNextMonth">&#8594;</button>
+                  </div>
+                  <div class="cal-grid" id="bCalGrid"></div>
+                </div>
+                <div class="matiere-card">
+                  <h4>Matière & notes</h4>
+                  <div class="form-group">
+                    <label class="form-label">Besoin principal *</label>
+                    <select class="form-input form-select" id="bMatiere">
+                      <option value="">Sélectionner…</option>
+                      <option>Biologie cellulaire</option>
+                      <option>Génétique &amp; Évolution</option>
+                      <option>Sciences de la Terre</option>
+                      <option>Corps humain &amp; Santé</option>
+                      <option>Écosystèmes</option>
+                      <option>Méthodologie Bac</option>
+                      <option>Révision générale</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-top:0.8rem">
+                    <label class="form-label">Notes (optionnel)</label>
+                    <textarea class="form-textarea" id="bNotes" placeholder="Sujet à revoir, exercices, questions…"></textarea>
+                  </div>
+                  <div id="bDateInfo" class="msg msg-info" style="margin-top:0.8rem;font-size:0.78rem">
+                    📅 Sélectionnez une date sur le calendrier.
+                  </div>
+                </div>
+              </div>
+              <div class="booking-nav">
+                <span></span>
+                <button class="btn btn-primary btn-sm" id="bBtn1Next" disabled onclick="bookingGoTo(2)">Choisir un créneau →</button>
+              </div>
+            </div>
+
+            <!-- Panel 2 : Créneaux -->
+            <div class="booking-panel" id="bpanel-2">
+              <h4 style="font-family:var(--serif);font-size:1.2rem;color:var(--green-deep);margin-bottom:0.3rem" id="bSlotsHeader">Créneaux disponibles</h4>
+              <p style="font-size:0.82rem;color:var(--text-mid);margin-bottom:0.5rem">Choisissez l'heure qui vous convient.</p>
+              <div class="slots-grid" id="bSlotsGrid"></div>
+              <div id="bSlotError" class="msg msg-error" style="display:none;margin-top:0.8rem">Veuillez sélectionner un créneau.</div>
+              <div class="booking-nav">
+                <button class="btn btn-secondary btn-sm" onclick="bookingGoTo(1)">← Retour</button>
+                <button class="btn btn-primary btn-sm" id="bBtn2Next" disabled onclick="bookingGoTo(3)">Voir le récapitulatif →</button>
+              </div>
+            </div>
+
+            <!-- Panel 3 : Récap + confirmation -->
+            <div class="booking-panel" id="bpanel-3">
+              <div class="credit-cost-badge">💳 Cette réservation utilisera <strong style="margin-left:0.3rem">1 crédit</strong></div>
+              <div class="recap-grid">
+                <div class="recap-item-box">
+                  <p class="recap-item-label">Date</p>
+                  <p class="recap-item-value" id="bRecapDate">—</p>
+                </div>
+                <div class="recap-item-box">
+                  <p class="recap-item-label">Heure</p>
+                  <p class="recap-item-value" id="bRecapHeure">—</p>
+                </div>
+                <div class="recap-item-box">
+                  <p class="recap-item-label">Matière</p>
+                  <p class="recap-item-value" id="bRecapMatiere">—</p>
+                </div>
+                <div class="recap-item-box">
+                  <p class="recap-item-label">Crédits après</p>
+                  <p class="recap-item-value" id="bRecapRemaining">—</p>
+                </div>
+              </div>
+              <div class="booking-nav">
+                <button class="btn btn-secondary btn-sm" onclick="bookingGoTo(2)">← Retour</button>
+                <button class="btn btn-primary btn-sm" onclick="confirmBooking()">✅ Confirmer (-1 crédit)</button>
+              </div>
+            </div>
+
+            <!-- Panel 4 : Succès -->
+            <div class="booking-panel" id="bpanel-4">
+              <div class="booking-success">
+                <div class="booking-success-icon">✓</div>
+                <h3 class="booking-success-title">Séance réservée !</h3>
+                <p class="booking-success-sub" id="bSuccessText">Votre séance a été ajoutée à votre agenda.</p>
+                <button class="btn btn-primary btn-sm" style="margin-top:1.5rem" onclick="closeBooking()">Fermer ✕</button>
+              </div>
+            </div>
+
+          </div><!-- /.booking-section -->
+
+          <!-- Prochaines séances -->
+          <div class="section-card">
+            <div class="section-card-head">
+              <div class="section-card-title">
+                📅 Prochaines séances
+                <span class="count-pill" id="upcomingCount">0</span>
+              </div>
+            </div>
+            <div id="upcomingContainer"></div>
+          </div>
+
+          <!-- Historique -->
+          <div class="section-card">
+            <div class="section-card-head">
+              <div class="section-card-title">📚 Historique des séances</div>
+            </div>
+            <div id="historyContainer"></div>
+          </div>
+
+        </div><!-- /col principale -->
+
+        <!-- ── SIDEBAR ── -->
+        <div>
+
+          <div class="stat-cards">
+            <div class="stat-mini">
+              <span class="stat-mini-n" id="statTotal">0</span>
+              <span class="stat-mini-l">séances totales</span>
+            </div>
+            <div class="stat-mini">
+              <span class="stat-mini-n" id="statCreditsUsed">0</span>
+              <span class="stat-mini-l">crédits utilisés</span>
+            </div>
+          </div>
+
+          <!-- Historique crédits -->
+          <div class="section-card">
+            <div class="section-card-head">
+              <div class="section-card-title" style="font-size:1.1rem">💶 Historique des crédits</div>
+            </div>
+            <div id="txContainer"></div>
+          </div>
+
+          <!-- Activation code -->
+          <div class="section-card">
+            <div class="section-card-head">
+              <div class="section-card-title" style="font-size:1.1rem">🎟️ Activer un code</div>
+            </div>
+            <p style="font-size:0.82rem;color:var(--text-mid);line-height:1.6;margin-bottom:0.5rem">
+              Entrez le code reçu de Pauline après votre achat pour ajouter des crédits.
+            </p>
+            <p style="font-size:0.75rem;color:var(--text-mid);margin-bottom:0.8rem">
+              Format : <code style="background:var(--cream);padding:0.1rem 0.4rem;font-size:0.8rem">SVT-4-XXXXXX</code>
+            </p>
+            <div class="code-input-row">
+              <input type="text" class="form-input" id="codeInput" placeholder="SVT-4-XXXXXX" maxlength="20"/>
+              <button class="btn btn-primary btn-sm" onclick="activateCode()">Activer</button>
+            </div>
+            <div id="codeMsg" style="margin-top:0.5rem"></div>
+          </div>
+
+        </div><!-- /sidebar -->
+
+      </div><!-- /dash-grid -->
+
+      <!-- Obtenir des crédits -->
+      <div class="section-card">
+        <div class="section-card-head">
+          <div class="section-card-title">🛒 Obtenir des crédits</div>
+        </div>
+        <p class="section-sub">Achetez un pack pour alimenter votre espace étudiant et réserver vos séances à votre rythme.</p>
+        <div class="packs-grid">
+          <div class="pack-card">
+            <p class="pack-credits-label">1 crédit</p>
+            <p class="pack-credits-n">1</p>
+            <p class="pack-name">Cours à la carte</p>
+            <p class="pack-price">35 € — sans engagement</p>
+            <ul class="pack-features">
+              <li>1 heure de cours individuel</li>
+              <li>Support de cours PDF</li>
+              <li>Récap & corrections inclus</li>
+            </ul>
+            <a href="reservation.html?formule=carte" class="btn btn-primary btn-sm" style="width:100%;justify-content:center">Réserver →</a>
+          </div>
+          <div class="pack-card featured">
+            <div class="pack-card-badge">Populaire</div>
+            <p class="pack-credits-label">4 crédits</p>
+            <p class="pack-credits-n">4</p>
+            <p class="pack-name">Pack mensuel</p>
+            <p class="pack-price">120 € — 30 €/cours</p>
+            <ul class="pack-features">
+              <li>4 crédits à utiliser librement</li>
+              <li>Fiches méthodes incluses</li>
+              <li>WhatsApp entre les cours</li>
+              <li>Bilan mensuel des progrès</li>
+            </ul>
+            <a href="reservation.html?formule=mensuel" class="btn btn-primary btn-sm" style="width:100%;justify-content:center">Acheter →</a>
+          </div>
+          <div class="pack-card">
+            <p class="pack-credits-label">6 crédits</p>
+            <p class="pack-credits-n">6</p>
+            <p class="pack-name">Prépa Bac</p>
+            <p class="pack-price">220 € — stage intensif</p>
+            <ul class="pack-features">
+              <li>6 crédits — 2 semaines</li>
+              <li>Annales corrigées incluses</li>
+              <li>Coaching grand oral SVT</li>
+              <li>Simulation d'épreuve complète</li>
+            </ul>
+            <a href="reservation.html?formule=bac" class="btn btn-primary btn-sm" style="width:100%;justify-content:center">Acheter →</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dash-wrapper -->
+  </div><!-- /dashboardPage -->
+
+  <script>
+  // ══════════════════════════════════════════════
+  // CONFIGURATION
+  // ══════════════════════════════════════════════
+  const STORAGE_KEY = 'svt_student_v1';
+  const AVAILABLE_DAYS = [false, true, true, true, true, true, true];
+  const TIME_SLOTS = {
+    1: ["09:00","10:00","11:00","14:00","15:00","16:00","17:00","18:00"],
+    2: ["09:00","10:00","14:00","15:00","17:00","18:00"],
+    3: ["09:00","10:00","11:00","16:00","17:00","18:00"],
+    4: ["09:00","14:00","15:00","16:00","17:00","18:00"],
+    5: ["09:00","10:00","11:00","14:00","15:00","16:00"],
+    6: ["10:00","11:00","14:00","15:00","16:00"],
+  };
+  const MONTHS   = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  const MONTHS_L = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  const DAYS     = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+
+  // ══════════════════════════════════════════════
+  // STOCKAGE
+  // ══════════════════════════════════════════════
+  function getStudent() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null; }
+    catch { return null; }
+  }
+  function saveStudent(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+  function newStudent(first, last, email, niveau) {
+    return { firstName: first, lastName: last, email, niveau,
+      credits: 0, sessions: [], transactions: [], usedCodes: [],
+      createdAt: new Date().toISOString() };
+  }
+  function addTx(s, desc, amount) {
+    s.transactions.push({ date: new Date().toISOString(), description: desc, amount, balance: s.credits });
+  }
+
+  // ══════════════════════════════════════════════
+  // PARAMÈTRES URL (depuis reservation.html)
+  // ══════════════════════════════════════════════
+  function processURLParams(s) {
+    const p = new URLSearchParams(location.search);
+    if (p.get('action') !== 'add') return false;
+    const formule = p.get('formule');
+    const credits = { carte: 0, mensuel: 4, bac: 6 }[formule] || 0;
+    const formuleLabel = { carte: 'Cours à la carte', mensuel: 'Pack mensuel', bac: 'Prépa Bac' }[formule] || formule;
+    const date = p.get('date'); const heure = p.get('heure'); const matiere = p.get('matiere') || 'Non précisé';
+
+    if (date && heure) {
+      s.sessions.push({ id: 'res-' + Date.now(), date, heure, matiere,
+        formule: formuleLabel, status: 'confirmed', source: 'reservation',
+        createdAt: new Date().toISOString() });
+    }
+    if (credits > 0) {
+      s.credits += credits;
+      addTx(s, 'Achat ' + formuleLabel, +credits);
+    }
+    history.replaceState({}, '', 'espace-etudiant.html');
+    return true;
+  }
+
+  // ══════════════════════════════════════════════
+  // AUTH
+  // ══════════════════════════════════════════════
+  function handleLogin(e) {
+    e.preventDefault();
+    const email  = document.getElementById('loginEmail').value.trim();
+    const first  = document.getElementById('loginFirst').value.trim();
+    const last   = document.getElementById('loginLast').value.trim();
+    const niveau = document.getElementById('loginNiveau').value;
+    if (!email || !first || !last || !niveau) return;
+
+    let s = getStudent();
+    if (s && s.email === email) {
+      s.firstName = first; s.lastName = last; s.niveau = niveau;
+    } else {
+      s = newStudent(first, last, email, niveau);
+    }
+    processURLParams(s);
+    saveStudent(s);
+    showDashboard(s);
+  }
+
+  function logout() {
+    if (confirm('Se déconnecter ? Vos données restent sauvegardées sur cet appareil.')) showLogin();
+  }
+
+  // ══════════════════════════════════════════════
+  // VUES
+  // ══════════════════════════════════════════════
+  function showLogin() {
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('dashboardPage').style.display = 'none';
+  }
+  function showDashboard(s) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboardPage').style.display = 'block';
+    renderDashboard(s);
+  }
+
+  function renderDashboard(s) {
+    document.getElementById('dashName').textContent = s.firstName + ' ' + s.lastName;
+    document.getElementById('dashNiveau').textContent = '📚 ' + s.niveau;
+
+    const n = s.credits || 0;
+    document.getElementById('creditNumber').textContent = n;
+    document.getElementById('creditPlural').textContent = n !== 1 ? 's' : '';
+    document.getElementById('creditBadge').textContent = n > 0 ? n + ' disponible' + (n > 1 ? 's' : '') : 'Aucun crédit';
+    document.getElementById('creditSub').textContent = n > 0
+      ? 'cours à utiliser à votre convenance'
+      : 'Achetez un pack pour commencer à réserver.';
+    document.getElementById('bookingToggleBtn').disabled = n === 0;
+
+    const sessions = s.sessions || [];
+    const txs = s.transactions || [];
+    const creditsUsed = txs.filter(t => t.amount < 0).reduce((sum, t) => sum + Math.abs(t.amount), 0);
+    document.getElementById('statTotal').textContent = sessions.filter(x => x.status !== 'cancelled').length;
+    document.getElementById('statCreditsUsed').textContent = creditsUsed;
+
+    renderUpcoming(sessions);
+    renderHistory(sessions);
+    renderTransactions(txs);
+    initBookingCalendar();
+  }
+
+  // ══════════════════════════════════════════════
+  // RENDU SÉANCES
+  // ══════════════════════════════════════════════
+  function dateLabel(str) {
+    const d = new Date(str + 'T12:00:00');
+    return DAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS_L[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function renderUpcoming(sessions) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const list = sessions.filter(s => {
+      if (s.status === 'cancelled') return false;
+      return new Date(s.date + 'T12:00:00') >= today;
+    }).sort((a, b) => a.date.localeCompare(b.date));
+
+    document.getElementById('upcomingCount').textContent = list.length;
+    const el = document.getElementById('upcomingContainer');
+    if (!list.length) {
+      el.innerHTML = '<div class="empty-state"><span class="empty-state-icon">📅</span>Aucune séance à venir. Utilisez vos crédits pour en réserver une !</div>';
+      return;
+    }
+    el.innerHTML = `<table class="sessions-table"><thead><tr>
+      <th>Date</th><th>Heure</th><th>Matière</th><th>Statut</th><th></th>
+    </tr></thead><tbody>${list.map(s => `<tr>
+      <td>${dateLabel(s.date)}</td>
+      <td><strong>${s.heure}</strong></td>
+      <td>${s.matiere || '—'}</td>
+      <td><span class="status-badge status-upcoming">Confirmée</span></td>
+      <td>${s.source !== 'reservation' ? `<button class="btn btn-danger" onclick="cancelSession('${s.id}')">Annuler</button>` : ''}</td>
+    </tr>`).join('')}</tbody></table>`;
+  }
+
+  function renderHistory(sessions) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const list = sessions.filter(s => {
+      if (s.status === 'cancelled') return true;
+      return new Date(s.date + 'T12:00:00') < today;
+    }).sort((a, b) => b.date.localeCompare(a.date));
+
+    const el = document.getElementById('historyContainer');
+    if (!list.length) {
+      el.innerHTML = '<div class="empty-state"><span class="empty-state-icon">📚</span>Aucune séance passée pour le moment.</div>';
+      return;
+    }
+    el.innerHTML = `<table class="sessions-table"><thead><tr>
+      <th>Date</th><th>Heure</th><th>Matière</th><th>Statut</th>
+    </tr></thead><tbody>${list.map(s => {
+      const cls = s.status === 'cancelled' ? 'status-cancelled' : 'status-completed';
+      const lbl = s.status === 'cancelled' ? 'Annulée' : 'Terminée';
+      return `<tr>
+        <td>${dateLabel(s.date)}</td><td>${s.heure}</td>
+        <td>${s.matiere || '—'}</td>
+        <td><span class="status-badge ${cls}">${lbl}</span></td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+  }
+
+  function renderTransactions(txs) {
+    const el = document.getElementById('txContainer');
+    if (!txs.length) {
+      el.innerHTML = '<div class="empty-state" style="padding:1rem"><span class="empty-state-icon" style="font-size:1.5rem">💳</span>Aucune transaction.</div>';
+      return;
+    }
+    el.innerHTML = [...txs].reverse().slice(0, 12).map(tx => {
+      const d = new Date(tx.date);
+      const ds = d.getDate() + ' ' + MONTHS_L[d.getMonth()];
+      const pos = tx.amount > 0;
+      return `<div class="transaction-row">
+        <div>
+          <div class="tx-desc">${tx.description}</div>
+          <div class="tx-date">${ds} · Solde : ${tx.balance} crédit${tx.balance !== 1 ? 's' : ''}</div>
+        </div>
+        <div class="tx-amount ${pos ? 'tx-positive' : 'tx-negative'}">${pos ? '+' : ''}${tx.amount}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function cancelSession(id) {
+    if (!confirm('Annuler cette séance ? Le crédit sera restitué.')) return;
+    const s = getStudent();
+    const sess = s.sessions.find(x => x.id === id);
+    if (!sess) return;
+    s.credits += 1;
+    addTx(s, 'Annulation — ' + dateLabel(sess.date), +1);
+    sess.status = 'cancelled';
+    saveStudent(s);
+    renderDashboard(s);
+  }
+
+  // ══════════════════════════════════════════════
+  // CODE D'ACTIVATION
+  // ══════════════════════════════════════════════
+  function activateCode() {
+    const input = document.getElementById('codeInput');
+    const code  = input.value.trim().toUpperCase();
+    const msgEl = document.getElementById('codeMsg');
+
+    if (!code) { msgEl.className = 'msg msg-error'; msgEl.textContent = 'Entrez un code.'; return; }
+    const match = code.match(/^SVT-(\d+)-[A-Z0-9]+$/);
+    if (!match) {
+      msgEl.className = 'msg msg-error';
+      msgEl.textContent = 'Format invalide. Le code doit être au format SVT-N-XXXXXX.'; return;
+    }
+
+    const s = getStudent(); if (!s) return;
+    if ((s.usedCodes || []).includes(code)) {
+      msgEl.className = 'msg msg-error'; msgEl.textContent = 'Ce code a déjà été utilisé.'; return;
+    }
+
+    const n = parseInt(match[1]);
+    s.credits += n;
+    s.usedCodes = [...(s.usedCodes || []), code];
+    addTx(s, 'Code activé : ' + code, +n);
+    saveStudent(s);
+    input.value = '';
+    msgEl.className = 'msg msg-success';
+    msgEl.textContent = `✅ ${n} crédit${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} !`;
+    renderDashboard(s);
+  }
+
+  // ══════════════════════════════════════════════
+  // CALENDRIER DE RÉSERVATION
+  // ══════════════════════════════════════════════
+  let bSt = { year: null, month: null, selDate: null, selSlot: null };
+  const bToday = new Date(); bToday.setHours(0,0,0,0);
+
+  function initBookingCalendar() {
+    bSt.year = bToday.getFullYear();
+    bSt.month = bToday.getMonth();
+    bSt.selDate = null; bSt.selSlot = null;
+    renderBCal();
+  }
+
+  function renderBCal() {
+    const { year: y, month: m } = bSt;
+    document.getElementById('bCalMonthTitle').textContent = MONTHS[m] + ' ' + y;
+    const grid = document.getElementById('bCalGrid');
+    grid.innerHTML = '';
+    ['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(d => {
+      const el = document.createElement('div'); el.className = 'cal-day-name'; el.textContent = d; grid.appendChild(el);
+    });
+    const fd = new Date(y, m, 1).getDay();
+    const offset = fd === 0 ? 6 : fd - 1;
+    const dInM = new Date(y, m+1, 0).getDate();
+    for (let i = 0; i < offset; i++) { const el = document.createElement('div'); el.className = 'cal-day empty'; grid.appendChild(el); }
+    for (let d = 1; d <= dInM; d++) {
+      const date = new Date(y, m, d);
+      const dow  = date.getDay();
+      const ds   = fmtDate(date);
+      const past = date < bToday;
+      const avail = AVAILABLE_DAYS[dow] && !past;
+      const el = document.createElement('div');
+      el.textContent = d;
+      el.className = 'cal-day'
+        + (past || !AVAILABLE_DAYS[dow] ? ' disabled' : '')
+        + (avail ? ' has-slots' : '')
+        + (date.getTime() === bToday.getTime() ? ' today' : '')
+        + (bSt.selDate === ds ? ' selected' : '');
+      if (avail) el.addEventListener('click', () => selectBDate(ds, date));
+      grid.appendChild(el);
+    }
+  }
+
+  function fmtDate(d) {
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function selectBDate(ds, dateObj) {
+    bSt.selDate = ds;
+    renderBCal();
+    const lbl = DAYS[dateObj.getDay()] + ' ' + dateObj.getDate() + ' ' + MONTHS_L[dateObj.getMonth()];
+    const info = document.getElementById('bDateInfo');
+    info.className = 'msg msg-success'; info.innerHTML = `✅ <strong>${lbl}</strong> sélectionné.`;
+    checkStep1();
+  }
+
+  document.getElementById('bMatiere').addEventListener('change', checkStep1);
+  function checkStep1() {
+    document.getElementById('bBtn1Next').disabled = !bSt.selDate || !document.getElementById('bMatiere').value;
+  }
+
+  document.getElementById('bPrevMonth').addEventListener('click', () => {
+    bSt.month--; if (bSt.month < 0) { bSt.month = 11; bSt.year--; } renderBCal();
+  });
+  document.getElementById('bNextMonth').addEventListener('click', () => {
+    bSt.month++; if (bSt.month > 11) { bSt.month = 0; bSt.year++; } renderBCal();
+  });
+
+  function renderBSlots() {
+    const s = getStudent();
+    const taken = (s?.sessions || []).filter(x => x.status !== 'cancelled').map(x => x.date + ' ' + x.heure);
+    const dateObj = new Date(bSt.selDate + 'T12:00:00');
+    const dow = dateObj.getDay();
+    const slots = TIME_SLOTS[dow] || [];
+    const grid = document.getElementById('bSlotsGrid');
+    grid.innerHTML = ''; bSt.selSlot = null;
+    document.getElementById('bBtn2Next').disabled = true;
+    document.getElementById('bSlotsHeader').textContent =
+      'Créneaux du ' + DAYS[dow] + ' ' + dateObj.getDate() + ' ' + MONTHS_L[dateObj.getMonth()];
+    slots.forEach(time => {
+      const key = bSt.selDate + ' ' + time;
+      const isTaken = taken.includes(key);
+      const btn = document.createElement('button');
+      btn.className = 'slot-btn' + (isTaken ? ' taken' : '');
+      btn.disabled = isTaken; btn.textContent = time;
+      if (!isTaken) btn.addEventListener('click', () => {
+        document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected'); bSt.selSlot = time;
+        document.getElementById('bBtn2Next').disabled = false;
+        document.getElementById('bSlotError').style.display = 'none';
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  function updateBRecap() {
+    const s = getStudent();
+    const dObj = new Date(bSt.selDate + 'T12:00:00');
+    const dl = DAYS[dObj.getDay()] + ' ' + dObj.getDate() + ' ' + MONTHS_L[dObj.getMonth()] + ' ' + dObj.getFullYear();
+    document.getElementById('bRecapDate').textContent    = dl;
+    document.getElementById('bRecapHeure').textContent   = bSt.selSlot;
+    document.getElementById('bRecapMatiere').textContent = document.getElementById('bMatiere').value;
+    const rem = (s.credits || 0) - 1;
+    document.getElementById('bRecapRemaining').textContent = rem + ' crédit' + (rem !== 1 ? 's' : '');
+  }
+
+  // ══════════════════════════════════════════════
+  // NAVIGATION BOOKING
+  // ══════════════════════════════════════════════
+  function bookingGoTo(step) {
+    if (step === 2) renderBSlots();
+    if (step === 3) updateBRecap();
+    [1,2,3,4].forEach(i => {
+      const p = document.getElementById('bpanel-' + i);
+      if (p) p.classList.toggle('active', i === step);
+      const ms = document.getElementById('mstep-' + i);
+      if (ms) { ms.classList.toggle('active', i === step); ms.classList.toggle('done', i < step); }
+      if (i <= 3) { const ml = document.getElementById('mline-' + i); if (ml) ml.classList.toggle('done', i < step); }
+    });
+  }
+
+  function toggleBooking() {
+    const sec = document.getElementById('bookingSection');
+    if (sec.style.display !== 'none') { closeBooking(); return; }
+    sec.style.display = 'block';
+    bookingGoTo(1);
+    setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+
+  function closeBooking() {
+    document.getElementById('bookingSection').style.display = 'none';
+    initBookingCalendar();
+    document.getElementById('bMatiere').value = '';
+    document.getElementById('bNotes').value = '';
+    const info = document.getElementById('bDateInfo');
+    info.className = 'msg msg-info';
+    info.textContent = '📅 Sélectionnez une date sur le calendrier.';
+  }
+
+  function confirmBooking() {
+    const s = getStudent();
+    if (!s || s.credits < 1) { alert("Vous n'avez plus de crédits."); return; }
+    const matiere = document.getElementById('bMatiere').value;
+    const notes   = document.getElementById('bNotes').value.trim();
+    const sess = { id: 'sess-' + Date.now(), date: bSt.selDate, heure: bSt.selSlot,
+      matiere, notes, status: 'confirmed', source: 'student', createdAt: new Date().toISOString() };
+    s.sessions.push(sess);
+    s.credits -= 1;
+    addTx(s, 'Réservation — ' + dateLabel(bSt.selDate) + ' ' + bSt.selSlot, -1);
+    saveStudent(s);
+
+    const rem = s.credits;
+    document.getElementById('bSuccessText').textContent =
+      `Séance du ${dateLabel(bSt.selDate)} à ${bSt.selSlot} confirmée. Il vous reste ${rem} crédit${rem !== 1 ? 's' : ''}.`;
+    bookingGoTo(4);
+    renderDashboard(s);
+  }
+
+  // ══════════════════════════════════════════════
+  // INIT
+  // ══════════════════════════════════════════════
+  const params = new URLSearchParams(location.search);
+  let student = getStudent();
+
+  if (params.get('action') === 'add') {
+    if (student) {
+      processURLParams(student);
+      saveStudent(student);
+      showDashboard(student);
+    } else {
+      // Pré-remplir le formulaire de connexion
+      if (params.get('email'))   document.getElementById('loginEmail').value = params.get('email');
+      if (params.get('firstName')) document.getElementById('loginFirst').value = params.get('firstName');
+      if (params.get('lastName'))  document.getElementById('loginLast').value  = params.get('lastName');
+      if (params.get('niveau'))    document.getElementById('loginNiveau').value = params.get('niveau');
+      showLogin();
+    }
+  } else if (student) {
+    showDashboard(student);
+  } else {
+    showLogin();
+  }
+  </script>
+</body>
+</html>

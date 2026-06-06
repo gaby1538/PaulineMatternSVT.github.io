@@ -640,6 +640,13 @@
 
         <div id="emailStatus" class="msg" style="display:none"></div>
 
+        <!-- ESPACE ÉTUDIANT -->
+        <div id="studentSpaceSection" style="background:var(--green-deep);padding:2rem;text-align:left;margin-top:1.5rem">
+          <p style="font-family:var(--serif);font-size:1.2rem;color:var(--cream);margin-bottom:0.5rem">📚 Ajouter à votre espace étudiant</p>
+          <p id="studentSpaceDesc" style="font-size:0.85rem;color:rgba(245,240,232,0.75);margin-bottom:1.5rem;line-height:1.6;font-weight:300"></p>
+          <button onclick="saveToStudentSpace()" class="btn btn-white">→ Ajouter à mon espace étudiant</button>
+        </div>
+
         <a href="index.html" class="btn btn-secondary" style="margin-top:1rem">← Retour à l'accueil</a>
       </div>
     </div>
@@ -917,6 +924,12 @@
     // Lien Stripe dynamique selon la formule
     document.querySelector(".payment-section .btn-white").href = formule.stripe;
 
+    // Texte section espace étudiant
+    const credits = { carte: 0, mensuel: 4, bac: 6 }[state.selectedFormule] || 0;
+    document.getElementById("studentSpaceDesc").textContent = credits > 0
+      ? `Votre ${formule.label} inclut ${credits} crédits de cours. Ajoutez-les à votre espace étudiant pour réserver vos prochaines séances quand vous voulez.`
+      : `Retrouvez vos réservations et gérez votre suivi dans votre espace étudiant personnel.`;
+
     goTo(4);
 
     // Envoi email via EmailJS
@@ -971,8 +984,36 @@
     return `${y}-${m}-${d}`;
   }
 
+  // ══════════════════════════════════════════════
+  // ESPACE ÉTUDIANT — INTÉGRATION
+  // ══════════════════════════════════════════════
+  function saveToStudentSpace() {
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName  = document.getElementById("lastName").value.trim();
+    const email     = document.getElementById("email").value.trim();
+    const niveau    = document.getElementById("niveau").value;
+    const matiere   = document.getElementById("matiere").value;
+    const formule   = state.selectedFormule;
+    const date      = state.selectedDate || '';
+    const heure     = state.selectedSlot || '';
+
+    const credits = { carte: 0, mensuel: 4, bac: 6 }[formule] || 0;
+    const params = new URLSearchParams({
+      action: 'add', formule, firstName, lastName, email, niveau, date, heure, matiere
+    });
+    window.location.href = 'espace-etudiant.html?' + params.toString();
+  }
+
   // ── INIT ──
   initCalendar();
+
+  // Pré-sélection de formule via URL (?formule=mensuel)
+  const formuleParam = new URLSearchParams(location.search).get('formule');
+  if (formuleParam && FORMULES[formuleParam]) {
+    document.querySelectorAll('.formule-option').forEach(o => o.classList.remove('selected'));
+    const opt = document.querySelector(`.formule-option[data-formule="${formuleParam}"]`);
+    if (opt) { opt.classList.add('selected'); state.selectedFormule = formuleParam; }
+  }
   </script>
 </body>
 </html>
