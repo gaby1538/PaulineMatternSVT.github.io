@@ -452,7 +452,7 @@ begin
   end if;
 
   -- Format: SVT-{credits}-{6 random uppercase chars}
-  v_code := 'SVT-' || p_credits || '-' || upper(substring(encode(gen_random_bytes(6), 'hex'), 1, 6));
+  v_code := 'SVT-' || p_credits || '-' || upper(substring(md5(gen_random_uuid()::text), 1, 6));
 
   insert into public.activation_codes (code, credits)
   values (v_code, p_credits)
