@@ -7,6 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
   <style>
     /* ── VARIABLES & RESET ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -337,7 +340,7 @@
     .payment-text { font-size: 0.85rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; line-height: 1.6; }
 
     /* ── BOUTONS ── */
-    .btn { 
+    .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
       padding: 1rem 2rem; font-family: var(--sans); font-size: 0.88rem;
       font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
@@ -408,27 +411,17 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       min-height: 280px;
     }
-    .code-preview-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
-    .code-preview-n { font-family: var(--serif); font-size: 5rem; color: var(--white); line-height: 1; }
-    .code-preview-unit { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green-light); margin: 0.3rem 0 1.5rem; }
-    .code-preview-sample { font-family: 'Courier New', monospace; font-size: 1.3rem; letter-spacing: 0.1em; color: var(--amber-light); background: rgba(0,0,0,0.2); padding: 0.4rem 1rem; margin-bottom: 1rem; display: inline-block; }
-    .code-preview-desc { font-size: 0.8rem; color: rgba(245,240,232,0.6); line-height: 1.6; max-width: 260px; font-weight: 300; }
 
     /* ── CODE CONFIRMATION (panel 4) ── */
     .code-confirm-box { background: var(--green-deep); color: var(--cream); padding: 2rem; margin-bottom: 1.5rem; text-align: center; }
-    .code-confirm-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.5); margin-bottom: 1rem; }
-    .code-confirm-row { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0.8rem 0 1.2rem; flex-wrap: wrap; }
-    .code-confirm-value { font-family: 'Courier New', monospace; font-size: 1.8rem; letter-spacing: 0.12em; color: var(--amber-light); background: rgba(0,0,0,0.25); padding: 0.5rem 1.5rem; }
-    .copy-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: var(--cream); padding: 0.5rem 1rem; font-size: 0.78rem; cursor: pointer; font-family: var(--sans); transition: background 0.2s; }
-    .copy-btn:hover { background: rgba(255,255,255,0.22); }
-    .code-confirm-note { font-size: 0.83rem; color: rgba(245,240,232,0.7); line-height: 1.6; max-width: 420px; margin: 0 auto 1.5rem; font-weight: 300; }
+    .code-confirm-note { font-size: 0.83rem; color: rgba(245,240,232,0.7); line-height: 1.6; max-width: 420px; margin: 0 auto; font-weight: 300; }
   </style>
 </head>
 <body>
 
   <!-- ═══ NAVBAR ═══ -->
   <nav>
-    <a href="index.html" class="nav-logo">SVT<span>.</span>Cours</a>
+    <a href="index.html" class="nav-logo">Pauline <span>SVT</span></a>
     <a href="index.html" class="nav-back">← Retour au site</a>
   </nav>
 
@@ -492,12 +485,11 @@
           </div>
         </div>
 
-        <!-- Code preview (alternative au calendrier en mode code) -->
+        <!-- Code preview (mode code) -->
         <div class="code-preview-card" id="codePreviewCard" style="display:none">
-          <div class="code-preview-icon">🎟</div>
-          <p class="code-preview-title">Réservation par code</p>
-          <p class="code-preview-sub">Vous recevrez un code unique après le paiement. Utilisez-le dans votre espace étudiant pour réserver une séance à votre convenance, sans contrainte de date.</p>
-          <div class="code-preview-value">SVT-X-XXXXXX</div>
+          <div style="font-size:2.5rem;margin-bottom:0.8rem">🎟</div>
+          <p style="font-family:var(--serif);font-size:1.3rem;color:var(--cream);margin:0.5rem 0 1rem">Réservation par code</p>
+          <p style="font-size:0.85rem;color:rgba(245,240,232,0.7);line-height:1.6;max-width:280px;font-weight:300">Votre code d'activation vous sera envoyé par email après validation du paiement. Activez-le dans votre espace étudiant pour réserver vos séances à votre convenance.</p>
         </div>
 
         <!-- Formule -->
@@ -680,12 +672,8 @@
             </div>
           </div>
           <div class="code-confirm-box" id="codeConfirmBox" style="display:none">
-            <p style="font-size:0.85rem;color:rgba(245,240,232,0.7);margin-bottom:0.5rem">Votre code de réservation</p>
-            <div class="code-confirm-row">
-              <span class="code-confirm-value" id="confirmCode">—</span>
-              <button class="copy-btn" onclick="copyCode()">Copier</button>
-            </div>
-            <p class="code-confirm-note">Conservez ce code précieusement. Utilisez-le dans votre espace étudiant pour réserver une séance à votre convenance.</p>
+            <p style="font-family:var(--serif);font-size:1.1rem;color:var(--cream);margin-bottom:0.8rem">🎟 Code d'activation à venir</p>
+            <p class="code-confirm-note">Votre code d'activation vous sera envoyé par email après validation du paiement. Rendez-vous ensuite dans votre espace étudiant pour l'activer et réserver vos séances à votre convenance.</p>
           </div>
           <div class="confirmation-recap-row">
             <span class="recap-key">📚 Formule</span>
@@ -708,8 +696,7 @@
             Pour confirmer définitivement votre réservation, réglez en ligne en toute sécurité via Stripe.
             Le cours est confirmé dès réception du paiement.
           </p>
-          <!-- TODO: ajouter lien Stripe Payment Link -->
-          <a href="#" target="_blank" class="btn btn-white">
+          <a href="#" target="_blank" class="btn btn-white" id="stripeBtn">
             💳 Payer en ligne →
           </a>
         </div>
@@ -717,10 +704,10 @@
         <div id="emailStatus" class="msg" style="display:none"></div>
 
         <!-- ESPACE ÉTUDIANT -->
-        <div id="studentSpaceSection" style="background:var(--green-deep);padding:2rem;text-align:left;margin-top:1.5rem">
-          <p style="font-family:var(--serif);font-size:1.2rem;color:var(--cream);margin-bottom:0.5rem">📚 Ajouter à votre espace étudiant</p>
+        <div style="background:var(--green-deep);padding:2rem;text-align:left;margin-top:1.5rem">
+          <p style="font-family:var(--serif);font-size:1.2rem;color:var(--cream);margin-bottom:0.5rem">📚 Votre espace étudiant</p>
           <p id="studentSpaceDesc" style="font-size:0.85rem;color:rgba(245,240,232,0.75);margin-bottom:1.5rem;line-height:1.6;font-weight:300"></p>
-          <button onclick="saveToStudentSpace()" class="btn btn-white">→ Ajouter à mon espace étudiant</button>
+          <a href="espace-etudiant.html" class="btn btn-white">→ Accéder à mon espace étudiant</a>
         </div>
 
         <a href="index.html" class="btn btn-secondary" style="margin-top:1rem">← Retour à l'accueil</a>
@@ -731,35 +718,21 @@
 
   <script>
   // ══════════════════════════════════════════════
-  // CONFIGURATION — Modifie ces valeurs
+  // CONFIGURATION
   // ══════════════════════════════════════════════
+  const EMAILJS_PUBLIC_KEY  = "BnKgpXzYQ9U2C2-ao";
+  const EMAILJS_SERVICE_ID  = "service_v6ffs8i";
+  const EMAILJS_TEMPLATE_ID = "template_3g3zp41";
 
-  // EmailJS — Crée un compte sur emailjs.com (gratuit)
-  // Puis remplace ces 3 valeurs :
-  const EMAILJS_PUBLIC_KEY  = "BnKgpXzYQ9U2C2-ao";   // Account > API Keys
-  const EMAILJS_SERVICE_ID  = "service_v6ffs8i";   // Email Services
-  const EMAILJS_TEMPLATE_ID = "template_3g3zp41";  // Email Templates
-
-  // Créneaux disponibles par jour de la semaine
-  // 0=Dimanche, 1=Lundi ... 6=Samedi
-  // true = disponible, false = indisponible
-  const AVAILABLE_DAYS = [false, true, true, true, true, true, true]; // Lun-Sam
-
-  // Créneaux horaires par jour (modifie selon tes dispo)
+  const AVAILABLE_DAYS = [false, true, true, true, true, true, true];
   const TIME_SLOTS = {
-    1: ["09:00","10:00","11:00","14:00","15:00","16:00","17:00","18:00"], // Lundi
-    2: ["09:00","10:00","14:00","15:00","17:00","18:00"],                 // Mardi
-    3: ["09:00","10:00","11:00","16:00","17:00","18:00"],                 // Mercredi
-    4: ["09:00","14:00","15:00","16:00","17:00","18:00"],                 // Jeudi
-    5: ["09:00","10:00","11:00","14:00","15:00","16:00"],                 // Vendredi
-    6: ["10:00","11:00","14:00","15:00","16:00"],                         // Samedi
+    1: ["09:00","10:00","11:00","14:00","15:00","16:00","17:00","18:00"],
+    2: ["09:00","10:00","14:00","15:00","17:00","18:00"],
+    3: ["09:00","10:00","11:00","16:00","17:00","18:00"],
+    4: ["09:00","14:00","15:00","16:00","17:00","18:00"],
+    5: ["09:00","10:00","11:00","14:00","15:00","16:00"],
+    6: ["10:00","11:00","14:00","15:00","16:00"],
   };
-
-  // Créneaux déjà réservés (format "YYYY-MM-DD HH:MM")
-  // À terme, tu pourras gérer ça via une base de données
-  const TAKEN_SLOTS = [
-    // Exemple : "2025-06-10 14:00"
-  ];
 
   const FORMULES = {
     carte:   { label: "Cours à la carte",  price: "35€",  stripe: "#" },
@@ -768,21 +741,43 @@
   };
 
   // ══════════════════════════════════════════════
-  // ÉTAT DE L'APPLICATION
+  // ÉTAT
   // ══════════════════════════════════════════════
   let state = {
-    currentStep: 1,
-    selectedDate: null,
-    selectedSlot: null,
+    currentStep:     1,
+    selectedDate:    null,
+    selectedSlot:    null,
     selectedFormule: "carte",
-    viewYear: null,
-    viewMonth: null,
-    bookingMode: 'schedule',
-    generatedCode: null,
+    viewYear:        null,
+    viewMonth:       null,
+    bookingMode:     'schedule',
   };
+
+  // Créneaux pris — chargés depuis Supabase (format "YYYY-MM-DD HH:MM")
+  let takenSlots = [];
 
   const today = new Date();
   today.setHours(0,0,0,0);
+
+  // ══════════════════════════════════════════════
+  // SUPABASE — CRÉNEAUX EN TEMPS RÉEL
+  // ══════════════════════════════════════════════
+  async function loadTakenSlots() {
+    const { data, error } = await db.rpc('get_taken_slots');
+    if (!error && data) {
+      takenSlots = data.map(r => r.slot_date + ' ' + r.slot_time);
+    }
+  }
+
+  function subscribeRealtime() {
+    db.channel('reservation-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'sessions' }, () => {
+        loadTakenSlots().then(() => {
+          if (state.currentStep === 2) renderSlots();
+        });
+      })
+      .subscribe();
+  }
 
   // ══════════════════════════════════════════════
   // CALENDRIER
@@ -801,28 +796,25 @@
     const grid = document.getElementById("calGrid");
     grid.innerHTML = "";
 
-    // En-têtes jours
     ["Lu","Ma","Me","Je","Ve","Sa","Di"].forEach(d => {
       const el = document.createElement("div");
       el.className = "cal-day-name"; el.textContent = d;
       grid.appendChild(el);
     });
 
-    const firstDay = new Date(y, m, 1).getDay(); // 0=dimanche
-    const offset = firstDay === 0 ? 6 : firstDay - 1; // Lundi = 0
+    const firstDay = new Date(y, m, 1).getDay();
+    const offset = firstDay === 0 ? 6 : firstDay - 1;
     const daysInMonth = new Date(y, m+1, 0).getDate();
 
-    // Cases vides
     for (let i = 0; i < offset; i++) {
       const el = document.createElement("div");
       el.className = "cal-day empty";
       grid.appendChild(el);
     }
 
-    // Jours
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(y, m, d);
-      const dow  = date.getDay(); // 0=dimanche
+      const dow  = date.getDay();
       const dateStr = formatDate(date);
       const isPast  = date < today;
       const isAvail = AVAILABLE_DAYS[dow] && !isPast;
@@ -837,9 +829,7 @@
         + (isToday ? " today" : "")
         + (isSel   ? " selected" : "");
 
-      if (isAvail) {
-        el.addEventListener("click", () => selectDate(dateStr, date));
-      }
+      if (isAvail) el.addEventListener("click", () => selectDate(dateStr, date));
       grid.appendChild(el);
     }
   }
@@ -847,7 +837,7 @@
   function selectDate(dateStr, dateObj) {
     state.selectedDate = dateStr;
     renderCalendar();
-    const dayNames = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+    const dayNames   = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
     const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
     const label = `${dayNames[dateObj.getDay()]} ${dateObj.getDate()} ${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
     document.getElementById("infoBox").innerHTML = `✅ <strong>${label}</strong> sélectionné — choisissez votre formule puis continuez.`;
@@ -876,9 +866,6 @@
     });
   });
 
-  // ══════════════════════════════════════════════
-  // MODE DE RÉSERVATION (horaire ou code)
-  // ══════════════════════════════════════════════
   function onFormuleChange(formule) {
     state.selectedFormule = formule;
     const isPack = formule === 'mensuel' || formule === 'bac';
@@ -920,26 +907,8 @@
     }
   }
 
-  function generateCode() {
-    const credits = { carte: 1, mensuel: 4, bac: 6 }[state.selectedFormule] || 1;
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let rand = '';
-    for (let i = 0; i < 6; i++) rand += chars[Math.floor(Math.random() * chars.length)];
-    return `SVT-${credits}-${rand}`;
-  }
-
-  function copyCode() {
-    if (!state.generatedCode) return;
-    navigator.clipboard.writeText(state.generatedCode).then(() => {
-      const btn = document.querySelector('.copy-btn');
-      const orig = btn.textContent;
-      btn.textContent = 'Copié !';
-      setTimeout(() => { btn.textContent = orig; }, 2000);
-    });
-  }
-
   // ══════════════════════════════════════════════
-  // CRÉNEAUX
+  // CRÉNEAUX — mis à jour en temps réel via Supabase
   // ══════════════════════════════════════════════
   function renderSlots() {
     const dateObj = new Date(state.selectedDate + "T12:00:00");
@@ -950,16 +919,17 @@
     state.selectedSlot = null;
     document.getElementById("btn2Next").disabled = true;
 
-    const dayNames = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+    const dayNames   = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
     const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-    document.getElementById("slotsHeader").textContent = "Créneaux du " + dayNames[dow] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()];
+    document.getElementById("slotsHeader").textContent =
+      "Créneaux du " + dayNames[dow] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()];
 
     slots.forEach(time => {
-      const key = state.selectedDate + " " + time;
-      const isTaken = TAKEN_SLOTS.includes(key);
-      const btn = document.createElement("button");
+      const key     = state.selectedDate + " " + time;
+      const isTaken = takenSlots.includes(key);
+      const btn     = document.createElement("button");
       btn.className = "slot-btn" + (isTaken ? " taken" : "");
-      btn.disabled = isTaken;
+      btn.disabled  = isTaken;
       btn.innerHTML = `<span class="slot-time">${time}</span><span class="slot-duration">1h de cours</span>`;
       if (!isTaken) {
         btn.addEventListener("click", () => {
@@ -988,21 +958,15 @@
       if (i === step) s.classList.add("active");
     }
     for (let i = 1; i <= 3; i++) {
-      const l = document.getElementById(`line-${i}`);
-      l.classList.toggle("done", i < step);
+      document.getElementById(`line-${i}`).classList.toggle("done", i < step);
     }
     state.currentStep = step;
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   document.getElementById("btn1Next").addEventListener("click", () => {
-    if (state.bookingMode === 'code') {
-      updateRecap();
-      goTo(3);
-    } else {
-      renderSlots();
-      goTo(2);
-    }
+    if (state.bookingMode === 'code') { updateRecap(); goTo(3); }
+    else { renderSlots(); goTo(2); }
   });
 
   document.getElementById("btn2Back").addEventListener("click", () => goTo(1));
@@ -1042,7 +1006,7 @@
   }
 
   // ══════════════════════════════════════════════
-  // SOUMISSION DU FORMULAIRE
+  // SOUMISSION
   // ══════════════════════════════════════════════
   function submitForm() {
     const firstName = document.getElementById("firstName").value.trim();
@@ -1070,56 +1034,45 @@
       dateLabel = dayNames[dateObj.getDay()] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
     }
 
-    if (isCode) state.generatedCode = generateCode();
-
-    // Remplir la page de confirmation
+    // Remplir confirmation
     document.getElementById("confirmName").textContent    = firstName;
     document.getElementById("confirmEmail").textContent   = email;
     document.getElementById("confirmFormule").textContent = formule.label;
     document.getElementById("confirmNiveau").textContent  = niveau;
     document.getElementById("confirmTarif").textContent   = formule.price;
 
-    const dateTimeRows   = document.getElementById("dateTimeRows");
-    const codeConfirmBox = document.getElementById("codeConfirmBox");
-
     if (isCode) {
-      dateTimeRows.style.display   = 'none';
-      codeConfirmBox.style.display = 'block';
-      document.getElementById("confirmCode").textContent = state.generatedCode;
+      document.getElementById("dateTimeRows").style.display   = 'none';
+      document.getElementById("codeConfirmBox").style.display = 'block';
     } else {
-      dateTimeRows.style.display   = '';
-      codeConfirmBox.style.display = 'none';
+      document.getElementById("dateTimeRows").style.display   = '';
+      document.getElementById("codeConfirmBox").style.display = 'none';
       document.getElementById("confirmDate").textContent  = dateLabel;
       document.getElementById("confirmHeure").textContent = state.selectedSlot;
     }
 
-    // Lien Stripe dynamique selon la formule
-    document.querySelector(".payment-section .btn-white").href = formule.stripe;
+    // Lien Stripe
+    document.getElementById("stripeBtn").href = formule.stripe;
 
-    // Texte section espace étudiant
-    const credits = { carte: 1, mensuel: 4, bac: 6 }[state.selectedFormule] || 1;
-    if (isCode) {
-      document.getElementById("studentSpaceDesc").textContent =
-        `Votre code ${state.generatedCode} a été généré. Ajoutez-le à votre espace étudiant pour réserver vos séances quand vous voulez.`;
-    } else {
-      document.getElementById("studentSpaceDesc").textContent =
-        `Retrouvez vos réservations et gérez votre suivi dans votre espace étudiant personnel.`;
-    }
+    // Message espace étudiant
+    document.getElementById("studentSpaceDesc").textContent = isCode
+      ? "Votre code d'activation vous sera envoyé par email après confirmation du paiement. Activez-le dans votre espace étudiant pour réserver vos séances."
+      : "Retrouvez vos réservations et gérez votre suivi dans votre espace étudiant personnel.";
 
     goTo(4);
 
-    // Envoi email via EmailJS
+    // Email de confirmation
     sendConfirmationEmail({
-      to_name:    firstName + " " + lastName,
-      to_email:   email,
-      date:       isCode ? "Code : " + state.generatedCode : dateLabel,
-      heure:      isCode ? "—" : state.selectedSlot,
-      formule:    formule.label,
-      tarif:      formule.price,
-      niveau:     niveau,
-      matiere:    matiere,
-      phone:      phone || "Non renseigné",
-      message:    message || "Aucun message",
+      to_name:  firstName + " " + lastName,
+      to_email: email,
+      date:     isCode ? "Code envoyé par email après paiement" : dateLabel,
+      heure:    isCode ? "—" : state.selectedSlot,
+      formule:  formule.label,
+      tarif:    formule.price,
+      niveau,
+      matiere,
+      phone:    phone || "Non renseigné",
+      message:  message || "Aucun message",
     });
   }
 
@@ -1129,7 +1082,7 @@
   function sendConfirmationEmail(params) {
     if (EMAILJS_PUBLIC_KEY === "VOTRE_PUBLIC_KEY") {
       console.log("EmailJS non configuré — paramètres :", params);
-      showEmailStatus("info", "💡 EmailJS non configuré. L'email de confirmation n'a pas été envoyé (voir console).");
+      showEmailStatus("success", "💡 EmailJS non configuré. L'email de confirmation n'a pas été envoyé (voir console).");
       return;
     }
     emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -1145,7 +1098,7 @@
 
   function showEmailStatus(type, msg) {
     const el = document.getElementById("emailStatus");
-    el.className = "msg msg-" + (type === "success" ? "success" : type === "info" ? "success" : "error");
+    el.className = "msg msg-" + (type === "success" ? "success" : "error");
     el.textContent = msg;
     el.style.display = "block";
   }
@@ -1154,44 +1107,27 @@
   // UTILS
   // ══════════════════════════════════════════════
   function formatDate(date) {
-    const y = date.getFullYear();
-    const m = String(date.getMonth()+1).padStart(2,"0");
-    const d = String(date.getDate()).padStart(2,"0");
-    return `${y}-${m}-${d}`;
+    return date.getFullYear() + '-'
+      + String(date.getMonth()+1).padStart(2,"0") + '-'
+      + String(date.getDate()).padStart(2,"0");
   }
 
   // ══════════════════════════════════════════════
-  // ESPACE ÉTUDIANT — INTÉGRATION
+  // INIT
   // ══════════════════════════════════════════════
-  function saveToStudentSpace() {
-    const firstName = document.getElementById("firstName").value.trim();
-    const lastName  = document.getElementById("lastName").value.trim();
-    const email     = document.getElementById("email").value.trim();
-    const niveau    = document.getElementById("niveau").value;
-    const matiere   = document.getElementById("matiere").value;
-    const formule   = state.selectedFormule;
-    const date      = state.selectedDate || '';
-    const heure     = state.selectedSlot || '';
-    const code      = state.generatedCode || '';
+  (async function init() {
+    await loadTakenSlots();
+    subscribeRealtime();
+    initCalendar();
+    onFormuleChange('carte');
 
-    const params = new URLSearchParams({
-      action: 'add', formule, firstName, lastName, email, niveau, date, heure, matiere
-    });
-    if (code) params.set('code', code);
-    window.location.href = 'espace-etudiant.html?' + params.toString();
-  }
-
-  // ── INIT ──
-  initCalendar();
-  onFormuleChange('carte'); // Initialise le sélecteur de mode pour la formule par défaut
-
-  // Pré-sélection de formule via URL (?formule=mensuel)
-  const formuleParam = new URLSearchParams(location.search).get('formule');
-  if (formuleParam && FORMULES[formuleParam]) {
-    document.querySelectorAll('.formule-option').forEach(o => o.classList.remove('selected'));
-    const opt = document.querySelector(`.formule-option[data-formule="${formuleParam}"]`);
-    if (opt) { opt.classList.add('selected'); onFormuleChange(formuleParam); }
-  }
+    const formuleParam = new URLSearchParams(location.search).get('formule');
+    if (formuleParam && FORMULES[formuleParam]) {
+      document.querySelectorAll('.formule-option').forEach(o => o.classList.remove('selected'));
+      const opt = document.querySelector(`.formule-option[data-formule="${formuleParam}"]`);
+      if (opt) { opt.classList.add('selected'); onFormuleChange(formuleParam); }
+    }
+  })();
   </script>
 </body>
 </html>

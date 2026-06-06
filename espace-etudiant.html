@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Espace Étudiant — SVT.Cours</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -200,7 +202,7 @@
 <body>
 
   <nav>
-    <a href="index.html" class="nav-logo">SVT<span>.</span>Cours</a>
+    <a href="index.html" class="nav-logo">Pauline <span>SVT</span></a>
     <ul class="nav-links">
       <li><a href="cours.html">Cours</a></li>
       <li><a href="fiches.html">Fiches</a></li>
@@ -216,37 +218,81 @@
     <div class="login-card">
       <div class="login-icon">🎓</div>
       <h1 class="login-title">Mon espace <em style="font-style:italic;color:var(--green-mid)">étudiant</em></h1>
-      <p class="login-sub">Accédez à vos crédits de cours et réservez vos séances à votre convenance.</p>
+      <p class="login-sub">Connectez-vous pour accéder à vos crédits et réserver vos séances.</p>
       <form onsubmit="handleLogin(event)">
         <div class="form-group">
-          <label class="form-label" for="loginEmail">Email *</label>
-          <input class="form-input" type="email" id="loginEmail" placeholder="votre@email.com" required/>
+          <label class="form-label" for="loginEmail">Adresse email *</label>
+          <input class="form-input" type="email" id="loginEmail" placeholder="votre@email.com" required autocomplete="email"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Mot de passe *</label>
+          <input class="form-input" type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password"/>
+        </div>
+        <div id="loginMsg"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.8rem;justify-content:center">
+          Se connecter →
+        </button>
+      </form>
+      <div style="text-align:center;margin-top:1.5rem;font-size:0.85rem;color:var(--text-mid)">
+        Pas encore de compte ?
+        <button onclick="showRegister()" style="background:none;border:none;color:var(--green-mid);font-size:0.85rem;cursor:pointer;text-decoration:underline;font-family:var(--sans);padding:0">Créer un compte</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ INSCRIPTION ═══ -->
+  <div id="registerPage" class="login-page" style="display:none">
+    <div class="login-card" style="max-width:500px">
+      <div class="login-icon">✨</div>
+      <h1 class="login-title">Créer mon <em style="font-style:italic;color:var(--green-mid)">compte</em></h1>
+      <p class="login-sub">Votre espace personnel pour suivre vos crédits et vos séances.</p>
+      <form onsubmit="handleRegister(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regFirst">Prénom *</label>
+            <input class="form-input" type="text" id="regFirst" placeholder="Marie" required autocomplete="given-name"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regLast">Nom *</label>
+            <input class="form-input" type="text" id="regLast" placeholder="Dupont" required autocomplete="family-name"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regEmail">Adresse email *</label>
+          <input class="form-input" type="email" id="regEmail" placeholder="votre@email.com" required autocomplete="email"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regNiveau">Niveau scolaire *</label>
+          <select class="form-input form-select" id="regNiveau" required>
+            <option value="">Sélectionner…</option>
+            <option value="sixieme">6ème</option>
+            <option value="cinquieme">5ème</option>
+            <option value="quatrieme">4ème</option>
+            <option value="troisieme">3ème</option>
+            <option value="seconde">2nde</option>
+            <option value="premiere">1ère</option>
+            <option value="terminale">Terminale</option>
+            <option value="postbac">Post-bac</option>
+          </select>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="loginFirst">Prénom *</label>
-            <input class="form-input" type="text" id="loginFirst" placeholder="Marie" required/>
+            <label class="form-label" for="regPassword">Mot de passe *</label>
+            <input class="form-input" type="password" id="regPassword" placeholder="Min. 6 caractères" required autocomplete="new-password"/>
           </div>
           <div class="form-group">
-            <label class="form-label" for="loginLast">Nom *</label>
-            <input class="form-input" type="text" id="loginLast" placeholder="Dupont" required/>
+            <label class="form-label" for="regConfirm">Confirmer *</label>
+            <input class="form-input" type="password" id="regConfirm" placeholder="Même mot de passe" required autocomplete="new-password"/>
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label" for="loginNiveau">Niveau scolaire *</label>
-          <select class="form-input form-select" id="loginNiveau" required>
-            <option value="">Sélectionner…</option>
-            <option>6ème</option><option>5ème</option><option>4ème</option><option>3ème</option>
-            <option>2nde</option><option>1ère</option><option>Terminale</option><option>Post-bac</option>
-          </select>
-        </div>
-        <div id="loginMsg"></div>
-        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem;justify-content:center">
-          Accéder à mon espace →
+        <div id="regMsg"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.8rem;justify-content:center">
+          Créer mon compte →
         </button>
       </form>
-      <div class="login-note">
-        💡 Votre espace est sauvegardé sur cet appareil. Si vous possédez un code de crédits de Pauline, vous pourrez l'activer après connexion.
+      <div style="text-align:center;margin-top:1.5rem;font-size:0.85rem;color:var(--text-mid)">
+        Déjà un compte ?
+        <button onclick="showLogin()" style="background:none;border:none;color:var(--green-mid);font-size:0.85rem;cursor:pointer;text-decoration:underline;font-family:var(--sans);padding:0">Se connecter</button>
       </div>
     </div>
   </div>
@@ -383,7 +429,7 @@
               </div>
               <div class="booking-nav">
                 <button class="btn btn-secondary btn-sm" onclick="bookingGoTo(2)">← Retour</button>
-                <button class="btn btn-primary btn-sm" onclick="confirmBooking()">✅ Confirmer (-1 crédit)</button>
+                <button class="btn btn-primary btn-sm" id="bConfirmBtn" onclick="confirmBooking()">✅ Confirmer (-1 crédit)</button>
               </div>
             </div>
 
@@ -455,7 +501,7 @@
             </p>
             <div class="code-input-row">
               <input type="text" class="form-input" id="codeInput" placeholder="SVT-4-XXXXXX" maxlength="20"/>
-              <button class="btn btn-primary btn-sm" onclick="activateCode()">Activer</button>
+              <button class="btn btn-primary btn-sm" id="codeBtn" onclick="activateCode()">Activer</button>
             </div>
             <div id="codeMsg" style="margin-top:0.5rem"></div>
           </div>
@@ -520,7 +566,6 @@
   // ══════════════════════════════════════════════
   // CONFIGURATION
   // ══════════════════════════════════════════════
-  const STORAGE_KEY = 'svt_student_v1';
   const AVAILABLE_DAYS = [false, true, true, true, true, true, true];
   const TIME_SLOTS = {
     1: ["09:00","10:00","11:00","14:00","15:00","16:00","17:00","18:00"],
@@ -535,120 +580,183 @@
   const DAYS     = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
 
   // ══════════════════════════════════════════════
-  // STOCKAGE
+  // ÉTAT GLOBAL
   // ══════════════════════════════════════════════
-  function getStudent() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null; }
-    catch { return null; }
-  }
-  function saveStudent(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
-  function newStudent(first, last, email, niveau) {
-    return { firstName: first, lastName: last, email, niveau,
-      credits: 0, sessions: [], transactions: [], usedCodes: [],
-      createdAt: new Date().toISOString() };
-  }
-  function addTx(s, desc, amount) {
-    s.transactions.push({ date: new Date().toISOString(), description: desc, amount, balance: s.credits });
-  }
+  let currentStudent  = null;
+  let currentSessions = [];
+  let currentTxs      = [];
+  let takenSlots      = [];
+  let realtimeChannel = null;
 
   // ══════════════════════════════════════════════
-  // PARAMÈTRES URL (depuis reservation.html)
+  // DONNÉES
   // ══════════════════════════════════════════════
-  function processURLParams(s) {
-    const p = new URLSearchParams(location.search);
-    if (p.get('action') !== 'add') return false;
-    const formule      = p.get('formule');
-    const formuleLabel = { carte: 'Cours à la carte', mensuel: 'Pack mensuel', bac: 'Prépa Bac' }[formule] || formule;
-    const code         = p.get('code');
-    const date         = p.get('date');
-    const heure        = p.get('heure');
-    const matiere      = p.get('matiere') || 'Non précisé';
+  async function fetchStudentData(userId) {
+    const [
+      { data: student, error: e1 },
+      { data: sessions, error: e2 },
+      { data: txs,      error: e3 }
+    ] = await Promise.all([
+      db.from('students').select('*').eq('id', userId).single(),
+      db.from('sessions').select('*').eq('student_id', userId).order('slot_date', { ascending: false }),
+      db.from('transactions').select('*').eq('student_id', userId).order('created_at', { ascending: false })
+    ]);
 
-    if (code) {
-      // Mode code : ajouter les crédits correspondants
-      const credits = { carte: 1, mensuel: 4, bac: 6 }[formule] || 1;
-      s.credits += credits;
-      s.usedCodes = s.usedCodes || [];
-      s.usedCodes.push(code);
-      addTx(s, 'Achat ' + formuleLabel + ' — code ' + code, +credits);
-    } else {
-      // Mode horaire : enregistrer la séance directement
-      if (date && heure) {
-        s.sessions.push({ id: 'res-' + Date.now(), date, heure, matiere,
-          formule: formuleLabel, status: 'confirmed', source: 'reservation',
-          createdAt: new Date().toISOString() });
-      }
-      const credits = { carte: 0, mensuel: 4, bac: 6 }[formule] || 0;
-      if (credits > 0) {
-        s.credits += credits;
-        addTx(s, 'Achat ' + formuleLabel, +credits);
-      }
+    if (e1 || e2 || e3) {
+      console.error('Erreur chargement données:', e1?.message, e2?.message, e3?.message);
+      return false;
     }
-    history.replaceState({}, '', 'espace-etudiant.html');
+    currentStudent  = student;
+    currentSessions = sessions || [];
+    currentTxs      = txs || [];
     return true;
+  }
+
+  async function loadTakenSlots() {
+    const { data, error } = await db.rpc('get_taken_slots');
+    if (!error) takenSlots = data || [];
+  }
+
+  // ══════════════════════════════════════════════
+  // REALTIME — slots mis à jour en temps réel
+  // ══════════════════════════════════════════════
+  function subscribeRealtime() {
+    if (realtimeChannel) { db.removeChannel(realtimeChannel); realtimeChannel = null; }
+    realtimeChannel = db.channel('sessions-live')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'sessions' }, () => {
+        loadTakenSlots().then(() => {
+          if (document.getElementById('bpanel-2').classList.contains('active')) renderBSlots();
+        });
+      })
+      .subscribe();
   }
 
   // ══════════════════════════════════════════════
   // AUTH
   // ══════════════════════════════════════════════
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
-    const email  = document.getElementById('loginEmail').value.trim();
-    const first  = document.getElementById('loginFirst').value.trim();
-    const last   = document.getElementById('loginLast').value.trim();
-    const niveau = document.getElementById('loginNiveau').value;
-    if (!email || !first || !last || !niveau) return;
+    const email    = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+    const msgEl    = document.getElementById('loginMsg');
+    const btn      = e.target.querySelector('button[type=submit]');
 
-    let s = getStudent();
-    if (s && s.email === email) {
-      s.firstName = first; s.lastName = last; s.niveau = niveau;
-    } else {
-      s = newStudent(first, last, email, niveau);
+    btn.disabled = true;
+    msgEl.className = 'msg msg-info'; msgEl.textContent = 'Connexion en cours…';
+
+    const { error } = await db.auth.signInWithPassword({ email, password });
+    btn.disabled = false;
+
+    if (error) {
+      msgEl.className = 'msg msg-error';
+      msgEl.textContent = error.message === 'Invalid login credentials'
+        ? 'Email ou mot de passe incorrect.'
+        : error.message;
     }
-    processURLParams(s);
-    saveStudent(s);
-    showDashboard(s);
+    // Si succès, onAuthStateChange → showDashboard
   }
 
-  function logout() {
-    if (confirm('Se déconnecter ? Vos données restent sauvegardées sur cet appareil.')) showLogin();
+  async function handleRegister(e) {
+    e.preventDefault();
+    const first    = document.getElementById('regFirst').value.trim();
+    const last     = document.getElementById('regLast').value.trim();
+    const email    = document.getElementById('regEmail').value.trim().toLowerCase();
+    const niveau   = document.getElementById('regNiveau').value;
+    const password = document.getElementById('regPassword').value;
+    const confirm  = document.getElementById('regConfirm').value;
+    const msgEl    = document.getElementById('regMsg');
+
+    if (!first || !last || !email || !niveau || !password || !confirm) {
+      msgEl.className = 'msg msg-error'; msgEl.textContent = 'Remplissez tous les champs.'; return;
+    }
+    if (password.length < 6) {
+      msgEl.className = 'msg msg-error'; msgEl.textContent = 'Le mot de passe doit contenir au moins 6 caractères.'; return;
+    }
+    if (password !== confirm) {
+      msgEl.className = 'msg msg-error'; msgEl.textContent = 'Les mots de passe ne correspondent pas.'; return;
+    }
+
+    const btn = e.target.querySelector('button[type=submit]');
+    btn.disabled = true;
+    msgEl.className = 'msg msg-info'; msgEl.textContent = 'Création du compte…';
+
+    const { data, error } = await db.auth.signUp({
+      email,
+      password,
+      options: { data: { first_name: first, last_name: last, niveau } }
+    });
+
+    btn.disabled = false;
+
+    if (error) {
+      msgEl.className = 'msg msg-error'; msgEl.textContent = error.message; return;
+    }
+
+    if (!data.session) {
+      // Confirmation email activée dans Supabase Dashboard → Auth → Email → désactiver "Confirm email"
+      msgEl.className = 'msg msg-info';
+      msgEl.textContent = '📧 Vérifiez votre email pour confirmer votre inscription, puis connectez-vous.';
+      return;
+    }
+    // Si confirmation désactivée, onAuthStateChange → showDashboard
+  }
+
+  async function logout() {
+    if (!confirm('Se déconnecter ?')) return;
+    if (realtimeChannel) { db.removeChannel(realtimeChannel); realtimeChannel = null; }
+    await db.auth.signOut();
   }
 
   // ══════════════════════════════════════════════
   // VUES
   // ══════════════════════════════════════════════
   function showLogin() {
-    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('loginPage').style.display     = 'flex';
+    document.getElementById('registerPage').style.display  = 'none';
     document.getElementById('dashboardPage').style.display = 'none';
   }
-  function showDashboard(s) {
-    document.getElementById('loginPage').style.display = 'none';
+  function showRegister() {
+    document.getElementById('loginPage').style.display     = 'none';
+    document.getElementById('registerPage').style.display  = 'flex';
+    document.getElementById('dashboardPage').style.display = 'none';
+  }
+  async function showDashboard(userId) {
+    const ok = await fetchStudentData(userId);
+    if (!ok) { await db.auth.signOut(); return; }
+
+    await loadTakenSlots();
+    subscribeRealtime();
+
+    document.getElementById('loginPage').style.display     = 'none';
+    document.getElementById('registerPage').style.display  = 'none';
     document.getElementById('dashboardPage').style.display = 'block';
-    renderDashboard(s);
+    renderDashboard();
+
+    // Auto-activer un code passé par URL (depuis reservation.html)
+    await processURLCode();
   }
 
-  function renderDashboard(s) {
-    document.getElementById('dashName').textContent = s.firstName + ' ' + s.lastName;
-    document.getElementById('dashNiveau').textContent = '📚 ' + s.niveau;
+  function renderDashboard() {
+    const s = currentStudent;
+    document.getElementById('dashName').textContent    = s.first_name + ' ' + s.last_name;
+    document.getElementById('dashNiveau').textContent  = '📚 ' + s.niveau;
 
     const n = s.credits || 0;
     document.getElementById('creditNumber').textContent = n;
     document.getElementById('creditPlural').textContent = n !== 1 ? 's' : '';
-    document.getElementById('creditBadge').textContent = n > 0 ? n + ' disponible' + (n > 1 ? 's' : '') : 'Aucun crédit';
-    document.getElementById('creditSub').textContent = n > 0
+    document.getElementById('creditBadge').textContent  = n > 0 ? n + ' disponible' + (n > 1 ? 's' : '') : 'Aucun crédit';
+    document.getElementById('creditSub').textContent    = n > 0
       ? 'cours à utiliser à votre convenance'
       : 'Achetez un pack pour commencer à réserver.';
     document.getElementById('bookingToggleBtn').disabled = n === 0;
 
-    const sessions = s.sessions || [];
-    const txs = s.transactions || [];
-    const creditsUsed = txs.filter(t => t.amount < 0).reduce((sum, t) => sum + Math.abs(t.amount), 0);
-    document.getElementById('statTotal').textContent = sessions.filter(x => x.status !== 'cancelled').length;
+    const creditsUsed = currentTxs.filter(t => t.amount < 0).reduce((sum, t) => sum + Math.abs(t.amount), 0);
+    document.getElementById('statTotal').textContent       = currentSessions.filter(x => x.status !== 'cancelled').length;
     document.getElementById('statCreditsUsed').textContent = creditsUsed;
 
-    renderUpcoming(sessions);
-    renderHistory(sessions);
-    renderTransactions(txs);
+    renderUpcoming();
+    renderHistory();
+    renderTransactions();
     initBookingCalendar();
   }
 
@@ -660,12 +768,11 @@
     return DAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS_L[d.getMonth()] + ' ' + d.getFullYear();
   }
 
-  function renderUpcoming(sessions) {
+  function renderUpcoming() {
     const today = new Date(); today.setHours(0,0,0,0);
-    const list = sessions.filter(s => {
-      if (s.status === 'cancelled') return false;
-      return new Date(s.date + 'T12:00:00') >= today;
-    }).sort((a, b) => a.date.localeCompare(b.date));
+    const list = currentSessions
+      .filter(s => s.status !== 'cancelled' && new Date(s.slot_date + 'T12:00:00') >= today)
+      .sort((a, b) => a.slot_date.localeCompare(b.slot_date));
 
     document.getElementById('upcomingCount').textContent = list.length;
     const el = document.getElementById('upcomingContainer');
@@ -676,20 +783,19 @@
     el.innerHTML = `<table class="sessions-table"><thead><tr>
       <th>Date</th><th>Heure</th><th>Matière</th><th>Statut</th><th></th>
     </tr></thead><tbody>${list.map(s => `<tr>
-      <td>${dateLabel(s.date)}</td>
-      <td><strong>${s.heure}</strong></td>
-      <td>${s.matiere || '—'}</td>
+      <td>${dateLabel(s.slot_date)}</td>
+      <td><strong>${s.slot_time}</strong></td>
+      <td>${s.subject || '—'}</td>
       <td><span class="status-badge status-upcoming">Confirmée</span></td>
-      <td>${s.source !== 'reservation' ? `<button class="btn btn-danger" onclick="cancelSession('${s.id}')">Annuler</button>` : ''}</td>
+      <td><button class="btn btn-danger" onclick="cancelSession('${s.id}')">Annuler</button></td>
     </tr>`).join('')}</tbody></table>`;
   }
 
-  function renderHistory(sessions) {
+  function renderHistory() {
     const today = new Date(); today.setHours(0,0,0,0);
-    const list = sessions.filter(s => {
-      if (s.status === 'cancelled') return true;
-      return new Date(s.date + 'T12:00:00') < today;
-    }).sort((a, b) => b.date.localeCompare(a.date));
+    const list = currentSessions
+      .filter(s => s.status === 'cancelled' || new Date(s.slot_date + 'T12:00:00') < today)
+      .sort((a, b) => b.slot_date.localeCompare(a.slot_date));
 
     const el = document.getElementById('historyContainer');
     if (!list.length) {
@@ -702,21 +808,21 @@
       const cls = s.status === 'cancelled' ? 'status-cancelled' : 'status-completed';
       const lbl = s.status === 'cancelled' ? 'Annulée' : 'Terminée';
       return `<tr>
-        <td>${dateLabel(s.date)}</td><td>${s.heure}</td>
-        <td>${s.matiere || '—'}</td>
+        <td>${dateLabel(s.slot_date)}</td><td>${s.slot_time}</td>
+        <td>${s.subject || '—'}</td>
         <td><span class="status-badge ${cls}">${lbl}</span></td>
       </tr>`;
     }).join('')}</tbody></table>`;
   }
 
-  function renderTransactions(txs) {
+  function renderTransactions() {
     const el = document.getElementById('txContainer');
-    if (!txs.length) {
+    if (!currentTxs.length) {
       el.innerHTML = '<div class="empty-state" style="padding:1rem"><span class="empty-state-icon" style="font-size:1.5rem">💳</span>Aucune transaction.</div>';
       return;
     }
-    el.innerHTML = [...txs].reverse().slice(0, 12).map(tx => {
-      const d = new Date(tx.date);
+    el.innerHTML = currentTxs.slice(0, 12).map(tx => {
+      const d  = new Date(tx.created_at);
       const ds = d.getDate() + ' ' + MONTHS_L[d.getMonth()];
       const pos = tx.amount > 0;
       return `<div class="transaction-row">
@@ -729,47 +835,69 @@
     }).join('');
   }
 
-  function cancelSession(id) {
+  // ══════════════════════════════════════════════
+  // ANNULATION SÉANCE
+  // ══════════════════════════════════════════════
+  async function cancelSession(id) {
     if (!confirm('Annuler cette séance ? Le crédit sera restitué.')) return;
-    const s = getStudent();
-    const sess = s.sessions.find(x => x.id === id);
-    if (!sess) return;
-    s.credits += 1;
-    addTx(s, 'Annulation — ' + dateLabel(sess.date), +1);
-    sess.status = 'cancelled';
-    saveStudent(s);
-    renderDashboard(s);
+    const { data, error } = await db.rpc('cancel_session', { p_session_id: id });
+    if (error || !data?.ok) {
+      const errs = { session_not_found: 'Séance introuvable.', not_authenticated: 'Non connecté.' };
+      alert('Erreur : ' + (errs[data?.error] || error?.message || 'inconnue'));
+      return;
+    }
+    await fetchStudentData(currentStudent.id);
+    renderDashboard();
   }
 
   // ══════════════════════════════════════════════
   // CODE D'ACTIVATION
   // ══════════════════════════════════════════════
-  function activateCode() {
+  async function activateCode() {
     const input = document.getElementById('codeInput');
     const code  = input.value.trim().toUpperCase();
     const msgEl = document.getElementById('codeMsg');
+    const btn   = document.getElementById('codeBtn');
 
     if (!code) { msgEl.className = 'msg msg-error'; msgEl.textContent = 'Entrez un code.'; return; }
-    const match = code.match(/^SVT-(\d+)-[A-Z0-9]+$/);
-    if (!match) {
+
+    btn.disabled = true;
+    msgEl.className = 'msg msg-info'; msgEl.textContent = 'Vérification…';
+
+    const { data, error } = await db.rpc('activate_code', { p_code: code });
+    btn.disabled = false;
+
+    if (error || !data?.ok) {
       msgEl.className = 'msg msg-error';
-      msgEl.textContent = 'Format invalide. Le code doit être au format SVT-N-XXXXXX.'; return;
+      const errs = { invalid_code: 'Code invalide.', already_used: 'Ce code a déjà été utilisé.', not_authenticated: 'Non connecté.' };
+      msgEl.textContent = errs[data?.error] || error?.message || 'Erreur inconnue.';
+      return;
     }
 
-    const s = getStudent(); if (!s) return;
-    if ((s.usedCodes || []).includes(code)) {
-      msgEl.className = 'msg msg-error'; msgEl.textContent = 'Ce code a déjà été utilisé.'; return;
-    }
-
-    const n = parseInt(match[1]);
-    s.credits += n;
-    s.usedCodes = [...(s.usedCodes || []), code];
-    addTx(s, 'Code activé : ' + code, +n);
-    saveStudent(s);
     input.value = '';
+    const n = data.credits_added;
     msgEl.className = 'msg msg-success';
     msgEl.textContent = `✅ ${n} crédit${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} !`;
-    renderDashboard(s);
+    await fetchStudentData(currentStudent.id);
+    renderDashboard();
+  }
+
+  async function processURLCode() {
+    const p = new URLSearchParams(location.search);
+    if (p.get('action') !== 'add') return;
+    const code = p.get('code');
+    if (code) {
+      const { data } = await db.rpc('activate_code', { p_code: code.trim().toUpperCase() });
+      if (data?.ok) {
+        const n = data.credits_added;
+        const msgEl = document.getElementById('codeMsg');
+        msgEl.className = 'msg msg-success';
+        msgEl.textContent = `✅ ${n} crédit${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} via votre achat !`;
+        await fetchStudentData(currentStudent.id);
+        renderDashboard();
+      }
+    }
+    history.replaceState({}, '', 'espace-etudiant.html');
   }
 
   // ══════════════════════════════════════════════
@@ -796,7 +924,9 @@
     const fd = new Date(y, m, 1).getDay();
     const offset = fd === 0 ? 6 : fd - 1;
     const dInM = new Date(y, m+1, 0).getDate();
-    for (let i = 0; i < offset; i++) { const el = document.createElement('div'); el.className = 'cal-day empty'; grid.appendChild(el); }
+    for (let i = 0; i < offset; i++) {
+      const el = document.createElement('div'); el.className = 'cal-day empty'; grid.appendChild(el);
+    }
     for (let d = 1; d <= dInM; d++) {
       const date = new Date(y, m, d);
       const dow  = date.getDay();
@@ -841,22 +971,22 @@
   });
 
   function renderBSlots() {
-    const s = getStudent();
-    const taken = (s?.sessions || []).filter(x => x.status !== 'cancelled').map(x => x.date + ' ' + x.heure);
+    const taken = takenSlots.map(x => x.slot_date + ' ' + x.slot_time);
     const dateObj = new Date(bSt.selDate + 'T12:00:00');
-    const dow = dateObj.getDay();
+    const dow   = dateObj.getDay();
     const slots = TIME_SLOTS[dow] || [];
-    const grid = document.getElementById('bSlotsGrid');
+    const grid  = document.getElementById('bSlotsGrid');
     grid.innerHTML = ''; bSt.selSlot = null;
     document.getElementById('bBtn2Next').disabled = true;
     document.getElementById('bSlotsHeader').textContent =
       'Créneaux du ' + DAYS[dow] + ' ' + dateObj.getDate() + ' ' + MONTHS_L[dateObj.getMonth()];
     slots.forEach(time => {
-      const key = bSt.selDate + ' ' + time;
+      const key     = bSt.selDate + ' ' + time;
       const isTaken = taken.includes(key);
-      const btn = document.createElement('button');
+      const btn     = document.createElement('button');
       btn.className = 'slot-btn' + (isTaken ? ' taken' : '');
-      btn.disabled = isTaken; btn.textContent = time;
+      btn.disabled  = isTaken;
+      btn.textContent = time;
       if (!isTaken) btn.addEventListener('click', () => {
         document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected'); bSt.selSlot = time;
@@ -868,13 +998,12 @@
   }
 
   function updateBRecap() {
-    const s = getStudent();
     const dObj = new Date(bSt.selDate + 'T12:00:00');
     const dl = DAYS[dObj.getDay()] + ' ' + dObj.getDate() + ' ' + MONTHS_L[dObj.getMonth()] + ' ' + dObj.getFullYear();
     document.getElementById('bRecapDate').textContent    = dl;
     document.getElementById('bRecapHeure').textContent   = bSt.selSlot;
     document.getElementById('bRecapMatiere').textContent = document.getElementById('bMatiere').value;
-    const rem = (s.credits || 0) - 1;
+    const rem = (currentStudent.credits || 0) - 1;
     document.getElementById('bRecapRemaining').textContent = rem + ' crédit' + (rem !== 1 ? 's' : '');
   }
 
@@ -885,7 +1014,7 @@
     if (step === 2) renderBSlots();
     if (step === 3) updateBRecap();
     [1,2,3,4].forEach(i => {
-      const p = document.getElementById('bpanel-' + i);
+      const p  = document.getElementById('bpanel-' + i);
       if (p) p.classList.toggle('active', i === step);
       const ms = document.getElementById('mstep-' + i);
       if (ms) { ms.classList.toggle('active', i === step); ms.classList.toggle('done', i < step); }
@@ -905,55 +1034,67 @@
     document.getElementById('bookingSection').style.display = 'none';
     initBookingCalendar();
     document.getElementById('bMatiere').value = '';
-    document.getElementById('bNotes').value = '';
+    document.getElementById('bNotes').value   = '';
     const info = document.getElementById('bDateInfo');
     info.className = 'msg msg-info';
     info.textContent = '📅 Sélectionnez une date sur le calendrier.';
   }
 
-  function confirmBooking() {
-    const s = getStudent();
-    if (!s || s.credits < 1) { alert("Vous n'avez plus de crédits."); return; }
-    const matiere = document.getElementById('bMatiere').value;
-    const notes   = document.getElementById('bNotes').value.trim();
-    const sess = { id: 'sess-' + Date.now(), date: bSt.selDate, heure: bSt.selSlot,
-      matiere, notes, status: 'confirmed', source: 'student', createdAt: new Date().toISOString() };
-    s.sessions.push(sess);
-    s.credits -= 1;
-    addTx(s, 'Réservation — ' + dateLabel(bSt.selDate) + ' ' + bSt.selSlot, -1);
-    saveStudent(s);
+  async function confirmBooking() {
+    if (!currentStudent || currentStudent.credits < 1) { alert("Vous n'avez plus de crédits."); return; }
+    const btn = document.getElementById('bConfirmBtn');
+    btn.disabled = true;
+    btn.textContent = 'Réservation…';
 
-    const rem = s.credits;
+    const { data, error } = await db.rpc('book_session', {
+      p_date:    bSt.selDate,
+      p_time:    bSt.selSlot,
+      p_subject: document.getElementById('bMatiere').value,
+      p_niveau:  currentStudent.niveau
+    });
+
+    btn.disabled = false;
+    btn.textContent = '✅ Confirmer (-1 crédit)';
+
+    if (error || !data?.ok) {
+      const errs = {
+        slot_taken:       'Ce créneau vient d\'être pris. Choisissez-en un autre.',
+        no_credits:       'Vous n\'avez plus de crédits.',
+        not_authenticated:'Non connecté.'
+      };
+      alert(errs[data?.error] || error?.message || 'Erreur lors de la réservation.');
+      if (data?.error === 'slot_taken') bookingGoTo(2);
+      return;
+    }
+
+    await fetchStudentData(currentStudent.id);
+    const rem = currentStudent.credits;
     document.getElementById('bSuccessText').textContent =
       `Séance du ${dateLabel(bSt.selDate)} à ${bSt.selSlot} confirmée. Il vous reste ${rem} crédit${rem !== 1 ? 's' : ''}.`;
     bookingGoTo(4);
-    renderDashboard(s);
+    renderDashboard();
   }
 
   // ══════════════════════════════════════════════
   // INIT
   // ══════════════════════════════════════════════
-  const params = new URLSearchParams(location.search);
-  let student = getStudent();
-
-  if (params.get('action') === 'add') {
-    if (student) {
-      processURLParams(student);
-      saveStudent(student);
-      showDashboard(student);
-    } else {
-      // Pré-remplir le formulaire de connexion
-      if (params.get('email'))   document.getElementById('loginEmail').value = params.get('email');
-      if (params.get('firstName')) document.getElementById('loginFirst').value = params.get('firstName');
-      if (params.get('lastName'))  document.getElementById('loginLast').value  = params.get('lastName');
-      if (params.get('niveau'))    document.getElementById('loginNiveau').value = params.get('niveau');
+  db.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN') {
+      await showDashboard(session.user.id);
+    } else if (event === 'SIGNED_OUT') {
+      currentStudent = null; currentSessions = []; currentTxs = []; takenSlots = [];
       showLogin();
     }
-  } else if (student) {
-    showDashboard(student);
-  } else {
-    showLogin();
-  }
+  });
+
+  (async function init() {
+    const { data: { session } } = await db.auth.getSession();
+    if (session) {
+      await showDashboard(session.user.id);
+    } else {
+      showLogin();
+    }
+  })();
   </script>
 </body>
 </html>

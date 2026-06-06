@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Administration — SVT.Cours</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-deep: #1a3a2a; --green-mid: #2d6a4f; --green-light: #52b788;
+      --cream: #f5f0e8; --cream-dark: #e8e0d0; --amber: #c9881c; --amber-light: #e8b84b;
+      --text-dark: #1c1c1c; --text-mid: #4a4a4a; --white: #ffffff; --red: #c0392b;
+      --serif: 'Cormorant Garamond', Georgia, serif; --sans: 'DM Sans', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: #f0ede6; color: var(--text-dark); min-height: 100vh; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--green-deep); color: var(--cream);
+      padding: 1rem 2rem; display: flex; align-items: center;
+      justify-content: space-between; position: sticky; top: 0; z-index: 100;
+      border-bottom: 2px solid var(--amber);
+    }
+    .topbar-brand { font-family: var(--serif); font-size: 1.2rem; display: flex; align-items: center; gap: 0.8rem; }
+    .topbar-brand span { color: var(--amber); }
+    .admin-badge { background: var(--amber); color: var(--white); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.15rem 0.5rem; font-family: var(--sans); font-weight: 500; }
+    .topbar-right { display: flex; gap: 1rem; align-items: center; }
+    .topbar-email { font-size: 0.8rem; color: rgba(245,240,232,0.6); }
+    .btn-logout { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--cream); padding: 0.4rem 0.9rem; font-size: 0.75rem; cursor: pointer; font-family: var(--sans); letter-spacing: 0.06em; text-transform: uppercase; transition: background 0.2s; }
+    .btn-logout:hover { background: rgba(255,255,255,0.2); }
+
+    /* ── LAYOUT ── */
+    .admin-layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 54px); }
+    .sidebar { background: var(--green-deep); padding: 1.5rem 0; }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li a {
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.75rem 1.5rem; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(245,240,232,0.55); text-decoration: none; transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+    .sidebar-nav li a:hover { color: var(--cream); background: rgba(255,255,255,0.05); }
+    .sidebar-nav li a.active { color: var(--cream); border-color: var(--amber); background: rgba(255,255,255,0.07); }
+    .sidebar-section { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.25); padding: 1rem 1.5rem 0.4rem; }
+
+    /* ── MAIN ── */
+    .main { padding: 2rem; overflow-x: hidden; }
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── CARDS ── */
+    .card { background: var(--white); border: 1px solid var(--cream-dark); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .card-title { font-family: var(--serif); font-size: 1.3rem; color: var(--green-deep); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+    .card-sub { font-size: 0.82rem; color: var(--text-mid); margin-bottom: 1.2rem; }
+
+    /* ── STATS ROW ── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-box { background: var(--white); border: 1px solid var(--cream-dark); padding: 1.2rem; text-align: center; }
+    .stat-n { font-family: var(--serif); font-size: 2.5rem; color: var(--green-deep); line-height: 1; }
+    .stat-l { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mid); margin-top: 0.3rem; }
+
+    /* ── TABLES ── */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .data-table th { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); text-align: left; padding: 0.6rem 0.8rem; border-bottom: 2px solid var(--cream-dark); font-weight: 500; white-space: nowrap; }
+    .data-table td { padding: 0.75rem 0.8rem; border-bottom: 1px solid var(--cream-dark); vertical-align: middle; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: var(--cream); }
+    .table-wrap { overflow-x: auto; }
+
+    /* ── BADGES ── */
+    .badge { display: inline-block; font-size: 0.63rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 0.15rem 0.5rem; border: 1px solid; }
+    .badge-green { color: var(--green-mid); border-color: var(--green-light); background: rgba(82,183,136,0.08); }
+    .badge-grey { color: var(--text-mid); border-color: var(--cream-dark); background: var(--cream); }
+    .badge-red { color: var(--red); border-color: rgba(192,57,43,0.3); background: rgba(192,57,43,0.05); }
+    .badge-amber { color: var(--amber); border-color: var(--amber-light); background: rgba(201,136,28,0.06); }
+
+    /* ── FORMS ── */
+    .form-row { display: flex; gap: 0.8rem; align-items: flex-end; flex-wrap: wrap; }
+    .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+    .form-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); font-weight: 500; }
+    .form-input, .form-select { border: 1px solid var(--cream-dark); background: var(--cream); padding: 0.65rem 0.9rem; font-family: var(--sans); font-size: 0.88rem; color: var(--text-dark); outline: none; transition: border-color 0.2s; }
+    .form-input:focus, .form-select:focus { border-color: var(--green-mid); background: var(--white); }
+    .form-select { appearance: none; cursor: pointer; min-width: 160px; }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.2rem; font-family: var(--sans); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; border: 1.5px solid transparent; text-decoration: none; }
+    .btn-primary { background: var(--green-deep); color: var(--cream); border-color: var(--green-deep); }
+    .btn-primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
+    .btn-secondary { background: transparent; color: var(--green-deep); border-color: var(--green-deep); }
+    .btn-secondary:hover { background: var(--green-deep); color: var(--cream); }
+    .btn-danger { background: transparent; color: var(--red); border-color: rgba(192,57,43,0.4); font-size: 0.72rem; padding: 0.35rem 0.7rem; }
+    .btn-danger:hover { background: var(--red); color: var(--white); border-color: var(--red); }
+    .btn-amber { background: var(--amber); color: var(--white); border-color: var(--amber); }
+    .btn-amber:hover { background: #b07816; border-color: #b07816; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+    /* ── MESSAGES ── */
+    .msg { padding: 0.7rem 1rem; font-size: 0.82rem; margin-top: 0.6rem; line-height: 1.5; }
+    .msg-success { background: rgba(82,183,136,0.1); color: var(--green-mid); border-left: 3px solid var(--green-light); }
+    .msg-error { background: rgba(192,57,43,0.08); color: var(--red); border-left: 3px solid var(--red); }
+    .msg-info { background: rgba(201,136,28,0.08); color: var(--amber); border-left: 3px solid var(--amber); }
+
+    /* ── CODE DISPLAY ── */
+    .code-box { display: inline-flex; align-items: center; gap: 0.8rem; background: var(--green-deep); color: var(--cream); padding: 0.6rem 1rem; margin-top: 0.8rem; }
+    .code-value { font-family: 'Courier New', monospace; font-size: 1.1rem; letter-spacing: 0.1em; color: var(--amber-light); }
+    .copy-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--cream); padding: 0.3rem 0.7rem; font-size: 0.72rem; cursor: pointer; font-family: var(--sans); transition: background 0.2s; }
+    .copy-btn:hover { background: rgba(255,255,255,0.2); }
+
+    /* ── MODAL ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); max-width: 480px; width: 100%; padding: 2rem; position: relative; }
+    .modal-title { font-family: var(--serif); font-size: 1.4rem; color: var(--green-deep); margin-bottom: 1.2rem; }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-mid); }
+    .modal-close:hover { color: var(--green-deep); }
+
+    /* ── LOGIN PAGE ── */
+    .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--green-deep); }
+    .login-box { background: var(--white); padding: 2.5rem; max-width: 380px; width: 100%; }
+    .login-logo { font-family: var(--serif); font-size: 1.6rem; color: var(--green-deep); text-align: center; margin-bottom: 0.3rem; }
+    .login-logo span { color: var(--amber); }
+
+    /* ── EMPTY STATE ── */
+    .empty { text-align: center; padding: 2.5rem; color: var(--text-mid); font-size: 0.88rem; }
+
+    /* ── SEARCH ── */
+    .search-input { border: 1px solid var(--cream-dark); background: var(--cream); padding: 0.55rem 0.9rem; font-family: var(--sans); font-size: 0.85rem; outline: none; width: 220px; }
+    .search-input:focus { border-color: var(--green-mid); background: var(--white); }
+
+    /* ── PAGE HEADER ── */
+    .page-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.8rem; }
+    .page-hd h1 { font-family: var(--serif); font-size: 1.8rem; color: var(--green-deep); }
+
+    @media(max-width: 900px) {
+      .admin-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ LOGIN ═══ -->
+  <div id="loginPage" class="login-page">
+    <div class="login-box">
+      <div class="login-logo">Pauline <span>SVT</span></div>
+      <p style="text-align:center;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);margin-bottom:1.8rem">Administration</p>
+      <form onsubmit="adminLogin(event)">
+        <div class="form-group" style="margin-bottom:1rem">
+          <label class="form-label" for="adminEmail">Email</label>
+          <input class="form-input" type="email" id="adminEmail" placeholder="pauline@email.com" required style="width:100%"/>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label class="form-label" for="adminPassword">Mot de passe</label>
+          <input class="form-input" type="password" id="adminPassword" placeholder="••••••••" required style="width:100%"/>
+        </div>
+        <div id="loginMsg"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.8rem;justify-content:center">Connexion →</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ APP ═══ -->
+  <div id="appPage" style="display:none">
+
+    <div class="topbar">
+      <div class="topbar-brand">
+        Pauline <span>SVT</span>
+        <span class="admin-badge">Admin</span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-email" id="adminEmailDisplay"></span>
+        <button class="btn-logout" onclick="adminLogout()">Déconnexion</button>
+      </div>
+    </div>
+
+    <div class="admin-layout">
+
+      <!-- Sidebar -->
+      <nav class="sidebar">
+        <div class="sidebar-section">Navigation</div>
+        <ul class="sidebar-nav">
+          <li><a href="#" class="active" onclick="showSection('dashboard',this)">📊 Tableau de bord</a></li>
+          <li><a href="#" onclick="showSection('students',this)">🎓 Étudiants</a></li>
+          <li><a href="#" onclick="showSection('sessions',this)">📅 Séances</a></li>
+          <li><a href="#" onclick="showSection('codes',this)">🎟️ Codes d'activation</a></li>
+        </ul>
+      </nav>
+
+      <!-- Main content -->
+      <main class="main">
+
+        <!-- ── DASHBOARD ── -->
+        <div id="section-dashboard" class="section active">
+          <div class="page-hd">
+            <h1>Tableau de bord</h1>
+            <button class="btn btn-secondary" onclick="loadAll()">↺ Actualiser</button>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="stat-n" id="statStudents">—</div>
+              <div class="stat-l">Étudiants</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-n" id="statUpcoming">—</div>
+              <div class="stat-l">Séances à venir</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-n" id="statCredits">—</div>
+              <div class="stat-l">Crédits en circulation</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-n" id="statCodes">—</div>
+              <div class="stat-l">Codes non utilisés</div>
+            </div>
+          </div>
+
+          <!-- Prochaines séances -->
+          <div class="card">
+            <div class="card-title">📅 Prochaines séances</div>
+            <div class="table-wrap" id="dashSessionsContainer"><div class="empty">Chargement…</div></div>
+          </div>
+        </div>
+
+        <!-- ── ÉTUDIANTS ── -->
+        <div id="section-students" class="section">
+          <div class="page-hd">
+            <h1>Étudiants</h1>
+            <input type="text" class="search-input" id="studentSearch" placeholder="Rechercher…" oninput="filterStudents()"/>
+          </div>
+
+          <div class="card">
+            <div class="table-wrap" id="studentsContainer"><div class="empty">Chargement…</div></div>
+          </div>
+        </div>
+
+        <!-- ── SÉANCES ── -->
+        <div id="section-sessions" class="section">
+          <div class="page-hd">
+            <h1>Toutes les séances</h1>
+            <select class="form-select" id="sessionFilter" onchange="filterSessions()" style="min-width:140px">
+              <option value="all">Toutes</option>
+              <option value="confirmed">À venir</option>
+              <option value="completed">Passées</option>
+              <option value="cancelled">Annulées</option>
+            </select>
+          </div>
+          <div class="card">
+            <div class="table-wrap" id="sessionsContainer"><div class="empty">Chargement…</div></div>
+          </div>
+        </div>
+
+        <!-- ── CODES D'ACTIVATION ── -->
+        <div id="section-codes" class="section">
+          <div class="page-hd">
+            <h1>Codes d'activation</h1>
+          </div>
+
+          <div class="card">
+            <div class="card-title">✨ Générer un nouveau code</div>
+            <p class="card-sub">Le code sera valide une seule fois. Transmettez-le à l'étudiant après réception de son paiement.</p>
+            <div class="form-row" style="align-items:flex-end">
+              <div class="form-group">
+                <label class="form-label">Nombre de crédits</label>
+                <select class="form-select" id="codeCredits">
+                  <option value="1">1 crédit — Cours à la carte</option>
+                  <option value="4" selected>4 crédits — Pack mensuel</option>
+                  <option value="6">6 crédits — Prépa Bac</option>
+                </select>
+              </div>
+              <button class="btn btn-amber" onclick="generateCode()">🎟️ Générer le code</button>
+            </div>
+            <div id="codeResult" style="margin-top:0.8rem"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📋 Historique des codes</div>
+            <div class="table-wrap" id="codesContainer"><div class="empty">Chargement…</div></div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ── MODAL CRÉDITS ── -->
+  <div class="modal-overlay" id="creditsModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('creditsModal')">✕</button>
+      <h3 class="modal-title">Ajuster les crédits</h3>
+      <p id="creditsModalDesc" style="font-size:0.85rem;color:var(--text-mid);margin-bottom:1.2rem"></p>
+      <div class="form-group" style="margin-bottom:1rem">
+        <label class="form-label">Montant (positif = ajout, négatif = retrait)</label>
+        <input class="form-input" type="number" id="creditsAmount" placeholder="ex: 4 ou -1" style="width:100%"/>
+      </div>
+      <div class="form-group" style="margin-bottom:1rem">
+        <label class="form-label">Raison (optionnel)</label>
+        <input class="form-input" type="text" id="creditsReason" placeholder="ex: Remboursement, ajout manuel…" style="width:100%"/>
+      </div>
+      <div id="creditsMsg"></div>
+      <div style="display:flex;gap:0.8rem;margin-top:1rem">
+        <button class="btn btn-secondary" onclick="closeModal('creditsModal')">Annuler</button>
+        <button class="btn btn-primary" onclick="submitCredits()">Valider</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL ANNULATION SÉANCE ── -->
+  <div class="modal-overlay" id="cancelModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('cancelModal')">✕</button>
+      <h3 class="modal-title">Annuler la séance</h3>
+      <p id="cancelModalDesc" style="font-size:0.85rem;color:var(--text-mid);margin-bottom:1.2rem"></p>
+      <label style="display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;cursor:pointer;margin-bottom:1.2rem">
+        <input type="checkbox" id="cancelRefund" checked/>
+        Rembourser 1 crédit à l'étudiant
+      </label>
+      <div id="cancelMsg"></div>
+      <div style="display:flex;gap:0.8rem;margin-top:1rem">
+        <button class="btn btn-secondary" onclick="closeModal('cancelModal')">Retour</button>
+        <button class="btn btn-danger" onclick="submitCancelSession()" style="border-width:1.5px">Confirmer l'annulation</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ══════════════════════════════════════════════
+  // ÉTAT GLOBAL
+  // ══════════════════════════════════════════════
+  let adminUser    = null;
+  let allStudents  = [];
+  let allSessions  = [];
+  let allCodes     = [];
+
+  // Cibles des modals
+  let targetStudentId = null;
+  let targetSessionId = null;
+
+  const MONTHS_L = ["jan","fév","mar","avr","mai","jun","jul","aoû","sep","oct","nov","déc"];
+  const DAYS     = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
+
+  // ══════════════════════════════════════════════
+  // AUTH
+  // ══════════════════════════════════════════════
+  async function adminLogin(e) {
+    e.preventDefault();
+    const email    = document.getElementById('adminEmail').value.trim();
+    const password = document.getElementById('adminPassword').value;
+    const msgEl    = document.getElementById('loginMsg');
+    const btn      = e.target.querySelector('button[type=submit]');
+
+    btn.disabled = true;
+    msgEl.className = 'msg msg-info'; msgEl.textContent = 'Connexion…';
+
+    const { error } = await db.auth.signInWithPassword({ email, password });
+    btn.disabled = false;
+
+    if (error) {
+      msgEl.className = 'msg msg-error';
+      msgEl.textContent = error.message === 'Invalid login credentials'
+        ? 'Email ou mot de passe incorrect.' : error.message;
+      return;
+    }
+    // onAuthStateChange → vérification admin
+  }
+
+  async function adminLogout() {
+    await db.auth.signOut();
+  }
+
+  // ══════════════════════════════════════════════
+  // VÉRIFICATION ADMIN
+  // ══════════════════════════════════════════════
+  async function checkAndLoadAdmin(user) {
+    const { data, error } = await db.rpc('is_admin');
+    if (error || !data) {
+      await db.auth.signOut();
+      document.getElementById('loginMsg').className = 'msg msg-error';
+      document.getElementById('loginMsg').textContent = 'Accès refusé. Ce compte n\'est pas administrateur.';
+      showLoginPage();
+      return;
+    }
+    adminUser = user;
+    document.getElementById('adminEmailDisplay').textContent = user.email;
+    showAppPage();
+    await loadAll();
+  }
+
+  function showLoginPage() {
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('appPage').style.display   = 'none';
+  }
+  function showAppPage() {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('appPage').style.display   = 'block';
+  }
+
+  // ══════════════════════════════════════════════
+  // NAVIGATION SECTIONS
+  // ══════════════════════════════════════════════
+  function showSection(id, link) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+    if (link) link.classList.add('active');
+  }
+
+  // ══════════════════════════════════════════════
+  // CHARGEMENT DES DONNÉES
+  // ══════════════════════════════════════════════
+  async function loadAll() {
+    const [
+      { data: students },
+      { data: sessions },
+      { data: codes }
+    ] = await Promise.all([
+      db.from('students').select('*').order('created_at', { ascending: false }),
+      db.from('sessions').select(`*, students(first_name, last_name, email)`).order('slot_date', { ascending: false }),
+      db.from('activation_codes').select('*').order('created_at', { ascending: false })
+    ]);
+
+    allStudents = students || [];
+    allSessions = sessions || [];
+    allCodes    = codes || [];
+
+    renderDashboard();
+    renderStudents();
+    renderSessions();
+    renderCodes();
+  }
+
+  // ══════════════════════════════════════════════
+  // DASHBOARD
+  // ══════════════════════════════════════════════
+  function renderDashboard() {
+    const today = new Date().toISOString().slice(0, 10);
+    const upcoming = allSessions.filter(s => s.status === 'confirmed' && s.slot_date >= today);
+    const totalCredits = allStudents.reduce((sum, s) => sum + (s.credits || 0), 0);
+    const unusedCodes  = allCodes.filter(c => !c.used).length;
+
+    document.getElementById('statStudents').textContent = allStudents.length;
+    document.getElementById('statUpcoming').textContent = upcoming.length;
+    document.getElementById('statCredits').textContent  = totalCredits;
+    document.getElementById('statCodes').textContent    = unusedCodes;
+
+    const el = document.getElementById('dashSessionsContainer');
+    const list = upcoming.sort((a, b) => a.slot_date.localeCompare(b.slot_date) || a.slot_time.localeCompare(b.slot_time)).slice(0, 10);
+
+    if (!list.length) {
+      el.innerHTML = '<div class="empty">Aucune séance à venir.</div>'; return;
+    }
+    el.innerHTML = `<table class="data-table"><thead><tr>
+      <th>Date</th><th>Heure</th><th>Étudiant</th><th>Matière</th><th></th>
+    </tr></thead><tbody>${list.map(s => `<tr>
+      <td>${fmtDate(s.slot_date)}</td>
+      <td><strong>${s.slot_time}</strong></td>
+      <td>${studentName(s)}</td>
+      <td>${s.subject || '—'}</td>
+      <td><button class="btn btn-danger" onclick="openCancelModal('${s.id}','${fmtDate(s.slot_date)} ${s.slot_time}')">Annuler</button></td>
+    </tr>`).join('')}</tbody></table>`;
+  }
+
+  // ══════════════════════════════════════════════
+  // ÉTUDIANTS
+  // ══════════════════════════════════════════════
+  function renderStudents(filter) {
+    const q   = (filter || document.getElementById('studentSearch')?.value || '').toLowerCase();
+    const list = q ? allStudents.filter(s =>
+      (s.first_name + ' ' + s.last_name + ' ' + s.email).toLowerCase().includes(q)
+    ) : allStudents;
+
+    const el = document.getElementById('studentsContainer');
+    if (!list.length) { el.innerHTML = '<div class="empty">Aucun étudiant.</div>'; return; }
+
+    el.innerHTML = `<table class="data-table"><thead><tr>
+      <th>Nom</th><th>Email</th><th>Niveau</th><th>Crédits</th><th>Séances</th><th>Inscrit le</th><th></th>
+    </tr></thead><tbody>${list.map(s => {
+      const ses = allSessions.filter(x => x.student_id === s.id && x.status !== 'cancelled').length;
+      return `<tr>
+        <td><strong>${s.first_name} ${s.last_name}</strong></td>
+        <td style="font-size:0.82rem;color:var(--text-mid)">${s.email}</td>
+        <td>${niveauLabel(s.niveau)}</td>
+        <td>
+          <strong style="font-family:var(--serif);font-size:1.1rem">${s.credits}</strong>
+          <button class="btn btn-secondary" style="padding:0.25rem 0.6rem;font-size:0.68rem;margin-left:0.5rem" onclick="openCreditsModal('${s.id}','${s.first_name} ${s.last_name}',${s.credits})">Modifier</button>
+        </td>
+        <td>${ses}</td>
+        <td style="font-size:0.78rem;color:var(--text-mid)">${fmtDateTime(s.created_at)}</td>
+        <td><button class="btn btn-secondary" style="font-size:0.7rem;padding:0.3rem 0.6rem" onclick="showStudentSessions('${s.id}','${s.first_name} ${s.last_name}')">Séances →</button></td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+  }
+
+  function filterStudents() {
+    renderStudents(document.getElementById('studentSearch').value);
+  }
+
+  function niveauLabel(v) {
+    const map = { sixieme:'6ème', cinquieme:'5ème', quatrieme:'4ème', troisieme:'3ème',
+      seconde:'2nde', premiere:'1ère', terminale:'Terminale', postbac:'Post-bac' };
+    return map[v] || v || '—';
+  }
+
+  function showStudentSessions(studentId, name) {
+    showSection('sessions', null);
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+    // Filtrer sur cet étudiant
+    const el = document.getElementById('sessionsContainer');
+    const list = allSessions.filter(s => s.student_id === studentId)
+      .sort((a, b) => b.slot_date.localeCompare(a.slot_date));
+
+    document.querySelector('.page-hd h1').textContent = `Séances de ${name}`;
+    renderSessionList(list, el);
+  }
+
+  // ══════════════════════════════════════════════
+  // SÉANCES
+  // ══════════════════════════════════════════════
+  function renderSessions() {
+    const filter = document.getElementById('sessionFilter')?.value || 'all';
+    filterSessions(filter);
+  }
+
+  function filterSessions(forceFilter) {
+    const today  = new Date().toISOString().slice(0, 10);
+    const filter = forceFilter || document.getElementById('sessionFilter').value;
+    let list;
+
+    if (filter === 'confirmed') {
+      list = allSessions.filter(s => s.status === 'confirmed' && s.slot_date >= today);
+    } else if (filter === 'completed') {
+      list = allSessions.filter(s => s.status === 'confirmed' && s.slot_date < today);
+    } else if (filter === 'cancelled') {
+      list = allSessions.filter(s => s.status === 'cancelled');
+    } else {
+      list = allSessions;
+    }
+
+    list = list.sort((a, b) => b.slot_date.localeCompare(a.slot_date) || b.slot_time.localeCompare(a.slot_time));
+    document.querySelector('.page-hd h1').textContent = 'Toutes les séances';
+    renderSessionList(list, document.getElementById('sessionsContainer'));
+  }
+
+  function renderSessionList(list, el) {
+    const today = new Date().toISOString().slice(0, 10);
+    if (!list.length) { el.innerHTML = '<div class="empty">Aucune séance.</div>'; return; }
+    el.innerHTML = `<table class="data-table"><thead><tr>
+      <th>Date</th><th>Heure</th><th>Étudiant</th><th>Matière</th><th>Statut</th><th></th>
+    </tr></thead><tbody>${list.map(s => {
+      const isUpcoming = s.status === 'confirmed' && s.slot_date >= today;
+      const cls  = s.status === 'cancelled' ? 'badge-red' : isUpcoming ? 'badge-green' : 'badge-grey';
+      const lbl  = s.status === 'cancelled' ? 'Annulée' : isUpcoming ? 'À venir' : 'Terminée';
+      return `<tr>
+        <td>${fmtDate(s.slot_date)}</td>
+        <td><strong>${s.slot_time}</strong></td>
+        <td>${studentName(s)}</td>
+        <td>${s.subject || '—'}</td>
+        <td><span class="badge ${cls}">${lbl}</span></td>
+        <td>${isUpcoming ? `<button class="btn btn-danger" onclick="openCancelModal('${s.id}','${fmtDate(s.slot_date)} ${s.slot_time}')">Annuler</button>` : ''}</td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+  }
+
+  // ══════════════════════════════════════════════
+  // CODES D'ACTIVATION
+  // ══════════════════════════════════════════════
+  function renderCodes() {
+    const el = document.getElementById('codesContainer');
+    if (!allCodes.length) { el.innerHTML = '<div class="empty">Aucun code généré.</div>'; return; }
+    el.innerHTML = `<table class="data-table"><thead><tr>
+      <th>Code</th><th>Crédits</th><th>Statut</th><th>Utilisé par</th><th>Date utilisation</th><th>Créé le</th>
+    </tr></thead><tbody>${allCodes.map(c => {
+      const student = c.used_by ? allStudents.find(s => s.id === c.used_by) : null;
+      return `<tr>
+        <td><code style="font-size:0.88rem;letter-spacing:0.06em;color:var(--green-deep)">${c.code}</code></td>
+        <td><strong>${c.credits}</strong></td>
+        <td><span class="badge ${c.used ? 'badge-grey' : 'badge-amber'}">${c.used ? 'Utilisé' : 'Disponible'}</span></td>
+        <td style="font-size:0.82rem;color:var(--text-mid)">${student ? student.first_name + ' ' + student.last_name : '—'}</td>
+        <td style="font-size:0.78rem;color:var(--text-mid)">${c.used_at ? fmtDateTime(c.used_at) : '—'}</td>
+        <td style="font-size:0.78rem;color:var(--text-mid)">${fmtDateTime(c.created_at)}</td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+  }
+
+  async function generateCode() {
+    const credits = parseInt(document.getElementById('codeCredits').value);
+    const btn = document.querySelector('#section-codes .btn-amber');
+    const resEl = document.getElementById('codeResult');
+
+    btn.disabled = true;
+    resEl.innerHTML = '<div class="msg msg-info">Génération en cours…</div>';
+
+    const { data, error } = await db.rpc('admin_create_code', { p_credits: credits });
+    btn.disabled = false;
+
+    if (error || !data?.ok) {
+      resEl.innerHTML = `<div class="msg msg-error">Erreur : ${data?.error || error?.message || 'inconnue'}</div>`;
+      return;
+    }
+
+    resEl.innerHTML = `
+      <div class="msg msg-success">✅ Code généré avec ${credits} crédit${credits > 1 ? 's' : ''} !</div>
+      <div class="code-box">
+        <span class="code-value" id="generatedCode">${data.code}</span>
+        <button class="copy-btn" onclick="copyCode()">Copier</button>
+      </div>`;
+
+    await loadAll();
+  }
+
+  function copyCode() {
+    const code = document.getElementById('generatedCode')?.textContent;
+    if (!code) return;
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      const orig = btn.textContent;
+      btn.textContent = 'Copié !';
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  }
+
+  // ══════════════════════════════════════════════
+  // MODAL CRÉDITS
+  // ══════════════════════════════════════════════
+  function openCreditsModal(studentId, name, currentCredits) {
+    targetStudentId = studentId;
+    document.getElementById('creditsModalDesc').textContent =
+      `Étudiant : ${name} — Solde actuel : ${currentCredits} crédit${currentCredits !== 1 ? 's' : ''}`;
+    document.getElementById('creditsAmount').value = '';
+    document.getElementById('creditsReason').value = '';
+    document.getElementById('creditsMsg').innerHTML = '';
+    document.getElementById('creditsModal').classList.add('open');
+  }
+
+  async function submitCredits() {
+    const amount = parseInt(document.getElementById('creditsAmount').value);
+    const reason = document.getElementById('creditsReason').value.trim();
+    const msgEl  = document.getElementById('creditsMsg');
+
+    if (isNaN(amount) || amount === 0) {
+      msgEl.innerHTML = '<div class="msg msg-error">Entrez un montant non nul.</div>'; return;
+    }
+
+    const params = { p_student_id: targetStudentId, p_amount: amount };
+    if (reason) params.p_reason = reason;
+
+    const { data, error } = await db.rpc('admin_add_credits', params);
+
+    if (error || !data?.ok) {
+      msgEl.innerHTML = `<div class="msg msg-error">Erreur : ${data?.error || error?.message}</div>`; return;
+    }
+
+    msgEl.innerHTML = `<div class="msg msg-success">✅ Solde mis à jour : ${data.new_balance} crédit${data.new_balance !== 1 ? 's' : ''}.</div>`;
+    setTimeout(async () => { closeModal('creditsModal'); await loadAll(); }, 1200);
+  }
+
+  // ══════════════════════════════════════════════
+  // MODAL ANNULATION SÉANCE
+  // ══════════════════════════════════════════════
+  function openCancelModal(sessionId, label) {
+    targetSessionId = sessionId;
+    document.getElementById('cancelModalDesc').textContent = `Séance : ${label}`;
+    document.getElementById('cancelRefund').checked = true;
+    document.getElementById('cancelMsg').innerHTML = '';
+    document.getElementById('cancelModal').classList.add('open');
+  }
+
+  async function submitCancelSession() {
+    const refund = document.getElementById('cancelRefund').checked;
+    const msgEl  = document.getElementById('cancelMsg');
+
+    const { data, error } = await db.rpc('admin_cancel_session', {
+      p_session_id: targetSessionId,
+      p_refund:     refund
+    });
+
+    if (error || !data?.ok) {
+      msgEl.innerHTML = `<div class="msg msg-error">Erreur : ${data?.error || error?.message}</div>`; return;
+    }
+
+    msgEl.innerHTML = `<div class="msg msg-success">✅ Séance annulée${refund ? ' — crédit remboursé' : ''} !</div>`;
+    setTimeout(async () => { closeModal('cancelModal'); await loadAll(); }, 1200);
+  }
+
+  // ══════════════════════════════════════════════
+  // UTILS
+  // ══════════════════════════════════════════════
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  // Fermer modal au clic sur l'overlay
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+  });
+
+  function fmtDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr + 'T12:00:00');
+    return DAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS_L[d.getMonth()];
+  }
+
+  function fmtDateTime(isoStr) {
+    if (!isoStr) return '—';
+    const d = new Date(isoStr);
+    return d.getDate() + ' ' + MONTHS_L[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function studentName(session) {
+    if (session.students) return session.students.first_name + ' ' + session.students.last_name;
+    const s = allStudents.find(x => x.id === session.student_id);
+    return s ? s.first_name + ' ' + s.last_name : '—';
+  }
+
+  // ══════════════════════════════════════════════
+  // INIT
+  // ══════════════════════════════════════════════
+  db.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      await checkAndLoadAdmin(session.user);
+    } else if (event === 'SIGNED_OUT') {
+      adminUser = null;
+      showLoginPage();
+    }
+  });
+
+  (async function init() {
+    const { data: { session } } = await db.auth.getSession();
+    if (session) {
+      await checkAndLoadAdmin(session.user);
+    } else {
+      showLoginPage();
+    }
+  })();
+  </script>
+</body>
+</html>
