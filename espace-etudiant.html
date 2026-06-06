@@ -557,19 +557,32 @@
   function processURLParams(s) {
     const p = new URLSearchParams(location.search);
     if (p.get('action') !== 'add') return false;
-    const formule = p.get('formule');
-    const credits = { carte: 0, mensuel: 4, bac: 6 }[formule] || 0;
+    const formule      = p.get('formule');
     const formuleLabel = { carte: 'Cours à la carte', mensuel: 'Pack mensuel', bac: 'Prépa Bac' }[formule] || formule;
-    const date = p.get('date'); const heure = p.get('heure'); const matiere = p.get('matiere') || 'Non précisé';
+    const code         = p.get('code');
+    const date         = p.get('date');
+    const heure        = p.get('heure');
+    const matiere      = p.get('matiere') || 'Non précisé';
 
-    if (date && heure) {
-      s.sessions.push({ id: 'res-' + Date.now(), date, heure, matiere,
-        formule: formuleLabel, status: 'confirmed', source: 'reservation',
-        createdAt: new Date().toISOString() });
-    }
-    if (credits > 0) {
+    if (code) {
+      // Mode code : ajouter les crédits correspondants
+      const credits = { carte: 1, mensuel: 4, bac: 6 }[formule] || 1;
       s.credits += credits;
-      addTx(s, 'Achat ' + formuleLabel, +credits);
+      s.usedCodes = s.usedCodes || [];
+      s.usedCodes.push(code);
+      addTx(s, 'Achat ' + formuleLabel + ' — code ' + code, +credits);
+    } else {
+      // Mode horaire : enregistrer la séance directement
+      if (date && heure) {
+        s.sessions.push({ id: 'res-' + Date.now(), date, heure, matiere,
+          formule: formuleLabel, status: 'confirmed', source: 'reservation',
+          createdAt: new Date().toISOString() });
+      }
+      const credits = { carte: 0, mensuel: 4, bac: 6 }[formule] || 0;
+      if (credits > 0) {
+        s.credits += credits;
+        addTx(s, 'Achat ' + formuleLabel, +credits);
+      }
     }
     history.replaceState({}, '', 'espace-etudiant.html');
     return true;

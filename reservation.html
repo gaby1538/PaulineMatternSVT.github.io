@@ -383,6 +383,45 @@
       .step-line { width: 40px; }
       .step-label { display: none; }
     }
+
+    /* ── MODE RÉSERVATION ── */
+    .mode-options { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.5rem; }
+    .mode-opt {
+      border: 2px solid var(--cream-dark); padding: 1rem 1.2rem;
+      cursor: pointer; transition: all 0.25s; display: flex; align-items: center; gap: 1rem;
+    }
+    .mode-opt:hover { border-color: var(--green-light); }
+    .mode-opt.selected { border-color: var(--green-deep); background: rgba(26,58,42,0.03); }
+    .mode-opt input[type="radio"] { display: none; }
+    .mode-radio {
+      width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--cream-dark);
+      flex-shrink: 0; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+    }
+    .mode-opt.selected .mode-radio { border-color: var(--green-deep); background: var(--green-deep); }
+    .mode-opt.selected .mode-radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--white); }
+    .mode-selector-title { font-family: var(--serif); font-size: 1rem; color: var(--green-deep); margin: 1.3rem 0 0.8rem; }
+
+    /* ── CODE PREVIEW (panel 1) ── */
+    .code-preview-card {
+      background: var(--green-deep); color: var(--cream);
+      padding: 2.5rem 2rem; text-align: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 280px;
+    }
+    .code-preview-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+    .code-preview-n { font-family: var(--serif); font-size: 5rem; color: var(--white); line-height: 1; }
+    .code-preview-unit { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green-light); margin: 0.3rem 0 1.5rem; }
+    .code-preview-sample { font-family: 'Courier New', monospace; font-size: 1.3rem; letter-spacing: 0.1em; color: var(--amber-light); background: rgba(0,0,0,0.2); padding: 0.4rem 1rem; margin-bottom: 1rem; display: inline-block; }
+    .code-preview-desc { font-size: 0.8rem; color: rgba(245,240,232,0.6); line-height: 1.6; max-width: 260px; font-weight: 300; }
+
+    /* ── CODE CONFIRMATION (panel 4) ── */
+    .code-confirm-box { background: var(--green-deep); color: var(--cream); padding: 2rem; margin-bottom: 1.5rem; text-align: center; }
+    .code-confirm-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,240,232,0.5); margin-bottom: 1rem; }
+    .code-confirm-row { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0.8rem 0 1.2rem; flex-wrap: wrap; }
+    .code-confirm-value { font-family: 'Courier New', monospace; font-size: 1.8rem; letter-spacing: 0.12em; color: var(--amber-light); background: rgba(0,0,0,0.25); padding: 0.5rem 1.5rem; }
+    .copy-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: var(--cream); padding: 0.5rem 1rem; font-size: 0.78rem; cursor: pointer; font-family: var(--sans); transition: background 0.2s; }
+    .copy-btn:hover { background: rgba(255,255,255,0.22); }
+    .code-confirm-note { font-size: 0.83rem; color: rgba(245,240,232,0.7); line-height: 1.6; max-width: 420px; margin: 0 auto 1.5rem; font-weight: 300; }
   </style>
 </head>
 <body>
@@ -430,7 +469,7 @@
       <div class="booking-grid">
 
         <!-- Calendrier -->
-        <div class="calendar-card">
+        <div class="calendar-card" id="calendarCard">
           <div class="cal-header">
             <button class="cal-nav-btn" id="prevMonth">&#8592;</button>
             <span class="cal-month-title" id="calMonthTitle"></span>
@@ -451,6 +490,14 @@
               <span>Indisponible</span>
             </div>
           </div>
+        </div>
+
+        <!-- Code preview (alternative au calendrier en mode code) -->
+        <div class="code-preview-card" id="codePreviewCard" style="display:none">
+          <div class="code-preview-icon">🎟</div>
+          <p class="code-preview-title">Réservation par code</p>
+          <p class="code-preview-sub">Vous recevrez un code unique après le paiement. Utilisez-le dans votre espace étudiant pour réserver une séance à votre convenance, sans contrainte de date.</p>
+          <div class="code-preview-value">SVT-X-XXXXXX</div>
         </div>
 
         <!-- Formule -->
@@ -484,6 +531,25 @@
                   <p style="font-size:0.75rem;color:var(--text-mid)">Stage intensif 2 semaines</p>
                 </div>
                 <span class="formule-price">220€</span>
+              </label>
+            </div>
+
+            <!-- Sélecteur de mode (carte uniquement) -->
+            <div class="mode-selector" id="modeSelector" style="display:none">
+              <p class="mode-selector-title">Comment souhaitez-vous réserver ?</p>
+              <label class="mode-opt selected" id="modeSchedule" onclick="setMode('schedule')">
+                <span class="mode-radio"></span>
+                <div>
+                  <strong>Choisir un créneau maintenant</strong>
+                  <p style="font-size:0.78rem;color:var(--text-mid);margin:0.2rem 0 0">Sélectionnez une date et une heure directement.</p>
+                </div>
+              </label>
+              <label class="mode-opt" id="modeCode" onclick="setMode('code')">
+                <span class="mode-radio"></span>
+                <div>
+                  <strong>Recevoir un code</strong>
+                  <p style="font-size:0.78rem;color:var(--text-mid);margin:0.2rem 0 0">Réservez plus tard depuis votre espace étudiant.</p>
+                </div>
               </label>
             </div>
           </div>
@@ -565,11 +631,11 @@
 
         <!-- Récap -->
         <div class="recap-box" id="recapBox">
-          <div class="recap-item">
+          <div class="recap-item" id="recapDateRow">
             <p class="recap-label">Date</p>
             <p class="recap-value" id="recapDate">—</p>
           </div>
-          <div class="recap-item">
+          <div class="recap-item" id="recapHeureRow">
             <p class="recap-label">Heure</p>
             <p class="recap-value" id="recapHeure">—</p>
           </div>
@@ -603,13 +669,23 @@
         </p>
 
         <div class="confirmation-recap">
-          <div class="confirmation-recap-row">
-            <span class="recap-key">📅 Date</span>
-            <span class="recap-val" id="confirmDate"></span>
+          <div id="dateTimeRows">
+            <div class="confirmation-recap-row">
+              <span class="recap-key">📅 Date</span>
+              <span class="recap-val" id="confirmDate"></span>
+            </div>
+            <div class="confirmation-recap-row">
+              <span class="recap-key">🕐 Heure</span>
+              <span class="recap-val" id="confirmHeure"></span>
+            </div>
           </div>
-          <div class="confirmation-recap-row">
-            <span class="recap-key">🕐 Heure</span>
-            <span class="recap-val" id="confirmHeure"></span>
+          <div class="code-confirm-box" id="codeConfirmBox" style="display:none">
+            <p style="font-size:0.85rem;color:rgba(245,240,232,0.7);margin-bottom:0.5rem">Votre code de réservation</p>
+            <div class="code-confirm-row">
+              <span class="code-confirm-value" id="confirmCode">—</span>
+              <button class="copy-btn" onclick="copyCode()">Copier</button>
+            </div>
+            <p class="code-confirm-note">Conservez ce code précieusement. Utilisez-le dans votre espace étudiant pour réserver une séance à votre convenance.</p>
           </div>
           <div class="confirmation-recap-row">
             <span class="recap-key">📚 Formule</span>
@@ -701,6 +777,8 @@
     selectedFormule: "carte",
     viewYear: null,
     viewMonth: null,
+    bookingMode: 'schedule',
+    generatedCode: null,
   };
 
   const today = new Date();
@@ -794,9 +872,71 @@
     opt.addEventListener("click", () => {
       document.querySelectorAll(".formule-option").forEach(o => o.classList.remove("selected"));
       opt.classList.add("selected");
-      state.selectedFormule = opt.dataset.formule;
+      onFormuleChange(opt.dataset.formule);
     });
   });
+
+  // ══════════════════════════════════════════════
+  // MODE DE RÉSERVATION (horaire ou code)
+  // ══════════════════════════════════════════════
+  function onFormuleChange(formule) {
+    state.selectedFormule = formule;
+    const isPack = formule === 'mensuel' || formule === 'bac';
+    const modeSelector = document.getElementById('modeSelector');
+    if (isPack) {
+      modeSelector.style.display = 'none';
+      setMode('code');
+    } else {
+      modeSelector.style.display = 'block';
+      setMode('schedule');
+    }
+  }
+
+  function setMode(mode) {
+    state.bookingMode = mode;
+    const calendarCard    = document.getElementById('calendarCard');
+    const codePreviewCard = document.getElementById('codePreviewCard');
+    const infoBox         = document.getElementById('infoBox');
+    const btn1Next        = document.getElementById('btn1Next');
+
+    document.querySelectorAll('.mode-opt').forEach(o => o.classList.remove('selected'));
+
+    if (mode === 'schedule') {
+      const ms = document.getElementById('modeSchedule');
+      if (ms) ms.classList.add('selected');
+      calendarCard.style.display    = '';
+      codePreviewCard.style.display = 'none';
+      infoBox.style.display         = '';
+      btn1Next.textContent          = 'Choisir un créneau →';
+      btn1Next.disabled             = !state.selectedDate;
+    } else {
+      const mc = document.getElementById('modeCode');
+      if (mc) mc.classList.add('selected');
+      calendarCard.style.display    = 'none';
+      codePreviewCard.style.display = '';
+      infoBox.style.display         = 'none';
+      btn1Next.textContent          = 'Continuer →';
+      btn1Next.disabled             = false;
+    }
+  }
+
+  function generateCode() {
+    const credits = { carte: 1, mensuel: 4, bac: 6 }[state.selectedFormule] || 1;
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let rand = '';
+    for (let i = 0; i < 6; i++) rand += chars[Math.floor(Math.random() * chars.length)];
+    return `SVT-${credits}-${rand}`;
+  }
+
+  function copyCode() {
+    if (!state.generatedCode) return;
+    navigator.clipboard.writeText(state.generatedCode).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      const orig = btn.textContent;
+      btn.textContent = 'Copié !';
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  }
 
   // ══════════════════════════════════════════════
   // CRÉNEAUX
@@ -856,8 +996,13 @@
   }
 
   document.getElementById("btn1Next").addEventListener("click", () => {
-    renderSlots();
-    goTo(2);
+    if (state.bookingMode === 'code') {
+      updateRecap();
+      goTo(3);
+    } else {
+      renderSlots();
+      goTo(2);
+    }
   });
 
   document.getElementById("btn2Back").addEventListener("click", () => goTo(1));
@@ -869,23 +1014,31 @@
     goTo(3);
   });
 
-  document.getElementById("btn3Back").addEventListener("click", () => goTo(2));
+  document.getElementById("btn3Back").addEventListener("click", () => {
+    if (state.bookingMode === 'code') goTo(1); else goTo(2);
+  });
   document.getElementById("btn3Next").addEventListener("click", () => submitForm());
 
   // ══════════════════════════════════════════════
   // RÉCAP
   // ══════════════════════════════════════════════
   function updateRecap() {
-    const dateObj = new Date(state.selectedDate + "T12:00:00");
-    const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-    const dayNames = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-    const dateLabel = dayNames[dateObj.getDay()] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
     const formule = FORMULES[state.selectedFormule];
-
-    document.getElementById("recapDate").textContent    = dateLabel;
-    document.getElementById("recapHeure").textContent   = state.selectedSlot;
     document.getElementById("recapFormule").textContent = formule.label;
     document.getElementById("recapTarif").textContent   = formule.price;
+
+    const isCode = state.bookingMode === 'code';
+    document.getElementById("recapDateRow").style.display  = isCode ? 'none' : '';
+    document.getElementById("recapHeureRow").style.display = isCode ? 'none' : '';
+
+    if (!isCode && state.selectedDate) {
+      const dateObj    = new Date(state.selectedDate + "T12:00:00");
+      const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+      const dayNames   = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+      const dateLabel  = dayNames[dateObj.getDay()] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
+      document.getElementById("recapDate").textContent  = dateLabel;
+      document.getElementById("recapHeure").textContent = state.selectedSlot;
+    }
   }
 
   // ══════════════════════════════════════════════
@@ -906,29 +1059,52 @@
     }
     errEl.style.display = "none";
 
-    const dateObj = new Date(state.selectedDate + "T12:00:00");
-    const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-    const dayNames = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-    const dateLabel = dayNames[dateObj.getDay()] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
+    const isCode  = state.bookingMode === 'code';
     const formule = FORMULES[state.selectedFormule];
+
+    let dateLabel = '';
+    if (!isCode && state.selectedDate) {
+      const dateObj    = new Date(state.selectedDate + "T12:00:00");
+      const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+      const dayNames   = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+      dateLabel = dayNames[dateObj.getDay()] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
+    }
+
+    if (isCode) state.generatedCode = generateCode();
 
     // Remplir la page de confirmation
     document.getElementById("confirmName").textContent    = firstName;
     document.getElementById("confirmEmail").textContent   = email;
-    document.getElementById("confirmDate").textContent    = dateLabel;
-    document.getElementById("confirmHeure").textContent   = state.selectedSlot;
     document.getElementById("confirmFormule").textContent = formule.label;
     document.getElementById("confirmNiveau").textContent  = niveau;
     document.getElementById("confirmTarif").textContent   = formule.price;
+
+    const dateTimeRows   = document.getElementById("dateTimeRows");
+    const codeConfirmBox = document.getElementById("codeConfirmBox");
+
+    if (isCode) {
+      dateTimeRows.style.display   = 'none';
+      codeConfirmBox.style.display = 'block';
+      document.getElementById("confirmCode").textContent = state.generatedCode;
+    } else {
+      dateTimeRows.style.display   = '';
+      codeConfirmBox.style.display = 'none';
+      document.getElementById("confirmDate").textContent  = dateLabel;
+      document.getElementById("confirmHeure").textContent = state.selectedSlot;
+    }
 
     // Lien Stripe dynamique selon la formule
     document.querySelector(".payment-section .btn-white").href = formule.stripe;
 
     // Texte section espace étudiant
-    const credits = { carte: 0, mensuel: 4, bac: 6 }[state.selectedFormule] || 0;
-    document.getElementById("studentSpaceDesc").textContent = credits > 0
-      ? `Votre ${formule.label} inclut ${credits} crédits de cours. Ajoutez-les à votre espace étudiant pour réserver vos prochaines séances quand vous voulez.`
-      : `Retrouvez vos réservations et gérez votre suivi dans votre espace étudiant personnel.`;
+    const credits = { carte: 1, mensuel: 4, bac: 6 }[state.selectedFormule] || 1;
+    if (isCode) {
+      document.getElementById("studentSpaceDesc").textContent =
+        `Votre code ${state.generatedCode} a été généré. Ajoutez-le à votre espace étudiant pour réserver vos séances quand vous voulez.`;
+    } else {
+      document.getElementById("studentSpaceDesc").textContent =
+        `Retrouvez vos réservations et gérez votre suivi dans votre espace étudiant personnel.`;
+    }
 
     goTo(4);
 
@@ -936,8 +1112,8 @@
     sendConfirmationEmail({
       to_name:    firstName + " " + lastName,
       to_email:   email,
-      date:       dateLabel,
-      heure:      state.selectedSlot,
+      date:       isCode ? "Code : " + state.generatedCode : dateLabel,
+      heure:      isCode ? "—" : state.selectedSlot,
       formule:    formule.label,
       tarif:      formule.price,
       niveau:     niveau,
@@ -996,23 +1172,25 @@
     const formule   = state.selectedFormule;
     const date      = state.selectedDate || '';
     const heure     = state.selectedSlot || '';
+    const code      = state.generatedCode || '';
 
-    const credits = { carte: 0, mensuel: 4, bac: 6 }[formule] || 0;
     const params = new URLSearchParams({
       action: 'add', formule, firstName, lastName, email, niveau, date, heure, matiere
     });
+    if (code) params.set('code', code);
     window.location.href = 'espace-etudiant.html?' + params.toString();
   }
 
   // ── INIT ──
   initCalendar();
+  onFormuleChange('carte'); // Initialise le sélecteur de mode pour la formule par défaut
 
   // Pré-sélection de formule via URL (?formule=mensuel)
   const formuleParam = new URLSearchParams(location.search).get('formule');
   if (formuleParam && FORMULES[formuleParam]) {
     document.querySelectorAll('.formule-option').forEach(o => o.classList.remove('selected'));
     const opt = document.querySelector(`.formule-option[data-formule="${formuleParam}"]`);
-    if (opt) { opt.classList.add('selected'); state.selectedFormule = formuleParam; }
+    if (opt) { opt.classList.add('selected'); onFormuleChange(formuleParam); }
   }
   </script>
 </body>
