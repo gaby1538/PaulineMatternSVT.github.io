@@ -4,6 +4,10 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Tous les cours SVT — Collège & Lycée</title>
+  <meta name="description" content="45 cours SVT complets et gratuits du collège à la Terminale : biologie, géologie, santé. Résumés, points clés et quiz de révision pour chaque chapitre du programme officiel."/>
+  <meta property="og:title" content="Tous les cours SVT — Collège & Lycée"/>
+  <meta property="og:description" content="45 cours SVT gratuits du collège à la Terminale. Résumés, quiz et points clés pour réviser efficacement."/>
+  <meta property="og:type" content="website"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -117,12 +121,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 </head>
 <body>
 <nav>
-  <a href="index.html" class="nl">SVT<span>.</span>Cours</a>
+  <a href="index.html" class="nl">Pauline <span>SVT</span></a>
   <ul class="nv" id="navLinks">
-    <li><a href="cours.html" class="active">Cours</a></li>
+    <li><a href="cours-complet.html" class="active">Cours</a></li>
     <li><a href="fiches.html">Fiches</a></li>
     <li><a href="ressources.html">Ressources</a></li>
     <li><a href="contact.html">Contact</a></li>
+    <li><a href="espace-etudiant.html">Mon espace</a></li>
     <li><a href="reservation.html" class="nc">Réserver</a></li>
   </ul>
   <button class="hb" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -726,9 +731,20 @@ document.querySelectorAll('.tb').forEach(b=>{
     document.querySelectorAll('.tp').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');
     document.getElementById('tab-'+b.dataset.tab).classList.add('active');
+    history.replaceState(null,'','#'+b.dataset.tab);
     window.scrollTo({top:document.querySelector('.tabs').offsetTop-62,behavior:'smooth'});
   });
 });
+(function(){
+  const hash=location.hash.replace('#','');
+  const valid=['college','seconde','premiere','terminale'];
+  if(valid.includes(hash)){
+    document.querySelectorAll('.tb').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tp').forEach(x=>x.classList.remove('active'));
+    document.querySelector('[data-tab="'+hash+'"]').classList.add('active');
+    document.getElementById('tab-'+hash).classList.add('active');
+  }
+})();
 </script>
 <script src="nav.js"></script>
 </body>
