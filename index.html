@@ -1115,21 +1115,12 @@
     <p class="footer-copy">© 2025 — Cours de SVT. Tous droits réservés. <a href="admin.html" style="color:rgba(255,255,255,0.28);text-decoration:none;font-size:0.7rem;letter-spacing:0.06em">admin</a></p>
   </footer>
 
+  <script src="nav.js"></script>
   <script>
     // ── Navbar scroll ──
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 40);
-    });
-
-    // ── Menu hamburger ──
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-    });
-    navLinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => navLinks.classList.remove('open'));
     });
 
     // ── Scroll reveal ──

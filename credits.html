@@ -25,7 +25,14 @@
     .nav-links a{font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s}
     .nav-links a:hover,.nav-links a.active{color:var(--green-mid)}
     .nav-cta{background:var(--green-deep);color:var(--cream)!important;padding:0.5rem 1.2rem}
-    @media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:0}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--green-deep);transition:all 0.3s}
+    @media(max-width:768px){
+      nav{padding:1rem 1.5rem}
+      .nav-links{display:none;flex-direction:column;gap:1.2rem;position:absolute;top:100%;left:0;right:0;background:var(--cream);padding:2rem;border-top:1px solid var(--cream-dark)}
+      .nav-links.open{display:flex}
+      .hamburger{display:flex}
+    }
 
     /* PAGE */
     .page{max-width:860px;margin:0 auto;padding:8rem 2rem 5rem}
@@ -124,12 +131,13 @@
 <body>
   <nav>
     <a href="index.html" class="nav-logo">Pauline <span>SVT</span></a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="cours.html">Cours</a></li>
       <li><a href="fiches.html">Fiches</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
 
   <div class="page">
@@ -143,15 +151,17 @@
       </div>
 
       <div class="login-card">
-        <label class="login-label" for="codeInput">Votre code élève</label>
-        <input class="login-input" type="text" id="codeInput" placeholder="ex : SVT-2025-001" autocomplete="off" autocapitalize="characters"/>
-        <div id="loginError" class="msg msg-error">Code introuvable. Vérifiez votre email de confirmation ou contactez-moi.</div>
+        <label class="login-label" for="emailInput">Email</label>
+        <input class="login-input" type="email" id="emailInput" placeholder="votre@email.com" autocomplete="email" style="text-transform:none;letter-spacing:0"/>
+        <label class="login-label" for="passwordInput" style="margin-top:1rem">Mot de passe</label>
+        <input class="login-input" type="password" id="passwordInput" placeholder="••••••••" autocomplete="current-password" style="text-transform:none;letter-spacing:0"/>
+        <div id="loginError" class="msg msg-error">Email ou mot de passe incorrect. Vérifiez vos identifiants ou contactez-moi.</div>
         <button class="login-btn" id="loginBtn" onclick="login()">
           <span id="loginTxt">Accéder à mon espace →</span>
         </button>
         <p class="login-hint">
-          Votre code vous a été envoyé par email après votre achat.<br/>
-          Pas de code ? <a href="contact.html">Contactez-moi</a>
+          Connectez-vous avec les identifiants reçus par email.<br/>
+          Pas de compte ? <a href="contact.html">Contactez-moi</a>
         </p>
       </div>
     </div>
@@ -225,176 +235,126 @@
 
   </div>
 
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
   <script>
   // ══════════════════════════════════════════
-  // CONFIGURATION AIRTABLE
+  // SUPABASE AUTH + DASHBOARD
   // ══════════════════════════════════════════
-  // 1. Crée un compte sur airtable.com
-  // 2. Crée une base "Cours SVT" avec une table "Eleves"
-  // 3. Remplace ces 3 valeurs :
-  const AIRTABLE_TOKEN   = "TON_AIRTABLE_TOKEN"; // Personal Access Token — à remplir
-  const AIRTABLE_BASE_ID = "TON_BASE_ID";         // ID de ta base — à remplir
-  const AIRTABLE_TABLE   = "Eleves";                 // Nom de ta table
+  let currentStudent = null;
 
-  // ══ MODE DEMO (tant qu'Airtable n'est pas configuré) ══
-  // Supprime ou commente ce bloc quand Airtable est prêt
-  const DEMO_DATA = {
-    "SVT-2025-DEMO": {
-      nom: "Marie Dupont",
-      formule: "Pack 6 heures",
-      heures_total: 6,
-      heures_utilisees: 2,
-      date_achat: "2025-06-01",
-      historique: [
-        { date: "2025-06-15", desc: "Cours génétique moléculaire", type: "used", h: -1 },
-        { date: "2025-06-08", desc: "Cours biologie cellulaire",   type: "used", h: -1 },
-        { date: "2025-06-01", desc: "Achat Pack 6 heures",         type: "added", h: +6 },
-      ]
-    }
-  };
-
-  // ══════════════════════════════════════════
-  // LOGIN
-  // ══════════════════════════════════════════
   async function login() {
-    const code = document.getElementById("codeInput").value.trim().toUpperCase();
-    if (!code) return;
+    const email    = document.getElementById("emailInput").value.trim();
+    const password = document.getElementById("passwordInput").value;
+    if (!email || !password) return;
 
     const btn = document.getElementById("loginBtn");
     const txt = document.getElementById("loginTxt");
     btn.disabled = true;
-    txt.textContent = "Vérification…";
+    txt.textContent = "Connexion…";
     document.getElementById("loginError").classList.remove("show");
 
-    // Mode démo
-    if (AIRTABLE_TOKEN === "VOTRE_TOKEN_AIRTABLE") {
-      await new Promise(r => setTimeout(r, 800));
-      const data = DEMO_DATA[code];
-      if (data) {
-        sessionStorage.setItem("svt_eleve", JSON.stringify({...data, code}));
-        showDashboard(data);
-      } else {
-        showError();
-      }
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+    if (error || !data.user) {
+      document.getElementById("loginError").classList.add("show");
       btn.disabled = false;
       txt.textContent = "Accéder à mon espace →";
       return;
     }
 
-    // Mode réel — Airtable
-    try {
-      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE)}?filterByFormula={code}="${code}"`;
-      const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` }
-      });
-      const json = await res.json();
-
-      if (json.records && json.records.length > 0) {
-        const r = json.records[0].fields;
-        const data = {
-          code,
-          nom:              r.nom || "Élève",
-          formule:          r.formule || "Pack",
-          heures_total:     r.heures_total || 0,
-          heures_utilisees: r.heures_utilisees || 0,
-          date_achat:       r.date_achat || "",
-          notes:            r.notes || "",
-          historique: []
-        };
-        sessionStorage.setItem("svt_eleve", JSON.stringify(data));
-        showDashboard(data);
-      } else {
-        showError();
-      }
-    } catch(e) {
-      console.error(e);
-      showError();
-    }
+    await loadDashboard(data.user.id);
     btn.disabled = false;
     txt.textContent = "Accéder à mon espace →";
   }
 
-  function showError() {
-    document.getElementById("loginError").classList.add("show");
+  async function loadDashboard(userId) {
+    const [{ data: student }, { data: sessions }, { data: txs }] = await Promise.all([
+      db.from("students").select("*").eq("id", userId).single(),
+      db.from("sessions").select("*").eq("student_id", userId).order("slot_date", { ascending: false }),
+      db.from("transactions").select("*").eq("student_id", userId).order("created_at", { ascending: false }),
+    ]);
+
+    if (!student) return;
+    currentStudent = student;
+    showDashboard(student, sessions || [], txs || []);
   }
 
-  // Connexion sur Entrée
-  document.getElementById("codeInput").addEventListener("keydown", e => {
-    if (e.key === "Enter") login();
-  });
-
-  // ══════════════════════════════════════════
-  // AFFICHAGE DASHBOARD
-  // ══════════════════════════════════════════
-  function showDashboard(data) {
+  function showDashboard(student, sessions, txs) {
     document.getElementById("loginScreen").style.display = "none";
-    const dash = document.getElementById("dashboard");
-    dash.style.display = "block";
+    document.getElementById("dashboard").style.display = "block";
 
-    const restantes = data.heures_total - data.heures_utilisees;
-    const pct = data.heures_total > 0 ? Math.round((data.heures_utilisees / data.heures_total) * 100) : 0;
+    const credits = student.credits;
+    const sessionsConfirmed = (sessions || []).filter(s => s.status === "confirmed");
+    const sessionsUsed      = (sessions || []).filter(s => s.status === "cancelled" || s.status === "confirmed").length;
 
     // Header
-    document.getElementById("dashNom").textContent = data.nom.split(" ")[0];
-    document.getElementById("dashFormule").textContent = data.formule;
-    document.getElementById("dashDate").textContent = formatDate(data.date_achat);
+    document.getElementById("dashNom").textContent     = student.first_name;
+    document.getElementById("dashFormule").textContent = student.niveau || "—";
+    document.getElementById("dashDate").textContent    = formatDate(student.created_at);
 
     // Alerte solde bas
-    if (restantes <= 1) document.getElementById("alertLow").style.display = "block";
+    if (credits <= 1) document.getElementById("alertLow").style.display = "block";
 
-    // Jauge
-    document.getElementById("dashRestantes").textContent = restantes;
-    document.getElementById("dashFormulaTag").textContent = data.formule + " · " + data.heures_total + "h achetées";
-    document.getElementById("dashProgressLabel").textContent = data.heures_utilisees + "h / " + data.heures_total + "h";
+    // Jauge (credits restants vs sessions totales)
+    const totalEver = sessionsConfirmed.length + credits;
+    const used      = sessionsConfirmed.length;
+    const pct       = totalEver > 0 ? Math.round((used / totalEver) * 100) : 0;
+
+    document.getElementById("dashRestantes").textContent  = credits;
+    document.getElementById("dashFormulaTag").textContent = "Niveau : " + (student.niveau || "—");
+    document.getElementById("dashProgressLabel").textContent = used + " cours / " + totalEver + " total";
     setTimeout(() => {
       document.getElementById("progressFill").style.width = pct + "%";
     }, 300);
 
     // Stats
-    document.getElementById("dashTotal").textContent     = data.heures_total + "h";
-    document.getElementById("dashUtilisees").textContent = data.heures_utilisees + "h";
-    document.getElementById("dashRestantes2").textContent = restantes + "h";
+    document.getElementById("dashTotal").textContent      = totalEver + " cr.";
+    document.getElementById("dashUtilisees").textContent  = sessionsConfirmed.length;
+    document.getElementById("dashRestantes2").textContent = credits;
 
-    // CTA désactivé si plus d'heures
-    if (restantes <= 0) {
+    // CTA désactivé si plus de crédits
+    if (credits <= 0) {
       const cta = document.getElementById("ctaReserve");
       cta.style.background = "var(--cream-dark)";
       cta.innerHTML = `
         <div class="cta-reserve-text">
-          <p class="cta-reserve-title" style="color:var(--text-dark)">Plus d'heures disponibles</p>
+          <p class="cta-reserve-title" style="color:var(--text-dark)">Plus de crédits disponibles</p>
           <p class="cta-reserve-sub" style="color:var(--text-mid)">Renouvelez votre pack pour continuer</p>
         </div>
         <a href="reservation.html" class="btn-reserve" style="background:var(--green-deep);color:var(--cream)">Acheter un pack →</a>`;
     }
 
-    // Historique
-    renderHistory(data.historique || []);
+    // Historique depuis transactions
+    renderHistory(txs || []);
   }
 
-  function renderHistory(items) {
+  function renderHistory(txs) {
     const list = document.getElementById("historyList");
-    if (!items.length) {
-      list.innerHTML = `<p style="font-size:0.88rem;color:var(--text-mid);padding:1rem 0">Aucun cours enregistré pour le moment.</p>`;
+    if (!txs.length) {
+      list.innerHTML = `<p style="font-size:0.88rem;color:var(--text-mid);padding:1rem 0">Aucun historique pour le moment.</p>`;
       return;
     }
-    list.innerHTML = items.map(item => `
+    list.innerHTML = txs.map(tx => `
       <div class="history-item">
-        <span class="history-date">${formatDate(item.date)}</span>
-        <span class="history-desc">${item.desc}</span>
-        <span class="history-badge ${item.type === 'used' ? 'badge-used' : 'badge-added'}">
-          ${item.type === 'used' ? 'Cours' : 'Achat'}
+        <span class="history-date">${formatDate(tx.created_at)}</span>
+        <span class="history-desc">${tx.description}</span>
+        <span class="history-badge ${tx.amount < 0 ? 'badge-used' : 'badge-added'}">
+          ${tx.amount < 0 ? 'Cours' : 'Crédit'}
         </span>
-        <span class="history-h" style="color:${item.h < 0 ? 'var(--red)' : 'var(--green-mid)'}">
-          ${item.h > 0 ? '+' : ''}${item.h}h
+        <span class="history-h" style="color:${tx.amount < 0 ? 'var(--red)' : 'var(--green-mid)'}">
+          ${tx.amount > 0 ? '+' : ''}${tx.amount}
         </span>
       </div>`).join("");
   }
 
-  function logout() {
-    sessionStorage.removeItem("svt_eleve");
+  async function logout() {
+    await db.auth.signOut();
+    currentStudent = null;
     document.getElementById("dashboard").style.display = "none";
     document.getElementById("loginScreen").style.display = "block";
-    document.getElementById("codeInput").value = "";
+    document.getElementById("emailInput").value    = "";
+    document.getElementById("passwordInput").value = "";
   }
 
   function formatDate(str) {
@@ -404,11 +364,16 @@
     return d.toLocaleDateString("fr-FR", { day:"numeric", month:"long", year:"numeric" });
   }
 
-  // ══ Auto-login si session active ══
-  const saved = sessionStorage.getItem("svt_eleve");
-  if (saved) {
-    try { showDashboard(JSON.parse(saved)); } catch(e) {}
-  }
+  // Connexion sur Entrée
+  document.getElementById("passwordInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") login();
+  });
+
+  // Auto-login si session Supabase active
+  db.auth.getSession().then(({ data: { session } }) => {
+    if (session) loadDashboard(session.user.id);
+  });
   </script>
+  <script src="nav.js"></script>
 </body>
 </html>

@@ -21,7 +21,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nv a{font-size:0.82rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--tm);text-decoration:none;transition:color 0.2s}
 .nv a:hover,.nv a.active{color:var(--gm)}
 .nc{background:var(--gd);color:var(--cr)!important;padding:0.45rem 1rem}
-@media(max-width:768px){nav{padding:0.8rem 1rem}.nv{display:none}}
+.hb{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:0}
+.hb span{display:block;width:24px;height:2px;background:var(--gd);transition:all 0.3s}
+@media(max-width:768px){
+  nav{padding:0.8rem 1rem}
+  .nv{display:none;flex-direction:column;gap:1.2rem;position:absolute;top:100%;left:0;right:0;background:var(--cr);padding:2rem;border-top:1px solid var(--cd)}
+  .nv.open{display:flex}
+  .hb{display:flex}
+}
 
 .hero{background:var(--gd);color:var(--cr);padding:8rem 4rem 4rem;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 40%,rgba(82,183,136,0.2),transparent 60%)}
@@ -111,13 +118,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 <body>
 <nav>
   <a href="index.html" class="nl">SVT<span>.</span>Cours</a>
-  <ul class="nv">
+  <ul class="nv" id="navLinks">
     <li><a href="cours.html" class="active">Cours</a></li>
     <li><a href="fiches.html">Fiches</a></li>
     <li><a href="ressources.html">Ressources</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li><a href="reservation.html" class="nc">Réserver</a></li>
   </ul>
+  <button class="hb" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 
 <section class="hero">
@@ -722,5 +730,6 @@ document.querySelectorAll('.tb').forEach(b=>{
   });
 });
 </script>
+<script src="nav.js"></script>
 </body>
 </html>

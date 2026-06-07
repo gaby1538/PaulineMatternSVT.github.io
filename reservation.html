@@ -425,7 +425,7 @@
     <a href="index.html" class="nav-back">← Retour au site</a>
   </nav>
 
-  <div class="page-wrapper">
+  <div class="page-wrapper" id="pageContent" style="display:none">
 
     <!-- En-tête -->
     <div class="page-header">
@@ -1080,11 +1080,6 @@
   // EMAILJS
   // ══════════════════════════════════════════════
   function sendConfirmationEmail(params) {
-    if (EMAILJS_PUBLIC_KEY === "VOTRE_PUBLIC_KEY") {
-      console.log("EmailJS non configuré — paramètres :", params);
-      showEmailStatus("success", "💡 EmailJS non configuré. L'email de confirmation n'a pas été envoyé (voir console).");
-      return;
-    }
     emailjs.init(EMAILJS_PUBLIC_KEY);
     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
       .then(() => {
@@ -1116,6 +1111,31 @@
   // INIT
   // ══════════════════════════════════════════════
   (async function init() {
+    // Auth guard — redirect to login if not authenticated
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) {
+      window.location.href = 'espace-etudiant.html?redirect=reservation.html';
+      return;
+    }
+
+    // Credit check — show blocking message if no credits
+    const { data: student } = await db.from('students').select('credits').eq('id', session.user.id).single();
+    if (!student || student.credits < 1) {
+      document.getElementById('pageContent').style.display = 'block';
+      document.getElementById('pageContent').innerHTML = `
+        <div style="max-width:560px;margin:0 auto;text-align:center;padding:4rem 1rem">
+          <div style="font-size:3rem;margin-bottom:1.5rem">🎟</div>
+          <h2 style="font-family:var(--serif);font-size:2rem;color:var(--green-deep);margin-bottom:1rem">Aucun crédit disponible</h2>
+          <p style="color:var(--text-mid);line-height:1.7;margin-bottom:2rem">
+            Vous n'avez pas de crédit pour réserver une séance.<br/>
+            Activez un code dans votre espace étudiant ou achetez un pack.
+          </p>
+          <a href="espace-etudiant.html" class="btn btn-primary">→ Mon espace étudiant</a>
+        </div>`;
+      return;
+    }
+
+    document.getElementById('pageContent').style.display = 'block';
     await loadTakenSlots();
     subscribeRealtime();
     initCalendar();

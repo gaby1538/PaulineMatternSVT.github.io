@@ -24,7 +24,14 @@
     .nav-links a{font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s}
     .nav-links a:hover,.nav-links a.active{color:var(--green-mid)}
     .nav-cta{background:var(--green-deep);color:var(--cream)!important;padding:0.5rem 1.2rem}
-    @media(max-width:768px){nav{padding:1rem 1.5rem}.nav-links{display:none}}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:0}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--green-deep);transition:all 0.3s}
+    @media(max-width:768px){
+      nav{padding:1rem 1.5rem}
+      .nav-links{display:none;flex-direction:column;gap:1.2rem;position:absolute;top:100%;left:0;right:0;background:var(--cream);padding:2rem;border-top:1px solid var(--cream-dark)}
+      .nav-links.open{display:flex}
+      .hamburger{display:flex}
+    }
 
     /* HERO */
     .hero{min-height:42vh;background:var(--green-deep);display:flex;align-items:flex-end;padding:0 6rem 4rem;position:relative;overflow:hidden;padding-top:7rem}
@@ -111,13 +118,14 @@
 <body>
   <nav>
     <a href="index.html" class="nav-logo">Pauline <span>SVT</span></a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="cours.html">Cours</a></li>
       <li><a href="fiches.html">Fiches</a></li>
       <li><a href="contact.html" class="active">Contact</a></li>
       <li><a href="espace-etudiant.html">Mon espace</a></li>
       <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
 
   <section class="hero">
@@ -307,12 +315,6 @@
     btn.disabled=true;
     document.getElementById("btnTxt").textContent="Envoi en cours…";
 
-    if(EMAILJS_PUBLIC_KEY==="VOTRE_PUBLIC_KEY"){
-      // Sans EmailJS configuré : affiche juste le succès
-      setTimeout(()=>showSuccess(),800);
-      return;
-    }
-
     emailjs.init(EMAILJS_PUBLIC_KEY);
     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
       from_name: prenom+" "+nom,
@@ -323,7 +325,8 @@
       message: message,
     })
     .then(()=>showSuccess())
-    .catch(()=>{
+    .catch((err)=>{
+      console.error(err);
       btn.disabled=false;
       document.getElementById("btnTxt").textContent="Envoyer le message →";
       msg.className="msg msg-ko show";
@@ -344,5 +347,6 @@
   const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}});},{threshold:0.1});
   document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
   </script>
+  <script src="nav.js"></script>
 </body>
 </html>
