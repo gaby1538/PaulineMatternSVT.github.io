@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Espace Étudiant — SVT.Cours</title>
+  <meta name="robots" content="noindex, nofollow"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
@@ -580,6 +581,14 @@
   const DAYS     = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
 
   // ══════════════════════════════════════════════
+  // UTILS
+  // ══════════════════════════════════════════════
+  function escapeHTML(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // ══════════════════════════════════════════════
   // ÉTAT GLOBAL
   // ══════════════════════════════════════════════
   let currentStudent  = null;
@@ -634,8 +643,14 @@
   // ══════════════════════════════════════════════
   // AUTH
   // ══════════════════════════════════════════════
+  let _lastLoginAttempt = 0;
+
   async function handleLogin(e) {
     e.preventDefault();
+    const now = Date.now();
+    if (now - _lastLoginAttempt < 2000) return;
+    _lastLoginAttempt = now;
+
     const email    = document.getElementById('loginEmail').value.trim().toLowerCase();
     const password = document.getElementById('loginPassword').value;
     const msgEl    = document.getElementById('loginMsg');
@@ -727,6 +742,13 @@
     await loadTakenSlots();
     subscribeRealtime();
 
+    // Redirect post-login si ?redirect= est présent et valide
+    const redirectParam = new URLSearchParams(location.search).get('redirect');
+    if (redirectParam && /^[\w-]+\.html$/.test(redirectParam)) {
+      window.location.href = redirectParam;
+      return;
+    }
+
     document.getElementById('loginPage').style.display     = 'none';
     document.getElementById('registerPage').style.display  = 'none';
     document.getElementById('dashboardPage').style.display = 'block';
@@ -785,7 +807,7 @@
     </tr></thead><tbody>${list.map(s => `<tr>
       <td>${dateLabel(s.slot_date)}</td>
       <td><strong>${s.slot_time}</strong></td>
-      <td>${s.subject || '—'}</td>
+      <td>${escapeHTML(s.subject) || '—'}</td>
       <td><span class="status-badge status-upcoming">Confirmée</span></td>
       <td><button class="btn btn-danger" onclick="cancelSession('${s.id}')">Annuler</button></td>
     </tr>`).join('')}</tbody></table>`;
@@ -809,7 +831,7 @@
       const lbl = s.status === 'cancelled' ? 'Annulée' : 'Terminée';
       return `<tr>
         <td>${dateLabel(s.slot_date)}</td><td>${s.slot_time}</td>
-        <td>${s.subject || '—'}</td>
+        <td>${escapeHTML(s.subject) || '—'}</td>
         <td><span class="status-badge ${cls}">${lbl}</span></td>
       </tr>`;
     }).join('')}</tbody></table>`;
@@ -1074,6 +1096,10 @@
     bookingGoTo(4);
     renderDashboard();
   }
+
+  window.addEventListener('beforeunload', function() {
+    if (realtimeChannel) db.removeChannel(realtimeChannel);
+  });
 
   // ══════════════════════════════════════════════
   // INIT

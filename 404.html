@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Page introuvable — Pauline Mattern SVT</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-deep:  #1a3a2a;
+      --green-mid:   #2d6a4f;
+      --green-light: #52b788;
+      --cream:       #f5f0e8;
+      --cream-dark:  #e8e0d0;
+      --amber:       #c9881c;
+      --text-dark:   #1c1c1c;
+      --text-mid:    #4a4a4a;
+      --white:       #ffffff;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans:  'DM Sans', sans-serif;
+    }
+    body {
+      font-family: var(--sans);
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    .eyebrow {
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--amber); font-weight: 500; margin-bottom: 1.2rem;
+    }
+    .error-number {
+      font-family: var(--serif);
+      font-size: clamp(6rem, 20vw, 10rem);
+      color: var(--green-deep);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .error-title {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      color: var(--green-deep);
+      margin-bottom: 1rem;
+    }
+    .error-title em { font-style: italic; color: var(--green-mid); }
+    .error-text {
+      font-size: 1rem; color: var(--text-mid);
+      line-height: 1.7; max-width: 440px;
+      font-weight: 300; margin-bottom: 3rem;
+    }
+    .links {
+      display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.9rem 1.8rem; font-family: var(--sans); font-size: 0.85rem;
+      font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.3s; border: 2px solid transparent;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--green-deep); color: var(--cream); border-color: var(--green-deep); }
+    .btn-primary:hover { background: transparent; color: var(--green-deep); }
+    .btn-secondary { background: transparent; color: var(--green-deep); border-color: var(--green-deep); }
+    .btn-secondary:hover { background: var(--green-deep); color: var(--cream); }
+    .divider {
+      width: 48px; height: 2px; background: var(--green-light);
+      margin: 2rem auto;
+    }
+    .nav-logo {
+      font-family: var(--serif); font-size: 1.3rem;
+      color: var(--green-deep); text-decoration: none;
+      display: block; margin-bottom: 3rem;
+    }
+    .nav-logo span { color: var(--amber); }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="nav-logo">Pauline <span>SVT</span></a>
+
+  <p class="eyebrow">Erreur 404</p>
+  <div class="error-number">404</div>
+  <h1 class="error-title">Page <em>introuvable</em></h1>
+  <p class="error-text">
+    La page que vous cherchez n'existe pas ou a été déplacée.<br/>
+    Revenez à l'accueil ou explorez le site.
+  </p>
+
+  <div class="divider"></div>
+
+  <div class="links">
+    <a href="index.html" class="btn btn-primary">← Retour à l'accueil</a>
+    <a href="cours.html" class="btn btn-secondary">Voir les cours</a>
+    <a href="contact.html" class="btn btn-secondary">Nous contacter</a>
+  </div>
+</body>
+</html>

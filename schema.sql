@@ -29,9 +29,15 @@ create table public.sessions (
   niveau      text not null,
   status      text not null default 'confirmed'
                 check (status in ('confirmed','cancelled')),
-  created_at  timestamptz not null default now(),
-  unique(slot_date, slot_time, status)   -- one booking per slot (confirmed only handled in book_session)
+  created_at  timestamptz not null default now()
 );
+
+-- Partial unique index: only one CONFIRMED booking per slot.
+-- Allows multiple cancelled entries on the same slot (unlike a full UNIQUE constraint).
+-- To migrate an existing DB: DROP CONSTRAINT sessions_slot_date_slot_time_status_key first.
+create unique index sessions_unique_confirmed_slot
+  on public.sessions (slot_date, slot_time)
+  where status = 'confirmed';
 
 -- Credit transactions ledger
 create table public.transactions (

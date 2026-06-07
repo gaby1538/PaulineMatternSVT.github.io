@@ -3,9 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contact — Cours de SVT</title>
+  <title>Contact — Cours de SVT avec Pauline Mattern</title>
+  <meta name="description" content="Contactez Pauline Mattern pour des cours particuliers de SVT en ligne. Réponse sous 24h. Cours individuels du collège à la Terminale."/>
+  <meta property="og:title" content="Contact — Pauline Mattern SVT"/>
+  <meta property="og:description" content="Une question ? Écrivez à Pauline Mattern, professeure de SVT. Réponse garantie sous 24h."/>
+  <meta property="og:type" content="website"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="config.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -292,10 +297,8 @@
   </div>
 
   <script>
-  // ══ EMAILJS — mêmes clés que reservation.html ══
-  const EMAILJS_PUBLIC_KEY  = "BnKgpXzYQ9U2C2-ao";   // Account > API Keys
-  const EMAILJS_SERVICE_ID  = "service_v6ffs8i";   // Email Services
-  const EMAILJS_TEMPLATE_ID = "template_3g3zp41";  // Email Templates
+  // Clés EmailJS centralisées dans config.js
+  function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
 
   function sendMessage(){
     const prenom  = document.getElementById("prenom").value.trim();
@@ -308,6 +311,11 @@
     if(!prenom||!nom||!email||!sujet||!message){
       msg.className="msg msg-ko show";
       msg.textContent="Veuillez remplir tous les champs obligatoires (*).";
+      return;
+    }
+    if(!isValidEmail(email)){
+      msg.className="msg msg-ko show";
+      msg.textContent="Adresse email invalide.";
       return;
     }
 

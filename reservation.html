@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Réservation — Cours de SVT</title>
+  <title>Réservation — Cours de SVT avec Pauline Mattern</title>
+  <meta name="description" content="Réservez votre cours particulier de SVT en ligne avec Pauline Mattern. Choisissez une date, un créneau et votre formule. Sans engagement."/>
+  <meta property="og:title" content="Réserver un cours SVT — Pauline Mattern"/>
+  <meta property="og:description" content="Réservez votre premier cours de SVT en quelques clics. Créneaux disponibles 6j/7."/>
+  <meta property="og:type" content="website"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -653,11 +657,12 @@
     <!-- ══ PANEL 4 : CONFIRMATION ══ -->
     <div class="panel" id="panel-4">
       <div class="confirmation-wrapper">
-        <div class="confirmation-icon">✓</div>
-        <h2 class="confirmation-title">Réservation <em>confirmée !</em></h2>
+        <div class="confirmation-icon" style="background:var(--amber)">⏳</div>
+        <h2 class="confirmation-title">En attente de <em>paiement</em></h2>
         <p class="confirmation-text">
           Merci <strong id="confirmName"></strong> ! Votre demande a bien été enregistrée.
-          Vous allez recevoir un email de confirmation à <strong id="confirmEmail"></strong>.
+          <strong>Le créneau n'est définitivement confirmé qu'après réception du paiement.</strong>
+          Un récapitulatif sera envoyé à <strong id="confirmEmail"></strong> dès validation.
         </p>
 
         <div class="confirmation-recap">
@@ -696,7 +701,7 @@
             Pour confirmer définitivement votre réservation, réglez en ligne en toute sécurité via Stripe.
             Le cours est confirmé dès réception du paiement.
           </p>
-          <a href="#" target="_blank" class="btn btn-white" id="stripeBtn">
+          <a target="_blank" class="btn btn-white" id="stripeBtn">
             💳 Payer en ligne →
           </a>
         </div>
@@ -718,11 +723,8 @@
 
   <script>
   // ══════════════════════════════════════════════
-  // CONFIGURATION
+  // CONFIGURATION (clés EmailJS dans config.js)
   // ══════════════════════════════════════════════
-  const EMAILJS_PUBLIC_KEY  = "BnKgpXzYQ9U2C2-ao";
-  const EMAILJS_SERVICE_ID  = "service_v6ffs8i";
-  const EMAILJS_TEMPLATE_ID = "template_3g3zp41";
 
   const AVAILABLE_DAYS = [false, true, true, true, true, true, true];
   const TIME_SLOTS = {
@@ -734,10 +736,18 @@
     6: ["10:00","11:00","14:00","15:00","16:00"],
   };
 
+  // TODO: remplacez "#" par vos vrais liens Stripe Payment Link avant la mise en production.
+  // Créez les liens sur https://dashboard.stripe.com/payment-links
+  const STRIPE_LINKS = {
+    carte:   "#", // TODO: lien Stripe — cours à la carte 35€
+    mensuel: "#", // TODO: lien Stripe — pack mensuel 120€
+    bac:     "#", // TODO: lien Stripe — prépa bac 220€
+  };
+
   const FORMULES = {
-    carte:   { label: "Cours à la carte",  price: "35€",  stripe: "#" },
-    mensuel: { label: "Pack mensuel",      price: "120€", stripe: "#" },
-    bac:     { label: "Prépa Bac",         price: "220€", stripe: "#" },
+    carte:   { label: "Cours à la carte",  price: "35€",  stripe: STRIPE_LINKS.carte },
+    mensuel: { label: "Pack mensuel",      price: "120€", stripe: STRIPE_LINKS.mensuel },
+    bac:     { label: "Prépa Bac",         price: "220€", stripe: STRIPE_LINKS.bac },
   };
 
   // ══════════════════════════════════════════════
@@ -755,6 +765,7 @@
 
   // Créneaux pris — chargés depuis Supabase (format "YYYY-MM-DD HH:MM")
   let takenSlots = [];
+  let realtimeChannel = null;
 
   const today = new Date();
   today.setHours(0,0,0,0);
@@ -770,7 +781,7 @@
   }
 
   function subscribeRealtime() {
-    db.channel('reservation-realtime')
+    realtimeChannel = db.channel('reservation-realtime')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'sessions' }, () => {
         loadTakenSlots().then(() => {
           if (state.currentStep === 2) renderSlots();
@@ -778,6 +789,10 @@
       })
       .subscribe();
   }
+
+  window.addEventListener('beforeunload', function() {
+    if (realtimeChannel) db.removeChannel(realtimeChannel);
+  });
 
   // ══════════════════════════════════════════════
   // CALENDRIER
@@ -1019,6 +1034,11 @@
     const errEl     = document.getElementById("formError");
 
     if (!firstName || !lastName || !email || !niveau || !matiere) {
+      errEl.textContent = "Veuillez remplir tous les champs obligatoires (*).";
+      errEl.style.display = "block"; return;
+    }
+    if (!isValidEmail(email)) {
+      errEl.textContent = "Adresse email invalide.";
       errEl.style.display = "block"; return;
     }
     errEl.style.display = "none";
@@ -1051,8 +1071,21 @@
       document.getElementById("confirmHeure").textContent = state.selectedSlot;
     }
 
-    // Lien Stripe
-    document.getElementById("stripeBtn").href = formule.stripe;
+    // Lien Stripe — désactiver le bouton si non configuré
+    const stripeBtn = document.getElementById("stripeBtn");
+    if (!formule.stripe || formule.stripe === "#") {
+      stripeBtn.removeAttribute("href");
+      stripeBtn.style.pointerEvents = "none";
+      stripeBtn.style.opacity = "0.5";
+      stripeBtn.textContent = "⚠️ Paiement temporairement indisponible";
+      const paymentText = stripeBtn.previousElementSibling;
+      if (paymentText && paymentText.classList.contains("payment-text")) {
+        paymentText.insertAdjacentHTML("afterend",
+          '<p style="font-size:0.8rem;color:rgba(255,255,255,0.75);margin-bottom:0.8rem">Contactez-nous directement pour finaliser votre inscription.</p>');
+      }
+    } else {
+      stripeBtn.href = formule.stripe;
+    }
 
     // Message espace étudiant
     document.getElementById("studentSpaceDesc").textContent = isCode
@@ -1101,6 +1134,8 @@
   // ══════════════════════════════════════════════
   // UTILS
   // ══════════════════════════════════════════════
+  function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
   function formatDate(date) {
     return date.getFullYear() + '-'
       + String(date.getMonth()+1).padStart(2,"0") + '-'

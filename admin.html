@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
   <title>Administration — SVT.Cours</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -460,7 +461,7 @@
       <td>${fmtDate(s.slot_date)}</td>
       <td><strong>${s.slot_time}</strong></td>
       <td>${studentName(s)}</td>
-      <td>${s.subject || '—'}</td>
+      <td>${escapeHTML(s.subject) || '—'}</td>
       <td><button class="btn btn-danger" onclick="openCancelModal('${s.id}','${fmtDate(s.slot_date)} ${s.slot_time}')">Annuler</button></td>
     </tr>`).join('')}</tbody></table>`;
   }
@@ -477,21 +478,26 @@
     const el = document.getElementById('studentsContainer');
     if (!list.length) { el.innerHTML = '<div class="empty">Aucun étudiant.</div>'; return; }
 
+    const sessionCountMap = {};
+    allSessions.forEach(x => {
+      if (x.status !== 'cancelled') sessionCountMap[x.student_id] = (sessionCountMap[x.student_id] || 0) + 1;
+    });
+
     el.innerHTML = `<table class="data-table"><thead><tr>
       <th>Nom</th><th>Email</th><th>Niveau</th><th>Crédits</th><th>Séances</th><th>Inscrit le</th><th></th>
     </tr></thead><tbody>${list.map(s => {
-      const ses = allSessions.filter(x => x.student_id === s.id && x.status !== 'cancelled').length;
+      const ses = sessionCountMap[s.id] || 0;
       return `<tr>
-        <td><strong>${s.first_name} ${s.last_name}</strong></td>
-        <td style="font-size:0.82rem;color:var(--text-mid)">${s.email}</td>
+        <td><strong>${escapeHTML(s.first_name)} ${escapeHTML(s.last_name)}</strong></td>
+        <td style="font-size:0.82rem;color:var(--text-mid)">${escapeHTML(s.email)}</td>
         <td>${niveauLabel(s.niveau)}</td>
         <td>
           <strong style="font-family:var(--serif);font-size:1.1rem">${s.credits}</strong>
-          <button class="btn btn-secondary" style="padding:0.25rem 0.6rem;font-size:0.68rem;margin-left:0.5rem" onclick="openCreditsModal('${s.id}','${s.first_name} ${s.last_name}',${s.credits})">Modifier</button>
+          <button class="btn btn-secondary" style="padding:0.25rem 0.6rem;font-size:0.68rem;margin-left:0.5rem" onclick="openCreditsModal('${s.id}',${s.credits})">Modifier</button>
         </td>
         <td>${ses}</td>
         <td style="font-size:0.78rem;color:var(--text-mid)">${fmtDateTime(s.created_at)}</td>
-        <td><button class="btn btn-secondary" style="font-size:0.7rem;padding:0.3rem 0.6rem" onclick="showStudentSessions('${s.id}','${s.first_name} ${s.last_name}')">Séances →</button></td>
+        <td><button class="btn btn-secondary" style="font-size:0.7rem;padding:0.3rem 0.6rem" onclick="showStudentSessions('${s.id}')">Séances →</button></td>
       </tr>`;
     }).join('')}</tbody></table>`;
   }
@@ -506,15 +512,16 @@
     return map[v] || v || '—';
   }
 
-  function showStudentSessions(studentId, name) {
+  function showStudentSessions(studentId) {
     showSection('sessions', null);
     document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-    // Filtrer sur cet étudiant
+    const student = allStudents.find(x => x.id === studentId);
+    const name = student ? escapeHTML(student.first_name) + ' ' + escapeHTML(student.last_name) : '—';
     const el = document.getElementById('sessionsContainer');
     const list = allSessions.filter(s => s.student_id === studentId)
       .sort((a, b) => b.slot_date.localeCompare(a.slot_date));
 
-    document.querySelector('.page-hd h1').textContent = `Séances de ${name}`;
+    document.querySelector('.page-hd h1').textContent = `Séances de ${student ? student.first_name + ' ' + student.last_name : '—'}`;
     renderSessionList(list, el);
   }
 
@@ -559,7 +566,7 @@
         <td>${fmtDate(s.slot_date)}</td>
         <td><strong>${s.slot_time}</strong></td>
         <td>${studentName(s)}</td>
-        <td>${s.subject || '—'}</td>
+        <td>${escapeHTML(s.subject) || '—'}</td>
         <td><span class="badge ${cls}">${lbl}</span></td>
         <td>${isUpcoming ? `<button class="btn btn-danger" onclick="openCancelModal('${s.id}','${fmtDate(s.slot_date)} ${s.slot_time}')">Annuler</button>` : ''}</td>
       </tr>`;
@@ -580,7 +587,7 @@
         <td><code style="font-size:0.88rem;letter-spacing:0.06em;color:var(--green-deep)">${c.code}</code></td>
         <td><strong>${c.credits}</strong></td>
         <td><span class="badge ${c.used ? 'badge-grey' : 'badge-amber'}">${c.used ? 'Utilisé' : 'Disponible'}</span></td>
-        <td style="font-size:0.82rem;color:var(--text-mid)">${student ? student.first_name + ' ' + student.last_name : '—'}</td>
+        <td style="font-size:0.82rem;color:var(--text-mid)">${student ? escapeHTML(student.first_name) + ' ' + escapeHTML(student.last_name) : '—'}</td>
         <td style="font-size:0.78rem;color:var(--text-mid)">${c.used_at ? fmtDateTime(c.used_at) : '—'}</td>
         <td style="font-size:0.78rem;color:var(--text-mid)">${fmtDateTime(c.created_at)}</td>
       </tr>`;
@@ -627,8 +634,10 @@
   // ══════════════════════════════════════════════
   // MODAL CRÉDITS
   // ══════════════════════════════════════════════
-  function openCreditsModal(studentId, name, currentCredits) {
+  function openCreditsModal(studentId, currentCredits) {
     targetStudentId = studentId;
+    const s = allStudents.find(x => x.id === studentId);
+    const name = s ? s.first_name + ' ' + s.last_name : '—';
     document.getElementById('creditsModalDesc').textContent =
       `Étudiant : ${name} — Solde actuel : ${currentCredits} crédit${currentCredits !== 1 ? 's' : ''}`;
     document.getElementById('creditsAmount').value = '';
@@ -690,6 +699,11 @@
   // ══════════════════════════════════════════════
   // UTILS
   // ══════════════════════════════════════════════
+  function escapeHTML(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
   function closeModal(id) {
     document.getElementById(id).classList.remove('open');
   }
@@ -712,9 +726,9 @@
   }
 
   function studentName(session) {
-    if (session.students) return session.students.first_name + ' ' + session.students.last_name;
+    if (session.students) return escapeHTML(session.students.first_name) + ' ' + escapeHTML(session.students.last_name);
     const s = allStudents.find(x => x.id === session.student_id);
-    return s ? s.first_name + ' ' + s.last_name : '—';
+    return s ? escapeHTML(s.first_name) + ' ' + escapeHTML(s.last_name) : '—';
   }
 
   // ══════════════════════════════════════════════

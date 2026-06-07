@@ -1,0 +1,7 @@
+# Clés privées — ne jamais committer
+config.js
+
+# Dépendances & outils locaux
+node_modules/
+.DS_Store
+Thumbs.db
