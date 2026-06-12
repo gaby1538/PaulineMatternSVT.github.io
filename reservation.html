@@ -2,7 +2,9 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8"/>
+  <link rel="icon" href="svt_cours_logo.svg"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
   <title>Réservation — Cours de SVT avec Pauline Mattern</title>
   <meta name="description" content="Réservez votre cours particulier de SVT en ligne avec Pauline Mattern. Choisissez une date, un créneau et votre formule. Sans engagement."/>
   <meta property="og:title" content="Réserver un cours SVT — Pauline Mattern"/>
@@ -442,14 +444,9 @@
     <div class="stepper" id="stepper">
       <div class="step active" id="step-1">
         <div class="step-circle">1</div>
-        <span class="step-label">Date & formule</span>
+        <span class="step-label">Formule</span>
       </div>
       <div class="step-line" id="line-1"></div>
-      <div class="step" id="step-2">
-        <div class="step-circle">2</div>
-        <span class="step-label">Créneau horaire</span>
-      </div>
-      <div class="step-line" id="line-2"></div>
       <div class="step" id="step-3">
         <div class="step-circle">3</div>
         <span class="step-label">Vos informations</span>
@@ -461,36 +458,12 @@
       </div>
     </div>
 
-    <!-- ══ PANEL 1 : DATE & FORMULE ══ -->
+    <!-- ══ PANEL 1 : FORMULE ══ -->
     <div class="panel active" id="panel-1">
       <div class="booking-grid">
 
-        <!-- Calendrier -->
-        <div class="calendar-card" id="calendarCard">
-          <div class="cal-header">
-            <button class="cal-nav-btn" id="prevMonth">&#8592;</button>
-            <span class="cal-month-title" id="calMonthTitle"></span>
-            <button class="cal-nav-btn" id="nextMonth">&#8594;</button>
-          </div>
-          <div class="cal-grid" id="calGrid"></div>
-          <div class="cal-legend">
-            <div class="legend-item">
-              <div class="legend-dot" style="background:var(--green-light)"></div>
-              <span>Créneaux disponibles</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-dot" style="background:var(--green-deep)"></div>
-              <span>Date sélectionnée</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-dot" style="background:var(--cream-dark)"></div>
-              <span>Indisponible</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Code preview (mode code) -->
-        <div class="code-preview-card" id="codePreviewCard" style="display:none">
+        <!-- Code preview -->
+        <div class="code-preview-card" id="codePreviewCard">
           <div style="font-size:2.5rem;margin-bottom:0.8rem">🎟</div>
           <p style="font-family:var(--serif);font-size:1.3rem;color:var(--cream);margin:0.5rem 0 1rem">Réservation par code</p>
           <p style="font-size:0.85rem;color:rgba(245,240,232,0.7);line-height:1.6;max-width:280px;font-weight:300">Votre code d'activation vous sera envoyé par email après validation du paiement. Activez-le dans votre espace étudiant pour réserver vos séances à votre convenance.</p>
@@ -529,50 +502,15 @@
                 <span class="formule-price">220€</span>
               </label>
             </div>
-
-            <!-- Sélecteur de mode (carte uniquement) -->
-            <div class="mode-selector" id="modeSelector" style="display:none">
-              <p class="mode-selector-title">Comment souhaitez-vous réserver ?</p>
-              <label class="mode-opt selected" id="modeSchedule" onclick="setMode('schedule')">
-                <span class="mode-radio"></span>
-                <div>
-                  <strong>Choisir un créneau maintenant</strong>
-                  <p style="font-size:0.78rem;color:var(--text-mid);margin:0.2rem 0 0">Sélectionnez une date et une heure directement.</p>
-                </div>
-              </label>
-              <label class="mode-opt" id="modeCode" onclick="setMode('code')">
-                <span class="mode-radio"></span>
-                <div>
-                  <strong>Recevoir un code</strong>
-                  <p style="font-size:0.78rem;color:var(--text-mid);margin:0.2rem 0 0">Réservez plus tard depuis votre espace étudiant.</p>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <div class="info-box" id="infoBox">
-            📅 Sélectionnez une date sur le calendrier pour continuer.
           </div>
 
           <div class="nav-buttons">
             <span></span>
-            <button class="btn btn-primary" id="btn1Next" disabled>
-              Choisir un créneau →
+            <button class="btn btn-primary" id="btn1Next">
+              Continuer →
             </button>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- ══ PANEL 2 : CRÉNEAUX ══ -->
-    <div class="panel" id="panel-2">
-      <h2 class="slots-header" id="slotsHeader">Créneaux disponibles</h2>
-      <p class="slots-sub" id="slotsSub">Choisissez l'heure qui vous convient</p>
-      <div class="slots-grid" id="slotsGrid"></div>
-      <div id="slotError" class="msg msg-error" style="display:none">Veuillez sélectionner un créneau horaire.</div>
-      <div class="nav-buttons">
-        <button class="btn btn-secondary" id="btn2Back">← Retour</button>
-        <button class="btn btn-primary" id="btn2Next" disabled>Remplir le formulaire →</button>
       </div>
     </div>
 
@@ -726,22 +664,12 @@
   // CONFIGURATION (clés EmailJS dans config.js)
   // ══════════════════════════════════════════════
 
-  const AVAILABLE_DAYS = [false, true, true, true, true, true, true];
-  const TIME_SLOTS = {
-    1: ["09:00","10:00","11:00","14:00","15:00","16:00","17:00","18:00"],
-    2: ["09:00","10:00","14:00","15:00","17:00","18:00"],
-    3: ["09:00","10:00","11:00","16:00","17:00","18:00"],
-    4: ["09:00","14:00","15:00","16:00","17:00","18:00"],
-    5: ["09:00","10:00","11:00","14:00","15:00","16:00"],
-    6: ["10:00","11:00","14:00","15:00","16:00"],
-  };
-
   // TODO: remplacez "#" par vos vrais liens Stripe Payment Link avant la mise en production.
   // Créez les liens sur https://dashboard.stripe.com/payment-links
   const STRIPE_LINKS = {
-    carte:   "https://buy.stripe.com/test_7sY00j1fp3Hle1x5WvdZ600", // TODO: lien Stripe — cours à la carte 35€
-    mensuel: "https://buy.stripe.com/test_14A14n4rBb9NbTp2KjdZ601", // TODO: lien Stripe — pack mensuel 120€
-    bac:     "https://buy.stripe.com/test_14A7sLf6f7XB3mT4SrdZ602", // TODO: lien Stripe — prépa bac 220€
+    carte:   "https://buy.stripe.com/test_7sY00j1fp3Hle1x5WvdZ600",
+    mensuel: "https://buy.stripe.com/test_14A14n4rBb9NbTp2KjdZ601",
+    bac:     "https://buy.stripe.com/test_14A7sLf6f7XB3mT4SrdZ602",
   };
 
   const FORMULES = {
@@ -755,120 +683,8 @@
   // ══════════════════════════════════════════════
   let state = {
     currentStep:     1,
-    selectedDate:    null,
-    selectedSlot:    null,
     selectedFormule: "carte",
-    viewYear:        null,
-    viewMonth:       null,
-    bookingMode:     'schedule',
   };
-
-  // Créneaux pris — chargés depuis Supabase (format "YYYY-MM-DD HH:MM")
-  let takenSlots = [];
-  let realtimeChannel = null;
-
-  const today = new Date();
-  today.setHours(0,0,0,0);
-
-  // ══════════════════════════════════════════════
-  // SUPABASE — CRÉNEAUX EN TEMPS RÉEL
-  // ══════════════════════════════════════════════
-  async function loadTakenSlots() {
-    const { data, error } = await db.rpc('get_taken_slots');
-    if (!error && data) {
-      takenSlots = data.map(r => r.slot_date + ' ' + r.slot_time);
-    }
-  }
-
-  function subscribeRealtime() {
-    realtimeChannel = db.channel('reservation-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'sessions' }, () => {
-        loadTakenSlots().then(() => {
-          if (state.currentStep === 2) renderSlots();
-        });
-      })
-      .subscribe();
-  }
-
-  window.addEventListener('beforeunload', function() {
-    if (realtimeChannel) db.removeChannel(realtimeChannel);
-  });
-
-  // ══════════════════════════════════════════════
-  // CALENDRIER
-  // ══════════════════════════════════════════════
-  function initCalendar() {
-    state.viewYear  = today.getFullYear();
-    state.viewMonth = today.getMonth();
-    renderCalendar();
-  }
-
-  function renderCalendar() {
-    const { viewYear: y, viewMonth: m } = state;
-    const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-    document.getElementById("calMonthTitle").textContent = `${monthNames[m]} ${y}`;
-
-    const grid = document.getElementById("calGrid");
-    grid.innerHTML = "";
-
-    ["Lu","Ma","Me","Je","Ve","Sa","Di"].forEach(d => {
-      const el = document.createElement("div");
-      el.className = "cal-day-name"; el.textContent = d;
-      grid.appendChild(el);
-    });
-
-    const firstDay = new Date(y, m, 1).getDay();
-    const offset = firstDay === 0 ? 6 : firstDay - 1;
-    const daysInMonth = new Date(y, m+1, 0).getDate();
-
-    for (let i = 0; i < offset; i++) {
-      const el = document.createElement("div");
-      el.className = "cal-day empty";
-      grid.appendChild(el);
-    }
-
-    for (let d = 1; d <= daysInMonth; d++) {
-      const date = new Date(y, m, d);
-      const dow  = date.getDay();
-      const dateStr = formatDate(date);
-      const isPast  = date < today;
-      const isAvail = AVAILABLE_DAYS[dow] && !isPast;
-      const isToday = date.getTime() === today.getTime();
-      const isSel   = state.selectedDate === dateStr;
-
-      const el = document.createElement("div");
-      el.textContent = d;
-      el.className = "cal-day"
-        + (isPast || !AVAILABLE_DAYS[dow] ? " disabled" : "")
-        + (isAvail ? " has-slots" : "")
-        + (isToday ? " today" : "")
-        + (isSel   ? " selected" : "");
-
-      if (isAvail) el.addEventListener("click", () => selectDate(dateStr, date));
-      grid.appendChild(el);
-    }
-  }
-
-  function selectDate(dateStr, dateObj) {
-    state.selectedDate = dateStr;
-    renderCalendar();
-    const dayNames   = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-    const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-    const label = `${dayNames[dateObj.getDay()]} ${dateObj.getDate()} ${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
-    document.getElementById("infoBox").innerHTML = `✅ <strong>${label}</strong> sélectionné — choisissez votre formule puis continuez.`;
-    document.getElementById("btn1Next").disabled = false;
-  }
-
-  document.getElementById("prevMonth").addEventListener("click", () => {
-    state.viewMonth--;
-    if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear--; }
-    renderCalendar();
-  });
-  document.getElementById("nextMonth").addEventListener("click", () => {
-    state.viewMonth++;
-    if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear++; }
-    renderCalendar();
-  });
 
   // ══════════════════════════════════════════════
   // FORMULES
@@ -877,125 +693,38 @@
     opt.addEventListener("click", () => {
       document.querySelectorAll(".formule-option").forEach(o => o.classList.remove("selected"));
       opt.classList.add("selected");
-      onFormuleChange(opt.dataset.formule);
+      state.selectedFormule = opt.dataset.formule;
     });
   });
-
-  function onFormuleChange(formule) {
-    state.selectedFormule = formule;
-    const isPack = formule === 'mensuel' || formule === 'bac';
-    const modeSelector = document.getElementById('modeSelector');
-    if (isPack) {
-      modeSelector.style.display = 'none';
-      setMode('code');
-    } else {
-      modeSelector.style.display = 'block';
-      setMode('schedule');
-    }
-  }
-
-  function setMode(mode) {
-    state.bookingMode = mode;
-    const calendarCard    = document.getElementById('calendarCard');
-    const codePreviewCard = document.getElementById('codePreviewCard');
-    const infoBox         = document.getElementById('infoBox');
-    const btn1Next        = document.getElementById('btn1Next');
-
-    document.querySelectorAll('.mode-opt').forEach(o => o.classList.remove('selected'));
-
-    if (mode === 'schedule') {
-      const ms = document.getElementById('modeSchedule');
-      if (ms) ms.classList.add('selected');
-      calendarCard.style.display    = '';
-      codePreviewCard.style.display = 'none';
-      infoBox.style.display         = '';
-      btn1Next.textContent          = 'Choisir un créneau →';
-      btn1Next.disabled             = !state.selectedDate;
-    } else {
-      const mc = document.getElementById('modeCode');
-      if (mc) mc.classList.add('selected');
-      calendarCard.style.display    = 'none';
-      codePreviewCard.style.display = '';
-      infoBox.style.display         = 'none';
-      btn1Next.textContent          = 'Continuer →';
-      btn1Next.disabled             = false;
-    }
-  }
-
-  // ══════════════════════════════════════════════
-  // CRÉNEAUX — mis à jour en temps réel via Supabase
-  // ══════════════════════════════════════════════
-  function renderSlots() {
-    const dateObj = new Date(state.selectedDate + "T12:00:00");
-    const dow = dateObj.getDay();
-    const slots = TIME_SLOTS[dow] || [];
-    const grid = document.getElementById("slotsGrid");
-    grid.innerHTML = "";
-    state.selectedSlot = null;
-    document.getElementById("btn2Next").disabled = true;
-
-    const dayNames   = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-    const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-    document.getElementById("slotsHeader").textContent =
-      "Créneaux du " + dayNames[dow] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()];
-
-    slots.forEach(time => {
-      const key     = state.selectedDate + " " + time;
-      const isTaken = takenSlots.includes(key);
-      const btn     = document.createElement("button");
-      btn.className = "slot-btn" + (isTaken ? " taken" : "");
-      btn.disabled  = isTaken;
-      btn.innerHTML = `<span class="slot-time">${time}</span><span class="slot-duration">1h de cours</span>`;
-      if (!isTaken) {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".slot-btn").forEach(b => b.classList.remove("selected"));
-          btn.classList.add("selected");
-          state.selectedSlot = time;
-          document.getElementById("btn2Next").disabled = false;
-          document.getElementById("slotError").style.display = "none";
-        });
-      }
-      grid.appendChild(btn);
-    });
-  }
 
   // ══════════════════════════════════════════════
   // NAVIGATION ENTRE ÉTAPES
   // ══════════════════════════════════════════════
   function goTo(step) {
-    document.querySelector(`.panel.active`)?.classList.remove("active");
+    document.querySelector(".panel.active")?.classList.remove("active");
     document.getElementById(`panel-${step}`).classList.add("active");
 
-    for (let i = 1; i <= 4; i++) {
+    [1, 3, 4].forEach(i => {
       const s = document.getElementById(`step-${i}`);
-      s.classList.remove("active","done");
+      if (!s) return;
+      s.classList.remove("active", "done");
       if (i < step) s.classList.add("done");
       if (i === step) s.classList.add("active");
-    }
-    for (let i = 1; i <= 3; i++) {
-      document.getElementById(`line-${i}`).classList.toggle("done", i < step);
-    }
+    });
+    [1, 3].forEach(i => {
+      const line = document.getElementById(`line-${i}`);
+      if (line) line.classList.toggle("done", i < step);
+    });
     state.currentStep = step;
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   document.getElementById("btn1Next").addEventListener("click", () => {
-    if (state.bookingMode === 'code') { updateRecap(); goTo(3); }
-    else { renderSlots(); goTo(2); }
-  });
-
-  document.getElementById("btn2Back").addEventListener("click", () => goTo(1));
-  document.getElementById("btn2Next").addEventListener("click", () => {
-    if (!state.selectedSlot) {
-      document.getElementById("slotError").style.display = "block"; return;
-    }
     updateRecap();
     goTo(3);
   });
 
-  document.getElementById("btn3Back").addEventListener("click", () => {
-    if (state.bookingMode === 'code') goTo(1); else goTo(2);
-  });
+  document.getElementById("btn3Back").addEventListener("click", () => goTo(1));
   document.getElementById("btn3Next").addEventListener("click", () => submitForm());
 
   // ══════════════════════════════════════════════
@@ -1005,19 +734,8 @@
     const formule = FORMULES[state.selectedFormule];
     document.getElementById("recapFormule").textContent = formule.label;
     document.getElementById("recapTarif").textContent   = formule.price;
-
-    const isCode = state.bookingMode === 'code';
-    document.getElementById("recapDateRow").style.display  = isCode ? 'none' : '';
-    document.getElementById("recapHeureRow").style.display = isCode ? 'none' : '';
-
-    if (!isCode && state.selectedDate) {
-      const dateObj    = new Date(state.selectedDate + "T12:00:00");
-      const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-      const dayNames   = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-      const dateLabel  = dayNames[dateObj.getDay()] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
-      document.getElementById("recapDate").textContent  = dateLabel;
-      document.getElementById("recapHeure").textContent = state.selectedSlot;
-    }
+    document.getElementById("recapDateRow").style.display  = 'none';
+    document.getElementById("recapHeureRow").style.display = 'none';
   }
 
   // ══════════════════════════════════════════════
@@ -1043,35 +761,17 @@
     }
     errEl.style.display = "none";
 
-    const isCode  = state.bookingMode === 'code';
     const formule = FORMULES[state.selectedFormule];
 
-    let dateLabel = '';
-    if (!isCode && state.selectedDate) {
-      const dateObj    = new Date(state.selectedDate + "T12:00:00");
-      const monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-      const dayNames   = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-      dateLabel = dayNames[dateObj.getDay()] + " " + dateObj.getDate() + " " + monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
-    }
-
-    // Remplir confirmation
     document.getElementById("confirmName").textContent    = firstName;
     document.getElementById("confirmEmail").textContent   = email;
     document.getElementById("confirmFormule").textContent = formule.label;
     document.getElementById("confirmNiveau").textContent  = niveau;
     document.getElementById("confirmTarif").textContent   = formule.price;
 
-    if (isCode) {
-      document.getElementById("dateTimeRows").style.display   = 'none';
-      document.getElementById("codeConfirmBox").style.display = 'block';
-    } else {
-      document.getElementById("dateTimeRows").style.display   = '';
-      document.getElementById("codeConfirmBox").style.display = 'none';
-      document.getElementById("confirmDate").textContent  = dateLabel;
-      document.getElementById("confirmHeure").textContent = state.selectedSlot;
-    }
+    document.getElementById("dateTimeRows").style.display   = 'none';
+    document.getElementById("codeConfirmBox").style.display = 'block';
 
-    // Lien Stripe — désactiver le bouton si non configuré
     const stripeBtn = document.getElementById("stripeBtn");
     if (!formule.stripe || formule.stripe === "#") {
       stripeBtn.removeAttribute("href");
@@ -1087,19 +787,16 @@
       stripeBtn.href = formule.stripe;
     }
 
-    // Message espace étudiant
-    document.getElementById("studentSpaceDesc").textContent = isCode
-      ? "Votre code d'activation vous sera envoyé par email après confirmation du paiement. Activez-le dans votre espace étudiant pour réserver vos séances."
-      : "Retrouvez vos réservations et gérez votre suivi dans votre espace étudiant personnel.";
+    document.getElementById("studentSpaceDesc").textContent =
+      "Votre code d'activation vous sera envoyé par email après confirmation du paiement. Activez-le dans votre espace étudiant pour réserver vos séances.";
 
     goTo(4);
 
-    // Email de confirmation
     sendConfirmationEmail({
       to_name:  firstName + " " + lastName,
       to_email: email,
-      date:     isCode ? "Code envoyé par email après paiement" : dateLabel,
-      heure:    isCode ? "—" : state.selectedSlot,
+      date:     "Code envoyé par email après paiement",
+      heure:    "—",
       formule:  formule.label,
       tarif:    formule.price,
       niveau,
@@ -1136,51 +833,23 @@
   // ══════════════════════════════════════════════
   function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
 
-  function formatDate(date) {
-    return date.getFullYear() + '-'
-      + String(date.getMonth()+1).padStart(2,"0") + '-'
-      + String(date.getDate()).padStart(2,"0");
-  }
-
   // ══════════════════════════════════════════════
   // INIT
   // ══════════════════════════════════════════════
   (async function init() {
-    // Auth guard — redirect to login if not authenticated
     const { data: { session } } = await db.auth.getSession();
     if (!session) {
       window.location.href = 'espace-etudiant.html?redirect=reservation.html';
       return;
     }
 
-    // Credit check — show blocking message if no credits
-    const { data: student } = await db.from('students').select('credits').eq('id', session.user.id).single();
-    if (!student || student.credits < 1) {
-      document.getElementById('pageContent').style.display = 'block';
-      document.getElementById('pageContent').innerHTML = `
-        <div style="max-width:560px;margin:0 auto;text-align:center;padding:4rem 1rem">
-          <div style="font-size:3rem;margin-bottom:1.5rem">🎟</div>
-          <h2 style="font-family:var(--serif);font-size:2rem;color:var(--green-deep);margin-bottom:1rem">Aucun crédit disponible</h2>
-          <p style="color:var(--text-mid);line-height:1.7;margin-bottom:2rem">
-            Vous n'avez pas de crédit pour réserver une séance.<br/>
-            Activez un code dans votre espace étudiant ou achetez un pack.
-          </p>
-          <a href="espace-etudiant.html" class="btn btn-primary">→ Mon espace étudiant</a>
-        </div>`;
-      return;
-    }
-
     document.getElementById('pageContent').style.display = 'block';
-    await loadTakenSlots();
-    subscribeRealtime();
-    initCalendar();
-    onFormuleChange('carte');
 
     const formuleParam = new URLSearchParams(location.search).get('formule');
     if (formuleParam && FORMULES[formuleParam]) {
       document.querySelectorAll('.formule-option').forEach(o => o.classList.remove('selected'));
       const opt = document.querySelector(`.formule-option[data-formule="${formuleParam}"]`);
-      if (opt) { opt.classList.add('selected'); onFormuleChange(formuleParam); }
+      if (opt) { opt.classList.add('selected'); state.selectedFormule = formuleParam; }
     }
   })();
   </script>

@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8"/>
+  <link rel="icon" href="svt_cours_logo.svg"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Espace Étudiant — SVT.Cours</title>
   <meta name="robots" content="noindex, nofollow"/>
@@ -27,6 +28,9 @@
     .nav-links a:hover, .nav-links a.active { color: var(--green-mid); }
     .nav-cta { background: var(--green-deep); color: var(--cream) !important; padding: 0.5rem 1.2rem; }
     @media(max-width: 768px) { nav { padding: 1rem 1.5rem; } .nav-links { display: none; } }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--green-deep); transition: all 0.3s; }
+    @media(max-width: 768px) { .hamburger { display: flex; } }
 
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem 1.8rem; font-family: var(--sans); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; text-decoration: none; }
     .btn-primary { background: var(--green-deep); color: var(--cream); border-color: var(--green-deep); }
@@ -212,6 +216,9 @@
       <li><a href="espace-etudiant.html" class="active">Mon espace</a></li>
       <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- ═══ LOGIN ═══ -->
@@ -380,10 +387,7 @@
                       <option>Révision générale</option>
                     </select>
                   </div>
-                  <div class="form-group" style="margin-top:0.8rem">
-                    <label class="form-label">Notes (optionnel)</label>
-                    <textarea class="form-textarea" id="bNotes" placeholder="Sujet à revoir, exercices, questions…"></textarea>
-                  </div>
+
                   <div id="bDateInfo" class="msg msg-info" style="margin-top:0.8rem;font-size:0.78rem">
                     📅 Sélectionnez une date sur le calendrier.
                   </div>
@@ -1056,7 +1060,7 @@
     document.getElementById('bookingSection').style.display = 'none';
     initBookingCalendar();
     document.getElementById('bMatiere').value = '';
-    document.getElementById('bNotes').value   = '';
+
     const info = document.getElementById('bDateInfo');
     info.className = 'msg msg-info';
     info.textContent = '📅 Sélectionnez une date sur le calendrier.';
@@ -1122,5 +1126,6 @@
     }
   })();
   </script>
+  <script src="nav.js"></script>
 </body>
 </html>
