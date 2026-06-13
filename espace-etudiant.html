@@ -7,40 +7,12 @@
   <title>Espace Étudiant — SVT.Cours</title>
   <meta name="robots" content="noindex, nofollow"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --green-deep: #1a3a2a; --green-mid: #2d6a4f; --green-light: #52b788;
-      --cream: #f5f0e8; --cream-dark: #e8e0d0; --amber: #c9881c; --amber-light: #e8b84b;
-      --text-dark: #1c1c1c; --text-mid: #4a4a4a; --white: #ffffff; --red: #c0392b;
-      --serif: 'Cormorant Garamond', Georgia, serif; --sans: 'DM Sans', sans-serif;
-    }
-    html { scroll-behavior: smooth; }
-    body { font-family: var(--sans); background: var(--cream); color: var(--text-dark); min-height: 100vh; }
-
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: rgba(245,240,232,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(45,106,79,0.15); }
-    .nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--green-deep); text-decoration: none; }
-    .nav-logo span { color: var(--amber); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a { font-size: 0.85rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--green-mid); }
-    .nav-cta { background: var(--green-deep); color: var(--cream) !important; padding: 0.5rem 1.2rem; }
-    @media(max-width: 768px) { nav { padding: 1rem 1.5rem; } .nav-links { display: none; } }
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
-    .hamburger span { display: block; width: 24px; height: 2px; background: var(--green-deep); transition: all 0.3s; }
-    @media(max-width: 768px) { .hamburger { display: flex; } }
-
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem 1.8rem; font-family: var(--sans); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; text-decoration: none; }
-    .btn-primary { background: var(--green-deep); color: var(--cream); border-color: var(--green-deep); }
-    .btn-primary:hover { background: transparent; color: var(--green-deep); }
-    .btn-secondary { background: transparent; color: var(--green-deep); border-color: var(--green-deep); }
-    .btn-secondary:hover { background: var(--green-deep); color: var(--cream); }
-    .btn-sm { padding: 0.5rem 1rem; font-size: 0.78rem; }
-    .btn-danger { background: transparent; color: var(--red); border-color: var(--red); font-size: 0.75rem; padding: 0.35rem 0.8rem; }
-    .btn-danger:hover { background: var(--red); color: var(--white); }
-    button:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+    body { min-height: 100vh; }
+    .btn-danger { font-size: 0.75rem; padding: 0.35rem 0.8rem; }
 
     /* ── LOGIN ── */
     .login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 6rem 2rem 3rem; }
@@ -57,10 +29,7 @@
     .form-textarea { border: 1px solid var(--cream-dark); background: var(--cream); padding: 0.85rem 1rem; font-family: var(--sans); font-size: 0.88rem; color: var(--text-dark); outline: none; transition: border-color 0.2s; width: 100%; resize: vertical; min-height: 80px; }
     .form-textarea:focus { border-color: var(--green-mid); background: var(--white); }
     .login-note { font-size: 0.78rem; color: var(--text-mid); margin-top: 1.5rem; line-height: 1.6; padding: 1rem; background: var(--cream); border-left: 3px solid var(--green-light); }
-    .msg { padding: 0.8rem 1.2rem; font-size: 0.85rem; margin-top: 0.8rem; line-height: 1.5; }
-    .msg-success { background: rgba(82,183,136,0.1); color: var(--green-mid); border-left: 3px solid var(--green-light); }
-    .msg-error { background: rgba(192,57,43,0.08); color: var(--red); border-left: 3px solid var(--red); }
-    .msg-info { background: rgba(201,136,28,0.08); color: var(--amber); border-left: 3px solid var(--amber); }
+    .msg { margin-top: 0.8rem; }
 
     /* ── DASHBOARD ── */
     .dash-topbar { background: var(--green-deep); color: var(--cream); padding: 5.5rem 4rem 1.8rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
@@ -116,7 +85,8 @@
     .cal-nav-btn:hover { background: var(--green-deep); color: var(--white); border-color: var(--green-deep); }
     .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
     .cal-day-name { text-align: center; font-size: 0.6rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-mid); padding: 0.3rem 0; }
-    .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; cursor: pointer; border-radius: 50%; border: 1px solid transparent; transition: all 0.18s; color: var(--text-dark); }
+    .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; cursor: pointer; border-radius: 50%; border: 1px solid transparent; transition: all 0.18s; color: var(--text-dark); background: none; font-family: inherit; }
+    .cal-day:disabled { opacity: 1; }
     .cal-day:hover:not(.disabled):not(.empty) { border-color: var(--green-light); color: var(--green-mid); }
     .cal-day.today { font-weight: 500; color: var(--amber); }
     .cal-day.selected { background: var(--green-deep); color: var(--white) !important; border-color: var(--green-deep); }
@@ -959,14 +929,17 @@
       const ds   = fmtDate(date);
       const past = date < bToday;
       const avail = AVAILABLE_DAYS[dow] && !past;
-      const el = document.createElement('div');
+      const el = document.createElement('button');
+      el.type = 'button';
       el.textContent = d;
+      el.setAttribute('aria-label', DAYS[dow] + ' ' + d + ' ' + MONTHS_L[m] + ' ' + y);
       el.className = 'cal-day'
         + (past || !AVAILABLE_DAYS[dow] ? ' disabled' : '')
         + (avail ? ' has-slots' : '')
         + (date.getTime() === bToday.getTime() ? ' today' : '')
         + (bSt.selDate === ds ? ' selected' : '');
       if (avail) el.addEventListener('click', () => selectBDate(ds, date));
+      else el.disabled = true;
       grid.appendChild(el);
     }
   }
@@ -1006,14 +979,22 @@
     document.getElementById('bBtn2Next').disabled = true;
     document.getElementById('bSlotsHeader').textContent =
       'Créneaux du ' + DAYS[dow] + ' ' + dateObj.getDate() + ' ' + MONTHS_L[dateObj.getMonth()];
+
+    const isToday = bSt.selDate === fmtDate(bToday);
+    const now = new Date();
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
     slots.forEach(time => {
       const key     = bSt.selDate + ' ' + time;
       const isTaken = taken.includes(key);
+      const [h, m]  = time.split(':').map(Number);
+      const isPast  = isToday && (h * 60 + m) <= nowMinutes;
+      const disabled = isTaken || isPast;
       const btn     = document.createElement('button');
-      btn.className = 'slot-btn' + (isTaken ? ' taken' : '');
-      btn.disabled  = isTaken;
+      btn.className = 'slot-btn' + (disabled ? ' taken' : '');
+      btn.disabled  = disabled;
       btn.textContent = time;
-      if (!isTaken) btn.addEventListener('click', () => {
+      if (!disabled) btn.addEventListener('click', () => {
         document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected'); bSt.selSlot = time;
         document.getElementById('bBtn2Next').disabled = false;

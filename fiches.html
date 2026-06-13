@@ -8,35 +8,17 @@
   <meta name="description" content="Fiches méthode SVT pour réussir le bac : rédiger une synthèse, construire un schéma bilan, maîtriser l'argumentation scientifique."/>
   <meta property="og:title" content="Fiches méthode SVT — Pauline Mattern"/>
   <meta property="og:description" content="Toutes les fiches méthode pour le bac SVT : synthèse, schémas, grand oral."/>
-  <meta property="og:type" content="website"/>
+  <meta property="og:type"  content="website"/>
+  <meta property="og:url"   content="https://VOTRE_DOMAINE.fr/fiches.html"/>
+  <meta property="og:image" content="https://VOTRE_DOMAINE.fr/og-image.jpg"/>
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="twitter:title"       content="Fiches méthode SVT — Pauline Mattern"/>
+  <meta name="twitter:description" content="Toutes les fiches méthode pour le bac SVT : synthèse, schémas, grand oral."/>
+  <meta name="twitter:image"       content="https://VOTRE_DOMAINE.fr/og-image.jpg"/>
+  <link rel="canonical" href="https://VOTRE_DOMAINE.fr/fiches.html"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --green-deep:#1a3a2a;--green-mid:#2d6a4f;--green-light:#52b788;
-      --cream:#f5f0e8;--cream-dark:#e8e0d0;--amber:#c9881c;--amber-light:#e8b84b;
-      --text-dark:#1c1c1c;--text-mid:#4a4a4a;--white:#ffffff;
-      --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif;
-    }
-    html{scroll-behavior:smooth}
-    body{font-family:var(--sans);background:var(--cream);color:var(--text-dark)}
-
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(45,106,79,0.15)}
-    .nav-logo{font-family:var(--serif);font-size:1.4rem;color:var(--green-deep);text-decoration:none}
-    .nav-logo span{color:var(--amber)}
-    .nav-links{display:flex;gap:2rem;list-style:none}
-    .nav-links a{font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s}
-    .nav-links a:hover,.nav-links a.active{color:var(--green-mid)}
-    .nav-cta{background:var(--green-deep);color:var(--cream)!important;padding:0.5rem 1.2rem}
-    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:0}
-    .hamburger span{display:block;width:24px;height:2px;background:var(--green-deep);transition:all 0.3s}
-    @media(max-width:768px){
-      nav{padding:1rem 1.5rem}
-      .nav-links{display:none;flex-direction:column;gap:1.2rem;position:absolute;top:100%;left:0;right:0;background:var(--cream);padding:2rem;border-top:1px solid var(--cream-dark)}
-      .nav-links.open{display:flex}
-      .hamburger{display:flex}
-    }
-
     /* HERO */
     .hero{background:var(--amber);color:var(--white);padding:9rem 6rem 5rem;position:relative;overflow:hidden}
     .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 80%,rgba(255,255,255,0.1) 0%,transparent 60%)}
@@ -111,6 +93,7 @@
     .fiche-content .encadre{background:rgba(26,58,42,0.05);border-left:3px solid var(--green-light);padding:0.8rem 1rem;margin:1rem 0;font-style:italic}
     .dl-btn{display:inline-flex;align-items:center;gap:0.5rem;background:var(--green-deep);color:var(--cream);padding:0.7rem 1.4rem;font-size:0.82rem;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--sans);border:none;cursor:pointer;text-decoration:none;transition:background 0.2s;margin-top:1.5rem}
     .dl-btn:hover{background:var(--amber)}
+    .dl-btn--disabled{background:rgba(0,0,0,0.08);color:rgba(0,0,0,0.35);cursor:not-allowed;pointer-events:none}
 
     .reveal{opacity:0;transform:translateY(20px);transition:all 0.5s ease}
     .reveal.visible{opacity:1;transform:none}
@@ -365,7 +348,7 @@
       </div>
       <div class="modal-body">
         <div class="fiche-content" id="fContent"></div>
-        <a href="#" class="dl-btn">📄 Télécharger la fiche PDF</a>
+        <a id="dlBtn" class="dl-btn">📄 Télécharger la fiche PDF</a>
       </div>
     </div>
   </div>
@@ -578,6 +561,18 @@
     document.getElementById("fType").textContent=f.type;
     document.getElementById("fTitle").textContent=f.title;
     document.getElementById("fContent").innerHTML=f.content;
+    const btn=document.getElementById("dlBtn");
+    if(f.pdf){
+      btn.href=`/ressources/fiches/${id}.pdf`;
+      btn.setAttribute("download","");
+      btn.classList.remove("dl-btn--disabled");
+      btn.textContent="📄 Télécharger la fiche PDF";
+    } else {
+      btn.removeAttribute("href");
+      btn.removeAttribute("download");
+      btn.classList.add("dl-btn--disabled");
+      btn.textContent="⏳ Bientôt disponible";
+    }
     document.getElementById("modalOverlay").classList.add("open");
     document.body.style.overflow="hidden";
   }

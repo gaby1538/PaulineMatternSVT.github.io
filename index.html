@@ -8,104 +8,56 @@
   <meta name="description" content="Cours particuliers de SVT en ligne avec Pauline Mattern, professeure certifiée. Du collège à la Terminale, suivi personnalisé et pédagogie claire."/>
   <meta property="og:title" content="Cours de SVT — Pauline Mattern"/>
   <meta property="og:description" content="Cours particuliers de SVT en ligne du collège au lycée. Réservez votre premier cours sans engagement."/>
-  <meta property="og:type" content="website"/>
+  <meta property="og:type"  content="website"/>
+  <meta property="og:url"   content="https://VOTRE_DOMAINE.fr/"/>
+  <meta property="og:image" content="https://VOTRE_DOMAINE.fr/og-image.jpg"/>
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="twitter:title"       content="Cours de SVT — Pauline Mattern"/>
+  <meta name="twitter:description" content="Cours particuliers de SVT en ligne du collège au lycée. Réservez votre premier cours sans engagement."/>
+  <meta name="twitter:image"       content="https://VOTRE_DOMAINE.fr/og-image.jpg"/>
+  <link rel="canonical" href="https://VOTRE_DOMAINE.fr/"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://VOTRE_DOMAINE.fr/#pauline-mattern",
+        "name": "Pauline Mattern",
+        "jobTitle": "Professeure de SVT certifiée",
+        "url": "https://VOTRE_DOMAINE.fr/",
+        "image": "https://VOTRE_DOMAINE.fr/og-image.jpg",
+        "sameAs": []
+      },
+      {
+        "@type": "Service",
+        "@id": "https://VOTRE_DOMAINE.fr/#cours-svt",
+        "name": "Cours particuliers de SVT en ligne",
+        "description": "Cours particuliers de SVT en ligne du collège à la Terminale, avec suivi personnalisé par Pauline Mattern, professeure certifiée.",
+        "provider": { "@id": "https://VOTRE_DOMAINE.fr/#pauline-mattern" },
+        "areaServed": "FR",
+        "serviceType": "Cours particuliers",
+        "offers": {
+          "@type": "Offer",
+          "url": "https://VOTRE_DOMAINE.fr/reservation.html"
+        }
+      }
+    ]
+  }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css"/>
   <style>
-    /* ── RESET & VARIABLES ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { overflow-x: hidden; }
 
-    :root {
-      --green-deep:   #1a3a2a;
-      --green-mid:    #2d6a4f;
-      --green-light:  #52b788;
-      --cream:        #f5f0e8;
-      --cream-dark:   #e8e0d0;
-      --amber:        #c9881c;
-      --amber-light:  #e8b84b;
-      --text-dark:    #1c1c1c;
-      --text-mid:     #4a4a4a;
-      --white:        #ffffff;
-      --serif:        'Cormorant Garamond', Georgia, serif;
-      --sans:         'DM Sans', sans-serif;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--sans);
-      background-color: var(--cream);
-      color: var(--text-dark);
-      overflow-x: hidden;
-    }
-
-    /* ── NAVBAR ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 4rem;
-      background: rgba(245, 240, 232, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(45, 106, 79, 0.15);
-      transition: box-shadow 0.3s;
-    }
+    /* ── NAVBAR (surcharges index) ── */
+    nav { background: rgba(245,240,232,0.92); transition: box-shadow 0.3s; }
     nav.scrolled { box-shadow: 0 4px 30px rgba(26,58,42,0.1); }
-
-    .nav-logo {
-      font-family: var(--serif);
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--green-deep);
-      text-decoration: none;
-      letter-spacing: 0.02em;
-    }
-    .nav-logo span { color: var(--amber); }
-
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-    .nav-links a {
-      font-family: var(--sans);
-      font-size: 0.88rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-mid);
-      text-decoration: none;
-      transition: color 0.25s;
-    }
-    .nav-links a:hover { color: var(--green-mid); }
-
-    .nav-cta {
-      background: var(--green-deep);
-      color: var(--cream) !important;
-      padding: 0.6rem 1.4rem;
-      border-radius: 2px;
-      transition: background 0.25s !important;
-    }
+    .nav-logo { font-size: 1.5rem; font-weight: 600; letter-spacing: 0.02em; }
+    .nav-links { gap: 2.5rem; }
+    .nav-links a { font-size: 0.88rem; font-weight: 500; letter-spacing: 0.08em; transition: color 0.25s; }
+    .nav-cta { padding: 0.6rem 1.4rem; border-radius: 2px; transition: background 0.25s !important; }
     .nav-cta:hover { background: var(--green-mid) !important; color: var(--white) !important; }
-
-    /* hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--green-deep);
-      transition: all 0.3s;
-    }
 
     /* ── HERO ── */
     .hero {
@@ -1016,8 +968,8 @@
   <section class="section-apropos" id="apropos">
     <div class="apropos-image-area reveal">
       <div class="apropos-main-block">
-        <!-- Photo de profil -->
-        <img src="popo_prof_fake.jpg" alt="Pauline Mattern - Professeure de SVT">
+        <!-- À REMPLACER : déposez la vraie photo dans ce dossier sous le nom "pauline-mattern.jpg" -->
+        <img src="pauline-mattern.jpg" alt="Pauline Mattern - Professeure de SVT">
       </div>
     </div>
     <div class="apropos-content reveal">
@@ -1101,6 +1053,7 @@
       <div class="reservation-actions">
         <!-- Remplacez ce lien par votre lien Calendly ou Koalendar -->
         <a href="reservation.html" class="btn-primary">📅 Réserver un créneau</a>
+        <!-- À REMPLACER : adresse email (vérifier aussi que le domaine coursvst.fr est le bon) -->
         <a href="mailto:contact@coursvst.fr" class="btn-secondary">✉️ Me contacter</a>
       </div>
     </div>
@@ -1117,7 +1070,7 @@
       <li><a href="ressources.html">Ressources</a></li>
       <li><a href="reservation.html">Réservation</a></li>
     </ul>
-    <p class="footer-copy">© 2025 — Cours de SVT. Tous droits réservés.</p>
+    <p class="footer-copy">© 2025 — Cours de SVT. Tous droits réservés. <a href="admin.html" style="color:rgba(255,255,255,0.2);font-size:0.72rem;text-decoration:none;margin-left:1rem" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.2)'">Administration</a></p>
   </footer>
 
   <script src="nav.js"></script>

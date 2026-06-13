@@ -7,25 +7,9 @@
   <title>Page introuvable — Pauline Mattern SVT</title>
   <meta name="robots" content="noindex, nofollow"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --green-deep:  #1a3a2a;
-      --green-mid:   #2d6a4f;
-      --green-light: #52b788;
-      --cream:       #f5f0e8;
-      --cream-dark:  #e8e0d0;
-      --amber:       #c9881c;
-      --text-dark:   #1c1c1c;
-      --text-mid:    #4a4a4a;
-      --white:       #ffffff;
-      --serif: 'Cormorant Garamond', Georgia, serif;
-      --sans:  'DM Sans', sans-serif;
-    }
     body {
-      font-family: var(--sans);
-      background: var(--cream);
-      color: var(--text-dark);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -60,27 +44,12 @@
     .links {
       display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
     }
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.9rem 1.8rem; font-family: var(--sans); font-size: 0.85rem;
-      font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-      cursor: pointer; transition: all 0.3s; border: 2px solid transparent;
-      text-decoration: none;
-    }
-    .btn-primary { background: var(--green-deep); color: var(--cream); border-color: var(--green-deep); }
-    .btn-primary:hover { background: transparent; color: var(--green-deep); }
-    .btn-secondary { background: transparent; color: var(--green-deep); border-color: var(--green-deep); }
-    .btn-secondary:hover { background: var(--green-deep); color: var(--cream); }
+    .btn { padding: 0.9rem 1.8rem; }
     .divider {
       width: 48px; height: 2px; background: var(--green-light);
       margin: 2rem auto;
     }
-    .nav-logo {
-      font-family: var(--serif); font-size: 1.3rem;
-      color: var(--green-deep); text-decoration: none;
-      display: block; margin-bottom: 3rem;
-    }
-    .nav-logo span { color: var(--amber); }
+    .nav-logo { font-size: 1.3rem; display: block; margin-bottom: 3rem; }
   </style>
 </head>
 <body>

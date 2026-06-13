@@ -5,56 +5,20 @@
   <link rel="icon" href="svt_cours_logo.svg"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="robots" content="noindex, nofollow"/>
-  <title>Réservation — Cours de SVT avec Pauline Mattern</title>
-  <meta name="description" content="Réservez votre cours particulier de SVT en ligne avec Pauline Mattern. Choisissez une date, un créneau et votre formule. Sans engagement."/>
-  <meta property="og:title" content="Réserver un cours SVT — Pauline Mattern"/>
-  <meta property="og:description" content="Réservez votre premier cours de SVT en quelques clics. Créneaux disponibles 6j/7."/>
+  <title>Acheter un pack de crédits — Cours de SVT avec Pauline Mattern</title>
+  <meta name="description" content="Achetez un pack de crédits pour des cours de SVT avec Pauline Mattern. Recevez votre code d'activation par email et réservez vos séances à votre rythme depuis votre espace étudiant."/>
+  <meta property="og:title" content="Pack de cours SVT — Pauline Mattern"/>
+  <meta property="og:description" content="Achetez votre pack de cours SVT en quelques clics. Recevez un code d'activation et réservez vos séances quand vous voulez."/>
   <meta property="og:type" content="website"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <style>
-    /* ── VARIABLES & RESET ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --green-deep:  #1a3a2a;
-      --green-mid:   #2d6a4f;
-      --green-light: #52b788;
-      --cream:       #f5f0e8;
-      --cream-dark:  #e8e0d0;
-      --amber:       #c9881c;
-      --amber-light: #e8b84b;
-      --text-dark:   #1c1c1c;
-      --text-mid:    #4a4a4a;
-      --white:       #ffffff;
-      --red:         #c0392b;
-      --serif: 'Cormorant Garamond', Georgia, serif;
-      --sans:  'DM Sans', sans-serif;
-    }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--sans);
-      background: var(--cream);
-      color: var(--text-dark);
-      min-height: 100vh;
-    }
-
-    /* ── NAVBAR ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 4rem;
-      background: rgba(245,240,232,0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(45,106,79,0.15);
-    }
-    .nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--green-deep); text-decoration: none; }
-    .nav-logo span { color: var(--amber); }
-    .nav-back { font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mid); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.2s; }
-    .nav-back:hover { color: var(--green-mid); }
+    body { min-height: 100vh; }
 
     /* ── PAGE LAYOUT ── */
     .page-wrapper {
@@ -131,69 +95,6 @@
       align-items: start;
     }
 
-    /* Calendrier */
-    .calendar-card {
-      background: var(--white);
-      border: 1px solid var(--cream-dark);
-      padding: 2rem;
-    }
-    .cal-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1.5rem;
-    }
-    .cal-nav-btn {
-      background: none; border: 1px solid var(--cream-dark);
-      width: 34px; height: 34px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.9rem; color: var(--green-deep);
-      transition: all 0.2s;
-    }
-    .cal-nav-btn:hover { background: var(--green-deep); color: var(--white); border-color: var(--green-deep); }
-    .cal-month-title {
-      font-family: var(--serif); font-size: 1.3rem; color: var(--green-deep);
-    }
-    .cal-grid {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
-    }
-    .cal-day-name {
-      text-align: center; font-size: 0.7rem; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--text-mid);
-      padding: 0.4rem 0; font-weight: 500;
-    }
-    .cal-day {
-      aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-      font-size: 0.88rem; cursor: pointer; border-radius: 50%;
-      border: 1px solid transparent; transition: all 0.2s; color: var(--text-dark);
-    }
-    .cal-day:hover:not(.disabled):not(.empty) {
-      border-color: var(--green-light); color: var(--green-mid);
-    }
-    .cal-day.today { font-weight: 500; color: var(--amber); }
-    .cal-day.selected {
-      background: var(--green-deep); color: var(--white) !important;
-      border-color: var(--green-deep);
-    }
-    .cal-day.disabled { color: var(--cream-dark); cursor: not-allowed; }
-    .cal-day.has-slots { position: relative; }
-    .cal-day.has-slots::after {
-      content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
-      width: 4px; height: 4px; border-radius: 50%; background: var(--green-light);
-    }
-    .cal-day.selected::after { background: var(--amber-light); }
-    .cal-day.empty { cursor: default; }
-
-    /* Légende */
-    .cal-legend {
-      display: flex; gap: 1.2rem; margin-top: 1.2rem; flex-wrap: wrap;
-    }
-    .legend-item {
-      display: flex; align-items: center; gap: 0.4rem;
-      font-size: 0.72rem; color: var(--text-mid);
-    }
-    .legend-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-    }
-
     /* Formule */
     .formule-card {
       background: var(--white);
@@ -228,40 +129,6 @@
     }
     .formule-name { font-size: 0.9rem; font-weight: 500; color: var(--text-dark); }
     .formule-price { font-family: var(--serif); font-size: 1rem; color: var(--amber); margin-left: auto; }
-
-    /* Info box */
-    .info-box {
-      margin-top: 1.5rem;
-      background: rgba(26,58,42,0.04);
-      border-left: 3px solid var(--green-light);
-      padding: 1rem 1.2rem;
-      font-size: 0.85rem; color: var(--text-mid); line-height: 1.6;
-    }
-
-    /* ── PANEL 2 : CRÉNEAUX ── */
-    .slots-header {
-      font-family: var(--serif); font-size: 1.4rem; color: var(--green-deep);
-      margin-bottom: 0.5rem;
-    }
-    .slots-sub { font-size: 0.88rem; color: var(--text-mid); margin-bottom: 2rem; }
-    .slots-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
-    }
-    .slot-btn {
-      border: 2px solid var(--cream-dark);
-      background: var(--white);
-      padding: 1rem; text-align: center;
-      cursor: pointer; transition: all 0.25s;
-      font-family: var(--sans); font-size: 0.9rem; color: var(--text-dark);
-    }
-    .slot-btn:hover:not(.taken) { border-color: var(--green-light); color: var(--green-mid); }
-    .slot-btn.selected { border-color: var(--green-deep); background: var(--green-deep); color: var(--white); }
-    .slot-btn.taken {
-      background: var(--cream-dark); color: rgba(0,0,0,0.3);
-      cursor: not-allowed; text-decoration: line-through;
-    }
-    .slot-time { font-weight: 500; display: block; }
-    .slot-duration { font-size: 0.72rem; color: inherit; opacity: 0.7; }
 
     /* ── PANEL 3 : FORMULAIRE ── */
     .form-grid {
@@ -346,25 +213,11 @@
     .payment-text { font-size: 0.85rem; color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; line-height: 1.6; }
 
     /* ── BOUTONS ── */
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-      padding: 1rem 2rem; font-family: var(--sans); font-size: 0.88rem;
-      font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-      cursor: pointer; transition: all 0.3s; border: 2px solid transparent;
-      text-decoration: none;
-    }
-    .btn-primary {
-      background: var(--green-deep); color: var(--cream); border-color: var(--green-deep);
-    }
-    .btn-primary:hover { background: transparent; color: var(--green-deep); }
+    .btn { padding: 1rem 2rem; font-size: 0.88rem; }
     .btn-primary:disabled {
       background: var(--cream-dark); color: rgba(0,0,0,0.3); border-color: var(--cream-dark);
       cursor: not-allowed;
     }
-    .btn-secondary {
-      background: transparent; color: var(--green-deep); border-color: var(--green-deep);
-    }
-    .btn-secondary:hover { background: var(--green-deep); color: var(--cream); }
     .btn-white {
       background: var(--white); color: var(--amber); border-color: var(--white);
     }
@@ -377,38 +230,18 @@
     }
 
     /* ── MESSAGES ── */
-    .msg { padding: 0.8rem 1.2rem; font-size: 0.88rem; margin-top: 1rem; }
-    .msg-error { background: rgba(192,57,43,0.08); color: var(--red); border-left: 3px solid var(--red); }
-    .msg-success { background: rgba(82,183,136,0.1); color: var(--green-mid); border-left: 3px solid var(--green-light); }
+    .msg { font-size: 0.88rem; }
 
     /* ── MOBILE ── */
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
       .page-wrapper { padding: 6rem 1rem 3rem; }
       .booking-grid { grid-template-columns: 1fr; }
-      .slots-grid { grid-template-columns: repeat(3, 1fr); }
       .form-grid { grid-template-columns: 1fr; }
       .form-group.full { grid-column: 1; }
       .step-line { width: 40px; }
       .step-label { display: none; }
     }
-
-    /* ── MODE RÉSERVATION ── */
-    .mode-options { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.5rem; }
-    .mode-opt {
-      border: 2px solid var(--cream-dark); padding: 1rem 1.2rem;
-      cursor: pointer; transition: all 0.25s; display: flex; align-items: center; gap: 1rem;
-    }
-    .mode-opt:hover { border-color: var(--green-light); }
-    .mode-opt.selected { border-color: var(--green-deep); background: rgba(26,58,42,0.03); }
-    .mode-opt input[type="radio"] { display: none; }
-    .mode-radio {
-      width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--cream-dark);
-      flex-shrink: 0; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-    }
-    .mode-opt.selected .mode-radio { border-color: var(--green-deep); background: var(--green-deep); }
-    .mode-opt.selected .mode-radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--white); }
-    .mode-selector-title { font-family: var(--serif); font-size: 1rem; color: var(--green-deep); margin: 1.3rem 0 0.8rem; }
 
     /* ── CODE PREVIEW (panel 1) ── */
     .code-preview-card {
@@ -435,20 +268,20 @@
 
     <!-- En-tête -->
     <div class="page-header">
-      <p class="page-eyebrow">Réservation en ligne</p>
-      <h1 class="page-title">Réservez votre <em>premier cours</em></h1>
-      <p class="page-subtitle">Choisissez un créneau, remplissez le formulaire, et recevez une confirmation par email.</p>
+      <p class="page-eyebrow">Achat en ligne</p>
+      <h1 class="page-title">Choisissez votre <em>pack de crédits</em></h1>
+      <p class="page-subtitle">Sélectionnez votre formule, renseignez vos informations, et recevez votre code d'activation par email dès confirmation du paiement.</p>
     </div>
 
     <!-- Stepper -->
     <div class="stepper" id="stepper">
       <div class="step active" id="step-1">
         <div class="step-circle">1</div>
-        <span class="step-label">Formule</span>
+        <span class="step-label">Votre pack</span>
       </div>
       <div class="step-line" id="line-1"></div>
       <div class="step" id="step-3">
-        <div class="step-circle">3</div>
+        <div class="step-circle">2</div>
         <span class="step-label">Vos informations</span>
       </div>
       <div class="step-line" id="line-3"></div>
@@ -465,8 +298,8 @@
         <!-- Code preview -->
         <div class="code-preview-card" id="codePreviewCard">
           <div style="font-size:2.5rem;margin-bottom:0.8rem">🎟</div>
-          <p style="font-family:var(--serif);font-size:1.3rem;color:var(--cream);margin:0.5rem 0 1rem">Réservation par code</p>
-          <p style="font-size:0.85rem;color:rgba(245,240,232,0.7);line-height:1.6;max-width:280px;font-weight:300">Votre code d'activation vous sera envoyé par email après validation du paiement. Activez-le dans votre espace étudiant pour réserver vos séances à votre convenance.</p>
+          <p style="font-family:var(--serif);font-size:1.3rem;color:var(--cream);margin:0.5rem 0 1rem">Votre code d'activation</p>
+          <p style="font-size:0.85rem;color:rgba(245,240,232,0.7);line-height:1.6;max-width:280px;font-weight:300">Choisissez votre pack, payez en ligne, et recevez votre code par email. Activez-le dans votre espace étudiant pour choisir vos créneaux à votre rythme.</p>
         </div>
 
         <!-- Formule -->
@@ -533,6 +366,7 @@
           </div>
           <div class="form-group">
             <label class="form-label" for="phone">Téléphone</label>
+            <!-- À REMPLACER : numéro de téléphone (placeholder du champ formulaire) -->
             <input class="form-input" type="tel" id="phone" placeholder="06 00 00 00 00"/>
           </div>
           <div class="form-group">
@@ -565,14 +399,6 @@
 
         <!-- Récap -->
         <div class="recap-box" id="recapBox">
-          <div class="recap-item" id="recapDateRow">
-            <p class="recap-label">Date</p>
-            <p class="recap-value" id="recapDate">—</p>
-          </div>
-          <div class="recap-item" id="recapHeureRow">
-            <p class="recap-label">Heure</p>
-            <p class="recap-value" id="recapHeure">—</p>
-          </div>
           <div class="recap-item">
             <p class="recap-label">Formule</p>
             <p class="recap-value" id="recapFormule">—</p>
@@ -588,7 +414,7 @@
 
       <div class="nav-buttons">
         <button class="btn btn-secondary" id="btn3Back">← Retour</button>
-        <button class="btn btn-primary" id="btn3Next">Confirmer la réservation →</button>
+        <button class="btn btn-primary" id="btn3Next">Confirmer l'achat →</button>
       </div>
     </div>
 
@@ -598,22 +424,12 @@
         <div class="confirmation-icon" style="background:var(--amber)">⏳</div>
         <h2 class="confirmation-title">En attente de <em>paiement</em></h2>
         <p class="confirmation-text">
-          Merci <strong id="confirmName"></strong> ! Votre demande a bien été enregistrée.
-          <strong>Le créneau n'est définitivement confirmé qu'après réception du paiement.</strong>
-          Un récapitulatif sera envoyé à <strong id="confirmEmail"></strong> dès validation.
+          Merci <strong id="confirmName"></strong> ! Nous avons bien reçu votre demande.
+          <strong>Finalisez le paiement ci-dessous pour confirmer votre inscription.</strong>
+          Un accusé de réception a été envoyé à <strong id="confirmEmail"></strong>.
         </p>
 
         <div class="confirmation-recap">
-          <div id="dateTimeRows">
-            <div class="confirmation-recap-row">
-              <span class="recap-key">📅 Date</span>
-              <span class="recap-val" id="confirmDate"></span>
-            </div>
-            <div class="confirmation-recap-row">
-              <span class="recap-key">🕐 Heure</span>
-              <span class="recap-val" id="confirmHeure"></span>
-            </div>
-          </div>
           <div class="code-confirm-box" id="codeConfirmBox" style="display:none">
             <p style="font-family:var(--serif);font-size:1.1rem;color:var(--cream);margin-bottom:0.8rem">🎟 Code d'activation à venir</p>
             <p class="code-confirm-note">Votre code d'activation vous sera envoyé par email après validation du paiement. Rendez-vous ensuite dans votre espace étudiant pour l'activer et réserver vos séances à votre convenance.</p>
@@ -636,8 +452,8 @@
         <div class="payment-section">
           <p class="payment-title">💳 Finaliser le paiement</p>
           <p class="payment-text">
-            Pour confirmer définitivement votre réservation, réglez en ligne en toute sécurité via Stripe.
-            Le cours est confirmé dès réception du paiement.
+            Pour activer votre pack, réglez en ligne en toute sécurité via Stripe.
+            Votre code d'activation sera expédié dès confirmation du paiement.
           </p>
           <a target="_blank" class="btn btn-white" id="stripeBtn">
             💳 Payer en ligne →
@@ -734,8 +550,6 @@
     const formule = FORMULES[state.selectedFormule];
     document.getElementById("recapFormule").textContent = formule.label;
     document.getElementById("recapTarif").textContent   = formule.price;
-    document.getElementById("recapDateRow").style.display  = 'none';
-    document.getElementById("recapHeureRow").style.display = 'none';
   }
 
   // ══════════════════════════════════════════════
@@ -769,7 +583,6 @@
     document.getElementById("confirmNiveau").textContent  = niveau;
     document.getElementById("confirmTarif").textContent   = formule.price;
 
-    document.getElementById("dateTimeRows").style.display   = 'none';
     document.getElementById("codeConfirmBox").style.display = 'block';
 
     const stripeBtn = document.getElementById("stripeBtn");
@@ -795,7 +608,8 @@
     sendConfirmationEmail({
       to_name:  firstName + " " + lastName,
       to_email: email,
-      date:     "Code envoyé par email après paiement",
+      statut:   "Demande reçue — paiement en attente",
+      date:     "—",
       heure:    "—",
       formule:  formule.label,
       tarif:    formule.price,
@@ -813,11 +627,11 @@
     emailjs.init(EMAILJS_PUBLIC_KEY);
     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
       .then(() => {
-        showEmailStatus("success", "📧 Email de confirmation envoyé à " + params.to_email);
+        showEmailStatus("success", "📧 Accusé de réception envoyé à " + params.to_email);
       })
       .catch(err => {
         console.error("EmailJS error:", err);
-        showEmailStatus("error", "⚠️ L'email de confirmation n'a pas pu être envoyé. Vérifiez votre configuration EmailJS.");
+        showEmailStatus("error", "⚠️ L'accusé de réception n'a pas pu être envoyé. Vérifiez votre configuration EmailJS.");
       });
   }
 

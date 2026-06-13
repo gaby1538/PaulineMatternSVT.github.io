@@ -8,35 +8,17 @@
   <meta name="description" content="Cours de SVT en ligne organisés par niveau : collège, lycée, terminale. Résumés illustrés, quiz de révision et fiches PDF téléchargeables."/>
   <meta property="og:title" content="Cours SVT en ligne — Pauline Mattern"/>
   <meta property="og:description" content="Résumés, quiz et PDF gratuits par niveau. De la 5ème à la Terminale."/>
-  <meta property="og:type" content="website"/>
+  <meta property="og:type"  content="website"/>
+  <meta property="og:url"   content="https://VOTRE_DOMAINE.fr/cours.html"/>
+  <meta property="og:image" content="https://VOTRE_DOMAINE.fr/og-image.jpg"/>
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="twitter:title"       content="Cours SVT en ligne — Pauline Mattern"/>
+  <meta name="twitter:description" content="Résumés, quiz et PDF gratuits par niveau. De la 5ème à la Terminale."/>
+  <meta name="twitter:image"       content="https://VOTRE_DOMAINE.fr/og-image.jpg"/>
+  <link rel="canonical" href="https://VOTRE_DOMAINE.fr/cours.html"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --green-deep:#1a3a2a; --green-mid:#2d6a4f; --green-light:#52b788;
-      --cream:#f5f0e8; --cream-dark:#e8e0d0; --amber:#c9881c; --amber-light:#e8b84b;
-      --text-dark:#1c1c1c; --text-mid:#4a4a4a; --white:#ffffff;
-      --serif:'Cormorant Garamond',Georgia,serif; --sans:'DM Sans',sans-serif;
-    }
-    html{scroll-behavior:smooth}
-    body{font-family:var(--sans);background:var(--cream);color:var(--text-dark)}
-
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(45,106,79,0.15)}
-    .nav-logo{font-family:var(--serif);font-size:1.4rem;color:var(--green-deep);text-decoration:none}
-    .nav-logo span{color:var(--amber)}
-    .nav-links{display:flex;gap:2rem;list-style:none}
-    .nav-links a{font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s}
-    .nav-links a:hover,.nav-links a.active{color:var(--green-mid)}
-    .nav-cta{background:var(--green-deep);color:var(--cream)!important;padding:0.5rem 1.2rem}
-    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:0}
-    .hamburger span{display:block;width:24px;height:2px;background:var(--green-deep);transition:all 0.3s}
-    @media(max-width:768px){
-      nav{padding:1rem 1.5rem}
-      .nav-links{display:none;flex-direction:column;gap:1.2rem;position:absolute;top:100%;left:0;right:0;background:var(--cream);padding:2rem;border-top:1px solid var(--cream-dark)}
-      .nav-links.open{display:flex}
-      .hamburger{display:flex}
-    }
-
     .hero{background:var(--green-deep);color:var(--cream);padding:9rem 6rem 5rem;position:relative;overflow:hidden}
     .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(82,183,136,0.2) 0%,transparent 60%)}
     .hero-inner{max-width:600px;position:relative;z-index:2}
@@ -463,12 +445,18 @@
 
   let qs = {id:null,i:0,done:false};
 
+  function slugify(s){
+    return s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase()
+      .replace(/\.pdf$/i,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")
+      +".pdf";
+  }
+
   function openModal(id){
     const c=COURS[id]; if(!c)return;
     qs={id,i:0,done:false};
     document.getElementById("mNiveau").textContent=c.niveau;
     document.getElementById("mTitle").textContent=c.titre;
-    const pdfs=c.pdfs.map(p=>`<a href="#" class="pdf-item"><span class="pdf-icon">📄</span><div><p class="pdf-name">${p.n}</p><p class="pdf-size">${p.t}</p></div></a>`).join("");
+    const pdfs=c.pdfs.map(p=>`<a href="/ressources/cours/${id}/${slugify(p.n)}" class="pdf-item" download><span class="pdf-icon">📄</span><div><p class="pdf-name">${p.n}</p><p class="pdf-size">${p.t}</p></div></a>`).join("");
     document.getElementById("mBody").innerHTML=`
       <div class="modal-section"><h3 class="modal-section-title">📖 Résumé du cours</h3><div class="modal-text">${c.resume}</div></div>
       <div class="modal-section"><h3 class="modal-section-title">📄 Ressources PDF</h3><div class="pdf-grid">${pdfs}</div></div>

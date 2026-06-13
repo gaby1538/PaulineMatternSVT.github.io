@@ -8,37 +8,19 @@
   <meta name="description" content="Contactez Pauline Mattern pour des cours particuliers de SVT en ligne. Réponse sous 24h. Cours individuels du collège à la Terminale."/>
   <meta property="og:title" content="Contact — Pauline Mattern SVT"/>
   <meta property="og:description" content="Une question ? Écrivez à Pauline Mattern, professeure de SVT. Réponse garantie sous 24h."/>
-  <meta property="og:type" content="website"/>
+  <meta property="og:type"  content="website"/>
+  <meta property="og:url"   content="https://VOTRE_DOMAINE.fr/contact.html"/>
+  <meta property="og:image" content="https://VOTRE_DOMAINE.fr/og-image.jpg"/>
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="twitter:title"       content="Contact — Pauline Mattern SVT"/>
+  <meta name="twitter:description" content="Une question ? Écrivez à Pauline Mattern, professeure de SVT. Réponse garantie sous 24h."/>
+  <meta name="twitter:image"       content="https://VOTRE_DOMAINE.fr/og-image.jpg"/>
+  <link rel="canonical" href="https://VOTRE_DOMAINE.fr/contact.html"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="config.js"></script>
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --green-deep:#1a3a2a;--green-mid:#2d6a4f;--green-light:#52b788;
-      --cream:#f5f0e8;--cream-dark:#e8e0d0;--amber:#c9881c;--amber-light:#e8b84b;
-      --text-dark:#1c1c1c;--text-mid:#4a4a4a;--white:#ffffff;
-      --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif;
-    }
-    html{scroll-behavior:smooth}
-    body{font-family:var(--sans);background:var(--cream);color:var(--text-dark)}
-
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(245,240,232,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(45,106,79,0.15)}
-    .nav-logo{font-family:var(--serif);font-size:1.4rem;color:var(--green-deep);text-decoration:none}
-    .nav-logo span{color:var(--amber)}
-    .nav-links{display:flex;gap:2rem;list-style:none}
-    .nav-links a{font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);text-decoration:none;transition:color 0.2s}
-    .nav-links a:hover,.nav-links a.active{color:var(--green-mid)}
-    .nav-cta{background:var(--green-deep);color:var(--cream)!important;padding:0.5rem 1.2rem}
-    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:0}
-    .hamburger span{display:block;width:24px;height:2px;background:var(--green-deep);transition:all 0.3s}
-    @media(max-width:768px){
-      nav{padding:1rem 1.5rem}
-      .nav-links{display:none;flex-direction:column;gap:1.2rem;position:absolute;top:100%;left:0;right:0;background:var(--cream);padding:2rem;border-top:1px solid var(--cream-dark)}
-      .nav-links.open{display:flex}
-      .hamburger{display:flex}
-    }
-
     /* HERO */
     .hero{min-height:42vh;background:var(--green-deep);display:flex;align-items:flex-end;padding:0 6rem 4rem;position:relative;overflow:hidden;padding-top:7rem}
     .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(82,183,136,0.25) 0%,transparent 60%)}
@@ -98,7 +80,7 @@
     .faq-card{background:var(--cream-dark);padding:2rem}
     .faq-title{font-family:var(--serif);font-size:1.2rem;color:var(--green-deep);margin-bottom:1.2rem}
     .faq-item{margin-bottom:1rem}
-    .faq-q{font-size:0.85rem;font-weight:500;color:var(--green-deep);margin-bottom:0.3rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+    .faq-q{font-size:0.85rem;font-weight:500;color:var(--green-deep);margin-bottom:0.3rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:none;border:none;padding:0;width:100%;font-family:inherit;text-align:left}
     .faq-q:hover{color:var(--amber)}
     .faq-a{font-size:0.82rem;color:var(--text-mid);line-height:1.6;font-weight:300;display:none;padding-top:0.3rem}
     .faq-item.open .faq-a{display:block}
@@ -168,6 +150,7 @@
           </div>
           <div class="form-group">
             <label class="form-label" for="tel">Téléphone</label>
+            <!-- À REMPLACER : numéro de téléphone (placeholder du champ formulaire) -->
             <input class="form-input" type="tel" id="tel" placeholder="06 00 00 00 00"/>
           </div>
         </div>
@@ -226,7 +209,7 @@
           <span class="info-icon">📧</span>
           <div>
             <p class="info-label">Email</p>
-            <!-- ✏️ Remplace par ton email -->
+            <!-- À REMPLACER : adresse email (vérifier aussi que le domaine coursvst.fr est le bon) -->
             <p class="info-value"><a href="mailto:contact@coursvst.fr">contact@coursvst.fr</a></p>
           </div>
         </div>
@@ -234,7 +217,7 @@
           <span class="info-icon">📱</span>
           <div>
             <p class="info-label">Téléphone / WhatsApp</p>
-            <!-- ✏️ Remplace par ton numéro -->
+            <!-- À REMPLACER : numéro de téléphone (texte affiché + lien tel:+33600000000) -->
             <p class="info-value"><a href="tel:+33600000000">06 00 00 00 00</a></p>
           </div>
         </div>
@@ -270,19 +253,19 @@
       <div class="faq-card reveal">
         <h3 class="faq-title">Questions fréquentes</h3>
         <div class="faq-item">
-          <p class="faq-q" onclick="toggleFaq(this)">Comment se déroule le premier cours ? <span class="faq-arrow">▼</span></p>
+          <button class="faq-q" type="button" aria-expanded="false" onclick="toggleFaq(this)">Comment se déroule le premier cours ? <span class="faq-arrow">▼</span></button>
           <p class="faq-a">Le premier cours est un cours diagnostic : on évalue le niveau, les lacunes et les objectifs. C'est aussi l'occasion de se rencontrer et de définir un programme personnalisé.</p>
         </div>
         <div class="faq-item">
-          <p class="faq-q" onclick="toggleFaq(this)">Les cours ont-ils lieu en ligne ou en présentiel ? <span class="faq-arrow">▼</span></p>
+          <button class="faq-q" type="button" aria-expanded="false" onclick="toggleFaq(this)">Les cours ont-ils lieu en ligne ou en présentiel ? <span class="faq-arrow">▼</span></button>
           <p class="faq-a">Les cours se déroulent exclusivement en ligne, sur la plateforme de votre choix (Zoom, Google Meet, Teams…). Un lien de connexion vous est envoyé avant chaque séance.</p>
         </div>
         <div class="faq-item">
-          <p class="faq-q" onclick="toggleFaq(this)">Peut-on annuler ou reporter un cours ? <span class="faq-arrow">▼</span></p>
+          <button class="faq-q" type="button" aria-expanded="false" onclick="toggleFaq(this)">Peut-on annuler ou reporter un cours ? <span class="faq-arrow">▼</span></button>
           <p class="faq-a">Oui, avec un préavis de 24h. En dessous de 24h, le cours est dû sauf cas de force majeure. Je suis flexible et humain !</p>
         </div>
         <div class="faq-item">
-          <p class="faq-q" onclick="toggleFaq(this)">Y a-t-il un engagement de durée ? <span class="faq-arrow">▼</span></p>
+          <button class="faq-q" type="button" aria-expanded="false" onclick="toggleFaq(this)">Y a-t-il un engagement de durée ? <span class="faq-arrow">▼</span></button>
           <p class="faq-a">Aucun engagement ! Vous pouvez prendre des cours à la carte ou opter pour le pack mensuel. Vous arrêtez quand vous voulez.</p>
         </div>
       </div>
@@ -351,6 +334,7 @@
   function toggleFaq(el){
     const item=el.parentElement;
     item.classList.toggle("open");
+    el.setAttribute('aria-expanded', item.classList.contains('open') ? 'true' : 'false');
   }
 
   const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");obs.unobserve(e.target);}});},{threshold:0.1});
